@@ -9,10 +9,15 @@ const JWT_SECRET = new TextEncoder().encode(
 export async function middleware(request: NextRequest) {
     const userAgentString = request.headers.get("user-agent") || "";
     const isNativeApp = userAgentString.includes("LakasInfoApp");
+    const bypassAppCheck = request.cookies.get("bypass_app_check")?.value === "true";
     const { pathname } = request.nextUrl;
 
-    if (!isNativeApp && pathname !== "/desktop-warning" && !pathname.endsWith(".apk")) {
+    if (!isNativeApp && !bypassAppCheck && pathname !== "/desktop-warning" && !pathname.endsWith(".apk")) {
         return NextResponse.redirect(new URL("/desktop-warning", request.url));
+    }
+
+    if (pathname === "/desktop-warning" && (isNativeApp || bypassAppCheck)) {
+        return NextResponse.redirect(new URL("/", request.url));
     }
 
     const token = request.cookies.get("token")?.value;

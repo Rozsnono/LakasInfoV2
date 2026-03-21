@@ -1,11 +1,19 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Download, Smartphone, QrCode } from "lucide-react";
+import { Download, Smartphone, QrCode, Globe } from "lucide-react";
 import Image from "next/image";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 export default function DesktopWarning() {
+    const router = useRouter();
+
+    const handleBypass = () => {
+        document.cookie = "bypass_app_check=true; path=/; max-age=31536000";
+        router.push("/");
+    };
+
     return (
         <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-6 text-center">
             <div className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,_var(--brand-primary)_0%,_transparent_60%)] opacity-20 blur-3xl" />
@@ -50,6 +58,14 @@ export default function DesktopWarning() {
                         </motion.button>
                     </a>
 
+                    <button
+                        onClick={handleBypass}
+                        className="flex w-full items-center justify-center gap-2 rounded-full py-4 text-[11px] font-black uppercase tracking-widest text-white/50 transition-colors hover:text-white"
+                    >
+                        <Globe className="h-4 w-4" />
+                        Folytatás mégis böngészőből
+                    </button>
+
                     <div className="flex w-full flex-col items-center gap-4 rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-md">
                         <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/50">
                             <QrCode className="h-4 w-4" />
@@ -62,7 +78,7 @@ export default function DesktopWarning() {
                                 className="h-full w-full object-contain"
                                 width={150}
                                 height={150}
-                            ></Image>
+                            />
                         </div>
                     </div>
                 </div>
