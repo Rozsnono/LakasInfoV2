@@ -1,10 +1,9 @@
-// src/lib/pdf-export.ts
 import { getAllReadingsPerMonthAction } from "@/app/actions/reading";
 import { HouseData } from "@/contexts/house.context";
 import { ReadingWithMeterInfo } from "@/services/reading.service";
-import html2pdf from 'html2pdf.js';
+import html2pdf from "html2pdf.js";
 
-export const exportPDF = async (house: HouseData, isPending: boolean, setIsPending: (value: boolean) => void, onReady: () => void, date?: { month: number; year: number }) => {
+export const exportPDF = async (house: HouseData, isPending: boolean, setIsPending: (value: boolean) => void, onReady: () => void, date?: { month: number | { start: number, end: number }; year: number | { start: number, end: number } }) => {
     if (!house) return;
     setIsPending(true);
 
@@ -12,7 +11,6 @@ export const exportPDF = async (house: HouseData, isPending: boolean, setIsPendi
         const result = await getAllReadingsPerMonthAction(house._id, date?.month || new Date().getMonth() + 1, date?.year || new Date().getFullYear());
         if (!result.success || !result.value) throw new Error("Hiba az adatok lekérésekor");
 
-        // 1. Csoportosítás mérőórák szerint
         const groupedReadings = result.value.reduce((acc: Record<string, ReadingWithMeterInfo[]>, reading: ReadingWithMeterInfo) => {
             if (!acc[reading.meterName]) {
                 acc[reading.meterName] = [];
@@ -21,9 +19,8 @@ export const exportPDF = async (house: HouseData, isPending: boolean, setIsPendi
             return acc;
         }, {});
 
-        // 2. Konténer létrehozása a generáláshoz
-        const element = document.createElement('div');
-        element.style.width = '800px'; // Fix szélesség a PDF konzisztenciájához
+        const element = document.createElement("div");
+        element.style.width = "800px";
 
         element.innerHTML = `
             <style>
@@ -39,6 +36,7 @@ export const exportPDF = async (house: HouseData, isPending: boolean, setIsPendi
                     margin-bottom: 40px;
                     display: flex;
                     justify-content: space-between;
+                    page-break-inside: avoid;
                 }
                 .header-title h1 {
                     margin: 0;
@@ -55,6 +53,7 @@ export const exportPDF = async (house: HouseData, isPending: boolean, setIsPendi
                 }
                 .meter-section {
                     margin-bottom: 30px;
+                    page-break-inside: avoid;
                 }
                 .meter-title {
                     background: #f8fafc;
@@ -94,6 +93,9 @@ export const exportPDF = async (house: HouseData, isPending: boolean, setIsPendi
                     font-size: 10px;
                     border-bottom: 1px solid #e2e8f0;
                 }
+                tr {
+                    page-break-inside: avoid;
+                }
                 td {
                     padding: 10px;
                     border-bottom: 1px solid #f1f5f9;
@@ -106,6 +108,7 @@ export const exportPDF = async (house: HouseData, isPending: boolean, setIsPendi
                     text-align: center;
                     border-top: 1px solid #f1f5f9;
                     padding-top: 15px;
+                    page-break-inside: avoid;
                 }
             </style>
 
@@ -119,7 +122,7 @@ export const exportPDF = async (house: HouseData, isPending: boolean, setIsPendi
                         </div>
                     </div>
                     <div style="text-align: right; font-size: 12px; color: #666;">
-                        <p><strong>Dátum:</strong> ${new Date().toLocaleDateString('hu-HU')}</p>
+                        <p><strong>Dátum:</strong> ${new Date().toLocaleDateString("hu-HU")}</p>
                         <p>LakasInfo App</p>
                     </div>
                 </div>
@@ -146,18 +149,18 @@ export const exportPDF = async (house: HouseData, isPending: boolean, setIsPendi
                                 <tbody>
                                     ${rList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map(r => `
                                         <tr>
-                                            <td>${new Date(r.date).toLocaleDateString('hu-HU', { year: 'numeric', month: 'short', day: 'numeric' })}</td>
+                                            <td>${new Date(r.date).toLocaleDateString("hu-HU", { year: "numeric", month: "short", day: "numeric" })}</td>
                                             <td><strong>${r.value.toLocaleString()} ${unit}</strong></td>
-                                            <td class="${r.difference! > 0 ? 'diff-positive' : ''}">
-                                                ${r.difference! > 0 ? '+' : ''}${r.difference?.toLocaleString()} ${unit}
+                                            <td class="${r.difference! > 0 ? "diff-positive" : ""}">
+                                                ${r.difference! > 0 ? "+" : ""}${r.difference?.toLocaleString()} ${unit}
                                             </td>
                                         </tr>
-                                    `).join('')}
+                                    `).join("")}
                                 </tbody>
                             </table>
                         </div>
                     `;
-        }).join('')}
+        }).join("")}
 
                 <div class="footer">
                     Ezt a jelentést a LakasInfo rendszer generálta. További részletekért látogasson el az applikációba.
@@ -165,16 +168,15 @@ export const exportPDF = async (house: HouseData, isPending: boolean, setIsPendi
             </div>
         `;
 
-        // 3. html2pdf opciók beállítása
         const opt = {
-            margin: 0,
-            filename: `Fogyasztasi_Jelentes_${house.name.replace(/\s+/g, '_')}.pdf`,
-            image: { type: 'jpeg' as const, quality: 0.98 },
+            margin: [0.3, 0, 0.3, 0],
+            filename: `Fogyasztasi_Jelentes_${house.name.replace(/\s+/g, "_")}.pdf`,
+            image: { type: "jpeg" as const, quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+            pagebreak: { mode: ["css", "legacy"] }
         };
 
-        // 4. PDF generálása és letöltése
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await html2pdf().set(opt as any).from(element).save();
 

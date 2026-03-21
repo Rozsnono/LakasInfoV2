@@ -11,7 +11,7 @@ interface Props {
     onShowPhoto: (url: string) => void;
     reading: {
         _id: string;
-        date: string;
+        date: Date;
         value: number;
         difference: number;
         unit: string;
@@ -84,7 +84,7 @@ export default function ReadingDetailSheet({ isOpen, onClose, onShowPhoto, readi
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-white/5 p-5 rounded-3xl border border-white/5 flex flex-col gap-1">
                                     <div className="flex items-center gap-2 text-white/30"><Calendar size={12} /><span className="text-[9px] font-black uppercase tracking-widest">Dátum</span></div>
-                                    <p className="text-white font-bold">{reading.date}</p>
+                                    <p className="text-white font-bold">{reading.date.toLocaleDateString('hu-HU', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
                                 </div>
                                 <div className="bg-white/5 p-5 rounded-3xl border border-white/5 flex flex-col gap-1">
                                     <div className="flex items-center gap-2 text-white/30"><Gauge size={12} /><span className="text-[9px] font-black uppercase tracking-widest">Állás</span></div>

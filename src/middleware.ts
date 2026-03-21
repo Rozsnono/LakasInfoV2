@@ -11,9 +11,9 @@ export async function middleware(request: NextRequest) {
     const isNativeApp = userAgentString.includes("LakasInfoApp");
     const { pathname } = request.nextUrl;
 
-    if (!isNativeApp && pathname !== "/desktop-warning" && !pathname.endsWith(".apk")) {
-        return NextResponse.redirect(new URL("/desktop-warning", request.url));
-    }
+    // if (!isNativeApp && pathname !== "/desktop-warning" && !pathname.endsWith(".apk")) {
+    //     return NextResponse.redirect(new URL("/desktop-warning", request.url));
+    // }
 
     const token = request.cookies.get("token")?.value;
 

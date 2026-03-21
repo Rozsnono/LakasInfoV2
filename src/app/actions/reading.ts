@@ -65,7 +65,7 @@ export async function getAllReadingsAction(houseId: string) {
     }
 }
 
-export async function getAllReadingsPerMonthAction(houseId: string, month: number, year: number) {
+export async function getAllReadingsPerMonthAction(houseId: string, month: number | { start: number, end: number }, year: number | { start: number, end: number }) {
     try {
         const userId = await getUserIdFromToken();
         if (!userId) {

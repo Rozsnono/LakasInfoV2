@@ -62,7 +62,7 @@ export default async function MeterDetailPage({
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             readings: meterDetails.readings.map((r: any) => ({
                 _id: r._id.toString(),
-                date: new Date(r.date).toLocaleDateString('hu-HU', { year: 'numeric', month: 'short', day: 'numeric' }),
+                date: new Date(r.date),
                 value: r.value,
                 difference: r.difference,
                 cost: r.calculatedCost || 0,

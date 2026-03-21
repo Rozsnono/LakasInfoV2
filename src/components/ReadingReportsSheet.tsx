@@ -16,6 +16,7 @@ interface ReportMonth {
   month: string;
   monthNumeric: number;
   year: string;
+  isFullYear?: boolean;
 }
 
 export default function ReadingReportsSheet({ isOpen, onClose }: Props) {
@@ -43,14 +44,15 @@ export default function ReadingReportsSheet({ isOpen, onClose }: Props) {
 
   const handleDownload = async (report: ReportMonth) => {
     if (!house) return;
+    const month = report.isFullYear ? { start: 0, end: 11 } : report.monthNumeric;
     await exportPDF(
       house,
       isExporting,
       setIsExporting,
       () => { }, // onReady
       {
-        month: report.monthNumeric,
-        year: report.year as unknown as number,
+        month: month,
+        year: parseInt(report.year),
       }
     );
   };

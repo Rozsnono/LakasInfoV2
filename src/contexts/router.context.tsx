@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import NextLink from "next/link";
 export function useRouter() {
 
     function replace(path: string, options?: { scroll?: boolean, backTo?: string }) {
@@ -41,34 +42,10 @@ export default function Link({
     target,
     ...rest
 }: CustomLinkProps) {
-    const router = useRouter();
-
-    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        if (onClick) onClick(e);
-
-        if (e.defaultPrevented) return;
-
-        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-
-        if (e.button !== 0) return;
-
-        if (target === "_blank") return;
-
-        const isExternal = href.startsWith('http://') || href.startsWith('https://');
-        if (isExternal) return;
-
-        e.preventDefault();
-
-        if (replace) {
-            router.replace(href);
-        } else {
-            router.push(href);
-        }
-    };
 
     return (
-        <a href={href} onClick={handleClick} target={target} {...rest}>
+        <NextLink href={href} replace={replace} onClick={onClick} target={target} {...rest}>
             {children}
-        </a>
-    );
+        </NextLink>
+    )
 }

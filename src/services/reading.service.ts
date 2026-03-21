@@ -109,19 +109,29 @@ export const ReadingService = {
         }
     },
 
-    async getAllReadingByMonth(houseId: string, month: number, year: number): Promise<{ success: boolean; message?: string; value?: ReadingWithMeterInfo[] }> {
+    async getAllReadingByMonth(houseId: string, month: number | { start: number, end: number }, year: number | { start: number, end: number }): Promise<{ success: boolean; message?: string; value?: ReadingWithMeterInfo[] }> {
         try {
             await dbConnect();
 
             const meters = await Meter.find({ houseId: new mongoose.Types.ObjectId(houseId) }).lean().exec();
+            const startMonth = typeof month === "number" ? month : month.start;
+            const endMonth = typeof month === "number" ? month : month.end;
+            const startYear = typeof year === "number" ? year : year.start;
+            const endYear = typeof year === "number" ? year : year.end;
 
-            const readings = await Reading.find({ meterId: { $in: meters.map(m => m._id) }, date: { $gte: new Date(year, month - 1, 1), $lt: new Date(year, month, 1) } }).sort({ date: -1 }).populate('meterId').lean().exec() as IReading[];
+            const startDate = new Date(startYear, startMonth, 1);
+            const endDate = new Date(endYear, endMonth + 1, 1);
+
+
+            const readings = await Reading.find({ meterId: { $in: meters.map(m => m._id) }, date: { $gte: startDate, $lt: endDate } }).sort({ date: -1 }).populate('meterId').lean().exec() as IReading[];
             const readingsWithMeterInfo = readings.map(r => ({
                 ...r,
                 meterName: (r.meterId as unknown as Record<string, unknown>).name as string,
                 meterType: (r.meterId as unknown as Record<string, unknown>).type as "villany" | "gaz" | "viz",
                 meterUnit: (r.meterId as unknown as Record<string, unknown>).unit as string,
             }));
+
+
             return { success: true, value: readingsWithMeterInfo as ReadingWithMeterInfo[] };
         } catch (error) {
             console.error("ReadingService.getAllReading Error:", error);
@@ -151,6 +161,16 @@ export const ReadingService = {
                     monthNumeric: month + 1,
                     year: year.toString(),
                     rawDate: d
+                });
+            }
+
+            if(!monthsMap.has(`${year}-full`) && month === 11) {
+                monthsMap.set(`${year}-full`, {
+                    month: year,
+                    monthNumeric: 0,
+                    year: year.toString(),
+                    rawDate: new Date(year, 11, 31),
+                    isFullYear: true
                 });
             }
         });
