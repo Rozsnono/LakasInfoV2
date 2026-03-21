@@ -271,7 +271,7 @@ function UsageGraphCard({ title, value, trend, trendUp, color, graphPath }: Usag
                 <div className="w-2 h-2 rounded-full shadow-lg" style={{ backgroundColor: color, boxShadow: `0 0 10px ${color}` }}></div>
             </div>
             <div className="z-10">
-                <div className="text-text-primary font-black text-2xl tracking-tighter italic">{value}</div>
+                <div className="text-text-primary font-black text-2xl tracking-tighter italic">{parseFloat(value).toFixed(2)}</div>
                 <div className="text-[10px] font-black flex items-center gap-1 mt-1 uppercase tracking-tight" style={{ color: trendUp ? '#ef4444' : '#10b981' }}>
                     {trendUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                     {trend}

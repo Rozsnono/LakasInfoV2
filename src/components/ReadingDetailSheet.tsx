@@ -95,7 +95,7 @@ export default function ReadingDetailSheet({ isOpen, onClose, onShowPhoto, readi
                             <div className="bg-primary/10 p-6 rounded-[2rem] border border-primary/20 flex justify-between items-center">
                                 <div>
                                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60 italic">Fogyasztás</span>
-                                    <p className="text-3xl font-black text-white italic">{reading.difference >= 0 ? '+' : ''}{reading.difference} <span className="text-sm font-bold opacity-40">{reading.unit}</span></p>
+                                    <p className="text-3xl font-black text-white italic">{reading.difference >= 0 ? '+' : ''}{reading.difference.toFixed(2)} <span className="text-sm font-bold opacity-40">{reading.unit}</span></p>
                                 </div>
                                 {reading.photoUrl && (
                                     <button onClick={() => onShowPhoto(reading.photoUrl!)} className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center shadow-lg active:scale-90 transition-transform">
