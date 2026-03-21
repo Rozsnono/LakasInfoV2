@@ -247,7 +247,7 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
                                 </button>
                                 <button
                                     onClick={async () => {await exportFile(selectedPhoto, "image/jpeg", `reading_photo_${selectedReading?._id}.jpg`, false, () => {})}}
-                                    className="absolute right-6 top-6 z-10 flex h-12 w-12 items-center justify-center rounded-2xl bg-black/50 text-white backdrop-blur-md transition-transform active:scale-90"
+                                    className="absolute right-6 top-6 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-primary/80 text-white backdrop-blur-md transition-transform active:scale-90 hover:bg-primary"
                                 >
                                     <Share size={22} className="ml-[-2px]" />
                                 </button>

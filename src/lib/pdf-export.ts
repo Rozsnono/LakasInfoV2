@@ -171,7 +171,7 @@ export const exportPDF = async (house: HouseData, isPending: boolean, setIsPendi
             </div>
         `;
 
-        const filename = `Fogyasztasi_Jelentes_${new Date().toISOString().split("T")[0]}.pdf`;
+        const filename = `Fogyasztasi_Jelentes.pdf`;
 
         const opt = {
             margin: [0.3, 0, 0.3, 0],

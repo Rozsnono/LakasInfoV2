@@ -10,6 +10,7 @@ import {
 import Link from "@/contexts/router.context";
 import NewReadingSheet from "@/components/NewReadingSheet";
 import { IReadingWithInfo } from "@/services/reading.service";
+import { exportFile } from "@/lib/file-export";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -49,13 +50,14 @@ export default function AllReadingsClient({ initialReadings }: { initialReadings
     }, [searchQuery, initialReadings]);
 
     const handleShare = async (url: string) => {
-        if (navigator.share) {
-            try {
-                await navigator.share({ title: "Mérőóra rögzített fotó", url });
-            } catch (err) {
-                console.error(err);
-            }
-        }
+        await exportFile(url, "meroorafoto.jpg", "image/jpeg", false, () => {});
+        // if (navigator.share) {
+        //     try {
+        //         await navigator.share({ title: "Mérőóra rögzített fotó", url });
+        //     } catch (err) {
+        //         console.error(err);
+        //     }
+        // }
     };
 
     return (
