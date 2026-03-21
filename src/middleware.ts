@@ -1,4 +1,4 @@
-import { NextResponse, userAgent } from "next/server";
+import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
@@ -7,11 +7,11 @@ const JWT_SECRET = new TextEncoder().encode(
 );
 
 export async function middleware(request: NextRequest) {
-    const { device } = userAgent(request);
-    const isMobile = device.type === "mobile" || device.type === "tablet";
+    const userAgentString = request.headers.get("user-agent") || "";
+    const isNativeApp = userAgentString.includes("LakasInfoApp");
     const { pathname } = request.nextUrl;
 
-    if (!isMobile && pathname !== "/desktop-warning") {
+    if (!isNativeApp && pathname !== "/desktop-warning" && !pathname.endsWith(".apk")) {
         return NextResponse.redirect(new URL("/desktop-warning", request.url));
     }
 
@@ -72,12 +72,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
-        "/dashboard/:path*",
-        "/onboarding/:path*",
-        "/house/:path*",
-        "/login",
-        "/register",
-        "/",
-        "/desktop-warning"
+        "/((?!api|_next/static|_next/image|favicon.ico).*)",
     ],
 };
