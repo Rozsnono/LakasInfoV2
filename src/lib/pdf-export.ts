@@ -207,5 +207,6 @@ export const exportPDF = async (house: HouseData, isPending: boolean, setIsPendi
     } catch (e) {
         setIsPending(false);
         console.error("PDF generálási hiba:", e);
+        alert("Hiba: " + (e as Error).message + " | " + JSON.stringify(e));
     }
 };
