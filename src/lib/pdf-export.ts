@@ -171,7 +171,7 @@ export const exportPDF = async (house: HouseData, isPending: boolean, setIsPendi
             </div>
         `;
 
-        const filename = `Fogyasztasi_Jelentes_${house.name.replace(/\s+/g, "_")}.pdf`;
+        const filename = `Fogyasztasi_Jelentes_${new Date().toISOString().split("T")[0]}.pdf`;
 
         const opt = {
             margin: [0.3, 0, 0.3, 0],
@@ -207,6 +207,5 @@ export const exportPDF = async (house: HouseData, isPending: boolean, setIsPendi
     } catch (e) {
         setIsPending(false);
         console.error("PDF generálási hiba:", e);
-        alert("Hiba: " + (e as Error).message + " | " + JSON.stringify(e));
     }
 };
