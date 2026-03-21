@@ -19,6 +19,7 @@ import { useUser } from "@/contexts/user.context";
 import { useHouse } from "@/contexts/house.context";
 import { getNotificationsAction } from "@/app/actions/notification";
 import { useRouter } from "@/contexts/router.context";
+import AppInfoSheet from "@/components/AppInfosSheet";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -98,6 +99,7 @@ export default function ProfilePage() {
         { id: "reports", icon: <FileText className="w-5 h-5 text-orange-400" />, label: "Rezsi jelentések" },
         { id: "energy", icon: <Lightbulb className="w-5 h-5 text-yellow-400" />, label: "Energiatakarékosság" },
         { id: "notifications", icon: <Bell className="w-5 h-5 text-primary" />, label: "Értesítések", badge: unreadCount },
+        { id: "appinfo", icon: <Gem className="w-5 h-5 text-purple-400" />, label: "Alkalmazás infók" },
     ];
 
     return (
@@ -195,6 +197,7 @@ export default function ProfilePage() {
             <EnergyEfficiencySheet isOpen={activeSheet === "energy"} onClose={() => setActiveSheet(null)} />
             <ReadingReportsSheet isOpen={activeSheet === "reports"} onClose={() => setActiveSheet(null)} />
             <QrCodeSheet isOpen={activeSheet === "qr"} onClose={() => setActiveSheet(null)} code={householdCode} />
+            <AppInfoSheet isOpen={activeSheet === "appinfo"} onClose={() => setActiveSheet(null)} />
         </motion.div>
     );
 }
