@@ -1,0 +1,53 @@
+import mongoose, { Schema, Document, Model } from "mongoose";
+
+export interface IUser extends Document {
+    name: string;
+    email: string;
+    password: string;
+    image?: string;
+    houses: mongoose.Types.ObjectId[];
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+const UserSchema: Schema<IUser> = new Schema(
+    {
+        name: {
+            type: String,
+            required: [true, "A név megadása kötelező."],
+            trim: true,
+        },
+        email: {
+            type: String,
+            required: [true, "Az e-mail cím megadása kötelező."],
+            unique: true,
+            lowercase: true,
+            trim: true,
+            match: [/^\S+@\S+\.\S+$/, "Kérlek adj meg egy érvényes e-mail címet."],
+        },
+        password: {
+            type: String,
+            required: [true, "A jelszó megadása kötelező."],
+            minlength: [8, "A jelszónak legalább 8 karakterből kell állnia."],
+            select: false,
+        },
+        image: {
+            type: String,
+            default: null,
+        },
+        houses: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "House",
+            },
+        ],
+    },
+    {
+        timestamps: true,
+        versionKey: false,
+    }
+);
+
+const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
+
+export default User;

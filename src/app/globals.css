@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+:root {
+  /* Itt definiáljuk az alapértelmezett, módosítható változókat */
+  --brand-primary: #ff3b30;
+  --brand-accent-red: #4a1215;
+}
+
+@theme {
+  --color-background: #000000;
+  --color-surface: #1c1c1e;
+  --color-surface-elevated: #2c2c2e;
+
+  /* Itt összekötjük a Tailwind 'primary' kulcsszót a változónkkal */
+  --color-primary: var(--brand-primary);
+  --color-accent-red: var(--brand-accent-red);
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #8e8e93;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: none;
+}
+
+.no-animations * {
+  transition-duration: 0.01s !important;
+  animation-duration: 0.01s !important;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #print-section,
+  #print-section * {
+    visibility: visible;
+  }
+
+  #print-section {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: white !important;
+    color: black !important;
+  }
+}

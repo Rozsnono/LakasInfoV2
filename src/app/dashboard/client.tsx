@@ -1,0 +1,312 @@
+"use client";
+
+import { motion, AnimatePresence, Variants } from "framer-motion";
+import {
+    Search,
+    Bell,
+    MapPin,
+    Plus,
+    Calculator,
+    ReceiptText,
+    MoreHorizontal,
+    Zap,
+    Flame,
+    Droplets,
+    TrendingUp,
+    TrendingDown
+} from "lucide-react";
+import React, { useState, useMemo, useEffect } from "react";
+import Link from "@/contexts/router.context";
+import NewReadingSheet from "@/components/NewReadingSheet";
+import MoreOptionsSheet from "@/components/MoreOptionsSheet";
+import NotificationsSheet from "@/components/NotificationsSheet";
+import { MeterWithStats } from "@/services/meter.service";
+import { useUser } from "@/contexts/user.context";
+import { getNotificationsAction } from "@/app/actions/notification"; // Importálva a frissítéshez
+
+const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.1,
+        },
+    },
+};
+
+const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.6,
+            ease: [0.22, 1, 0.36, 1],
+        },
+    },
+};
+
+const balanceVariants: Variants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: {
+        opacity: 1,
+        scale: 1,
+        transition: {
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+        },
+    },
+};
+
+export default function DashboardClient({ 
+    houseAddress, 
+    initialMeters,
+    initialUnreadCount 
+}: { 
+    houseAddress: string; 
+    initialMeters: MeterWithStats[];
+    initialUnreadCount: number;
+}) {
+    const [isNewReadingOpen, setIsNewReadingOpen] = useState(false);
+    const [isMoreOpen, setIsMoreOpen] = useState(false);
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+    const [unreadCount, setUnreadCount] = useState(initialUnreadCount);
+    const { user } = useUser();
+
+    // Értesítések számának frissítése a backendből
+    const refreshNotifications = async () => {
+        const res = await getNotificationsAction();
+        if (res.success) {
+            setUnreadCount(res.unreadCount as number);
+        }
+    };
+
+    // Ha bezáródik a sheet, frissítsük a számot
+    useEffect(() => {
+        if (!isNotificationsOpen) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            refreshNotifications();
+        }
+    }, [isNotificationsOpen]);
+
+    const totalMonthlyCost = useMemo(() => {
+        return initialMeters.reduce((acc, meter) => acc + meter.stats.totalCost, 0);
+    }, [initialMeters]);
+
+    const getMeterVisuals = (type: string) => {
+        switch (type) {
+            case "villany": return { icon: <Zap className="w-5 h-5 text-white" />, color: "bg-yellow-500", hex: "#eab30840" };
+            case "gaz": return { icon: <Flame className="w-5 h-5 text-white" />, color: "bg-orange-500", hex: "#f9731640" };
+            case "viz": return { icon: <Droplets className="w-5 h-5 text-white" />, color: "bg-blue-500", hex: "#3b82f640" };
+            default: return { icon: <Zap className="w-5 h-5 text-white" />, color: "bg-gray-500", hex: "#6b728040" };
+        }
+    };
+
+    return (
+        <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            className="relative min-h-full"
+        >
+
+            <div className="relative z-10 px-4 pt-12 pb-6 flex flex-col gap-8">
+                <motion.header variants={itemVariants} className="flex items-center gap-3">
+                    <Link href={'/dashboard/profile'}>
+                        <div className="w-10 h-10 rounded-full bg-surface-elevated overflow-hidden border border-white/10 shrink-0 flex items-center justify-center">
+                            <span className="font-bold text-text-primary text-sm uppercase">
+                                {user?.name ? (user.name.charAt(0) + (user.name.split(' ')[1]?.charAt(0) || '')) : "?"}
+                            </span>
+                        </div>
+                    </Link>
+                    <div className="flex-1 bg-surface/80 backdrop-blur-md rounded-full h-10 flex items-center px-4 border border-white/5 shadow-inner">
+                        <Search className="w-4 h-4 text-text-secondary mr-2" />
+                        <input
+                            type="text"
+                            placeholder="Mérőóra keresése..."
+                            className="bg-transparent text-text-primary text-sm font-medium w-full focus:outline-none placeholder:text-text-secondary"
+                        />
+                    </div>
+                    <button
+                        onClick={() => setIsNotificationsOpen(true)}
+                        className="w-10 h-10 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center border border-white/5 shrink-0 relative active:scale-95 transition-transform"
+                    >
+                        <Bell className="w-5 h-5 text-text-primary" />
+                        {/* Dinamikus Badge: Csak ha van olvasatlan */}
+                        {unreadCount > 0 && (
+                            <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-primary rounded-full border-2 border-surface shadow-[0_0_10px_rgba(255,59,48,0.5)]"></span>
+                        )}
+                    </button>
+                </motion.header>
+
+                <motion.div
+                    variants={balanceVariants}
+                    className="flex flex-col items-center text-center mt-2"
+                >
+                    <span className="text-text-secondary text-sm font-medium mb-1 opacity-60 uppercase tracking-widest">E havi várható költség</span>
+                    <h2 className="text-6xl font-black tracking-tighter text-text-primary italic">
+                        {totalMonthlyCost.toLocaleString()} <span className="text-2xl text-primary not-italic">Ft</span>
+                    </h2>
+                    <div className="flex items-center gap-2 mt-4 text-text-secondary text-[10px] font-bold uppercase tracking-wider bg-surface-elevated/50 px-4 py-1.5 rounded-full border border-white/5 shadow-sm">
+                        <MapPin className="w-3 h-3 text-primary" />
+                        {houseAddress}
+                    </div>
+                </motion.div>
+
+                <motion.div variants={itemVariants} className="flex justify-between px-2 mt-4">
+                    <ActionButton
+                        icon={<Plus className="w-6 h-6" />}
+                        label="Új állás"
+                        onClick={() => setIsNewReadingOpen(true)}
+                    />
+                    <Link href="/dashboard/calculator">
+                        <ActionButton icon={<Calculator className="w-6 h-6" />} label="Kalkulátor" />
+                    </Link>
+                    <Link href="/dashboard/meters">
+                        <ActionButton icon={<ReceiptText className="w-6 h-6" />} label="Mérőórák" />
+                    </Link>
+                    <ActionButton
+                        icon={<MoreHorizontal className="w-6 h-6" />}
+                        label="Továbbiak"
+                        onClick={() => setIsMoreOpen(true)}
+                    />
+                </motion.div>
+
+                <motion.div variants={itemVariants} className="grid grid-cols-2 gap-4 mt-2">
+                    {initialMeters.slice(0, 2).map((meter) => {
+                        const visual = getMeterVisuals(meter.type);
+                        const isWarning = meter.stats.isOverLimit;
+
+                        return (
+                            <UsageGraphCard
+                                key={meter._id.toString()}
+                                title={meter.name}
+                                value={`${meter.stats.consumption} ${meter.unit}`}
+                                trend={`${meter.stats.totalCost.toLocaleString()} Ft`}
+                                trendUp={isWarning}
+                                color={visual.hex}
+                                graphPath={isWarning
+                                    ? "M 0 45 Q 40 40 80 30 T 160 10"
+                                    : "M 0 10 Q 40 15 80 30 T 160 40"
+                                }
+                            />
+                        );
+                    })}
+                </motion.div>
+
+                <motion.div variants={itemVariants} className="bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-xl mt-2 flex flex-col gap-6">
+                    <div className="flex justify-between items-center mb-1">
+                        <h3 className="text-text-primary font-black text-lg tracking-tight uppercase italic">Aktuális állapot</h3>
+                        <Link href="/dashboard/meters" className="text-primary text-xs font-black uppercase tracking-widest active:opacity-70">
+                            Összes
+                        </Link>
+                    </div>
+
+                    <div className="flex flex-col gap-5">
+                        {initialMeters.map((meter) => {
+                            const visual = getMeterVisuals(meter.type);
+                            return (
+                                <Link key={meter._id.toString()} href={`/dashboard/meters/${meter._id}`}>
+                                    <ReadingItem
+                                        title={meter.name}
+                                        time={meter.stats.isOverLimit ? "Limit felett!" : "Kereten belül"}
+                                        value={`${meter.lastReadingValue.toLocaleString()} ${meter.unit}`}
+                                        icon={visual.icon}
+                                        color={visual.color}
+                                    />
+                                </Link>
+                            );
+                        })}
+                    </div>
+                </motion.div>
+            </div>
+
+            <NewReadingSheet isOpen={isNewReadingOpen} onClose={() => setIsNewReadingOpen(false)} />
+            <MoreOptionsSheet isOpen={isMoreOpen} onClose={() => setIsMoreOpen(false)} />
+            <NotificationsSheet isOpen={isNotificationsOpen} onClose={() => setIsNotificationsOpen(false)} />
+        </motion.div>
+    );
+}
+
+interface ActionButtonProps {
+    icon: React.ReactNode;
+    label: string;
+    onClick?: () => void;
+}
+
+function ActionButton({ icon, label, onClick }: ActionButtonProps) {
+    return (
+        <div className="flex flex-col items-center gap-2">
+            <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onClick}
+                className="w-16 h-16 bg-surface-elevated rounded-full flex items-center justify-center text-text-primary shadow-xl border border-white/5 transition-all"
+            >
+                {icon}
+            </motion.button>
+            <span className="text-text-primary text-[10px] font-black uppercase tracking-widest opacity-60">{label}</span>
+        </div>
+    );
+}
+
+interface UsageGraphCardProps {
+    title: string;
+    value: string;
+    trend: string;
+    trendUp: boolean;
+    color: string;
+    graphPath: string;
+}
+
+function UsageGraphCard({ title, value, trend, trendUp, color, graphPath }: UsageGraphCardProps) {
+    return (
+        <motion.div
+            whileTap={{ scale: 0.98 }}
+            className="bg-surface rounded-[2rem] p-5 border border-white/5 shadow-lg flex flex-col gap-3 relative overflow-hidden"
+        >
+            <div className="flex justify-between items-start z-10">
+                <span className="text-text-secondary font-black text-[10px] uppercase tracking-widest opacity-40">{title}</span>
+                <div className="w-2 h-2 rounded-full shadow-lg" style={{ backgroundColor: color, boxShadow: `0 0 10px ${color}` }}></div>
+            </div>
+            <div className="z-10">
+                <div className="text-text-primary font-black text-2xl tracking-tighter italic">{value}</div>
+                <div className="text-[10px] font-black flex items-center gap-1 mt-1 uppercase tracking-tight" style={{ color: trendUp ? '#ef4444' : '#10b981' }}>
+                    {trendUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                    {trend}
+                </div>
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 h-16 opacity-30 pointer-events-none">
+                <svg viewBox="0 0 160 50" preserveAspectRatio="none" className="w-full h-full">
+                    <path d={graphPath} fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+            </div>
+        </motion.div>
+    );
+}
+
+interface ReadingItemProps {
+    title: string;
+    time: string;
+    value: string;
+    icon: React.ReactNode;
+    color: string;
+}
+
+function ReadingItem({ title, time, value, icon, color }: ReadingItemProps) {
+    return (
+        <div className="flex items-center justify-between w-full active:opacity-60 transition-all group">
+            <div className="flex items-center gap-4">
+                <div className={`w-12 h-12 rounded-2xl ${color} flex items-center justify-center shadow-lg transition-transform group-active:scale-90`}>
+                    {icon}
+                </div>
+                <div className="flex flex-col items-start leading-tight">
+                    <span className="text-text-primary font-bold text-[16px] tracking-tight italic">{title}</span>
+                    <span className="text-text-secondary text-[10px] font-black opacity-40 uppercase tracking-widest">{time}</span>
+                </div>
+            </div>
+            <span className="text-text-primary font-black text-[15px] tracking-tight">{value}</span>
+        </div>
+    );
+}

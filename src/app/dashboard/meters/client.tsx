@@ -1,0 +1,181 @@
+"use client";
+
+import { motion, Variants } from "framer-motion";
+import {
+    Zap,
+    Flame,
+    Droplets,
+    Plus,
+    History,
+    MoreVertical,
+    AlertCircle,
+    ArrowLeft
+} from "lucide-react";
+import React, { useState } from "react";
+import Link from "@/contexts/router.context";
+import AddMeterSheet from "@/components/AddMeterSheet";
+import MeterOptionsSheet from "@/components/MeterOptionsSheet";
+import { MeterWithStats } from "@/services/meter.service";
+
+const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+};
+
+const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 24 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+};
+
+// Segédfüggvény az ikonokhoz
+const getMeterVisuals = (type: string) => {
+    switch (type) {
+        case "villany": return { icon: <Zap className="w-6 h-6 text-yellow-500" />, color: "bg-yellow-500/10 border-yellow-500/20" };
+        case "gaz": return { icon: <Flame className="w-6 h-6 text-orange-500" />, color: "bg-orange-500/10 border-orange-500/20" };
+        case "viz": return { icon: <Droplets className="w-6 h-6 text-blue-500" />, color: "bg-blue-500/10 border-blue-500/20" };
+        default: return { icon: <Zap className="w-6 h-6 text-gray-500" />, color: "bg-gray-500/10 border-gray-500/20" };
+    }
+};
+
+export default function MetersClient({ initialMeters }: { initialMeters: MeterWithStats[] }) {
+    const [isAddOpen, setIsAddOpen] = useState(false);
+    const [selectedMeter, setSelectedMeter] = useState<{ id: string; name: string } | null>(null);
+
+    return (
+        <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            className="relative min-h-full  px-4 pt-12 pb-6 flex flex-col gap-6"
+        >
+
+            <motion.header variants={itemVariants} className="relative z-10 flex items-center justify-between mt-2">
+                <div className="flex items-center gap-4">
+                    <Link
+                        href="/dashboard"
+                        className="w-10 h-10 rounded-full bg-surface flex items-center justify-center active:scale-95 transition-transform border border-white/5 shadow-xl text-white"
+                    >
+                        <ArrowLeft className="w-5 h-5" />
+                    </Link>
+                    <div>
+                        <h1 className="text-3xl font-black text-text-primary tracking-tight italic uppercase">Mérő<span className="text-primary text-outline">órák</span></h1>
+                        <p className="text-text-secondary text-xs font-bold uppercase tracking-widest opacity-60 mt-1">{initialMeters.length} aktív eszköz</p>
+                    </div>
+                </div>
+                <button
+                    onClick={() => setIsAddOpen(true)}
+                    className="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center shadow-2xl active:scale-90 transition-transform"
+                >
+                    <Plus className="w-6 h-6" strokeWidth={3} />
+                </button>
+            </motion.header>
+
+            <div className="relative z-10 flex flex-col gap-4 mt-2">
+                {initialMeters.length === 0 ? (
+                    <motion.div variants={itemVariants} className="text-center py-12">
+                        <p className="text-white/40 text-sm font-bold uppercase tracking-widest">Még nincsenek mérőórák.</p>
+                        <p className="text-white/20 text-[10px] mt-2 font-black uppercase tracking-widest">Kattints a + ikonra a hozzáadáshoz.</p>
+                    </motion.div>
+                ) : (
+                    initialMeters.map((meter) => {
+                        const visual = getMeterVisuals(meter.type);
+                        
+                        // Dátum formázása
+                        const lastReadDate = meter.lastReadingDate 
+                            ? new Date(meter.lastReadingDate).toLocaleDateString('hu-HU', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+                            : 'Nincs adat';
+
+                        return (
+                            <motion.div
+                                key={meter._id.toString()}
+                                variants={itemVariants}
+                                className="bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-2xl flex flex-col gap-5 relative overflow-hidden group"
+                            >
+                                <div className="flex justify-between items-start">
+                                    <div className="flex items-center gap-4">
+                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border shadow-inner ${visual.color}`}>
+                                            {visual.icon}
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="text-white font-black text-xl tracking-tight leading-none italic">{meter.name}</span>
+                                            <span className="text-text-secondary text-[11px] font-bold uppercase tracking-wider mt-2 opacity-50">{lastReadDate}</span>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setSelectedMeter({ id: meter._id.toString(), name: meter.name });
+                                        }}
+                                        className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-full text-white/20 active:bg-white/10 active:text-white transition-all"
+                                    >
+                                        <MoreVertical className="w-5 h-5" />
+                                    </button>
+                                </div>
+
+                                <div className="flex items-end justify-between">
+                                    <div className="flex flex-col">
+                                        <span className="text-text-secondary text-[10px] font-black uppercase tracking-[0.2em] mb-2 opacity-40">Jelenlegi állás</span>
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="text-4xl font-black text-white tracking-tighter">{meter.lastReadingValue.toLocaleString()}</span>
+                                            <span className="text-white/20 font-black text-sm uppercase">{meter.unit}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col items-end gap-2">
+                                        {meter.stats.isOverLimit ? (
+                                            <div className="flex items-center gap-2 text-red-500 bg-red-500/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-red-500/20">
+                                                <AlertCircle className="w-3.5 h-3.5" />
+                                                Keret felett!
+                                            </div>
+                                        ) : meter.stats.consumption > (meter.tierLimit || 999999) * 0.8 ? (
+                                            <div className="flex items-center gap-2 text-orange-500 bg-orange-500/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-orange-500/20">
+                                                <AlertCircle className="w-3.5 h-3.5" />
+                                                Keret közelében
+                                            </div>
+                                        ) : (
+                                            <div className="text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-500/20">
+                                                Optimális
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="h-px w-full bg-white/5"></div>
+
+                                {/* Linkelés a dinamikus [id] oldalra */}
+                                <Link href={`/dashboard/meters/${meter._id.toString()}`}>
+                                    <motion.div
+                                        whileTap={{ scale: 0.98 }}
+                                        className="flex items-center justify-between w-full py-2 group active:opacity-70 transition-all"
+                                    >
+                                        <div className="flex items-center gap-3 text-text-secondary group-hover:text-white transition-colors">
+                                            <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center">
+                                                <History className="w-4 h-4 opacity-40" />
+                                            </div>
+                                            <span className="text-xs font-bold uppercase tracking-widest opacity-60">Előzmények & Grafikon</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-white font-black text-sm tracking-tight">
+                                                {meter.stats.consumption > 0 ? "+" : ""}{meter.stats.consumption}
+                                            </span>
+                                            <span className="text-white/20 font-bold text-[10px] uppercase">/ hó</span>
+                                        </div>
+                                    </motion.div>
+                                </Link>
+                            </motion.div>
+                        );
+                    })
+                )}
+            </div>
+
+            {/* Modalok */}
+            <AddMeterSheet isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} />
+            <MeterOptionsSheet
+                isOpen={!!selectedMeter}
+                onClose={() => setSelectedMeter(null)}
+                meterId={selectedMeter?.id || ""}
+                meterName={selectedMeter?.name || ""}
+            />
+        </motion.div>
+    );
+}
