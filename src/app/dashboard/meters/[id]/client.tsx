@@ -215,7 +215,7 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
                                         {item.cost.toLocaleString()} Ft
                                     </span>
                                     <span className={`rounded-lg border border-white/5 bg-white/5 px-2 py-1 text-[11px] font-black uppercase tracking-widest ${item.difference > 0 ? "text-white" : "text-emerald-400"}`}>
-                                        {item.difference > 0 ? "+" : ""}{item.difference} {meter.unit}
+                                        {item.difference > 0 ? "+" : ""}{item.difference.toFixed(2)} {meter.unit}
                                     </span>
                                 </div>
                             </button>
