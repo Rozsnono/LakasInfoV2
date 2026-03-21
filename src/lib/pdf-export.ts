@@ -2,6 +2,9 @@ import { getAllReadingsPerMonthAction } from "@/app/actions/reading";
 import { HouseData } from "@/contexts/house.context";
 import { ReadingWithMeterInfo } from "@/services/reading.service";
 import html2pdf from "html2pdf.js";
+import { Capacitor } from "@capacitor/core";
+import { Filesystem, Directory } from "@capacitor/filesystem";
+import { Share } from "@capacitor/share";
 
 export const exportPDF = async (house: HouseData, isPending: boolean, setIsPending: (value: boolean) => void, onReady: () => void, date?: { month: number | { start: number, end: number }; year: number | { start: number, end: number } }) => {
     if (!house) return;
@@ -168,17 +171,36 @@ export const exportPDF = async (house: HouseData, isPending: boolean, setIsPendi
             </div>
         `;
 
+        const filename = `Fogyasztasi_Jelentes_${house.name.replace(/\s+/g, "_")}.pdf`;
+
         const opt = {
             margin: [0.3, 0, 0.3, 0],
-            filename: `Fogyasztasi_Jelentes_${house.name.replace(/\s+/g, "_")}.pdf`,
+            filename: filename,
             image: { type: "jpeg" as const, quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true, letterRendering: true },
             jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
             pagebreak: { mode: ["css", "legacy"] }
         };
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await html2pdf().set(opt as any).from(element).save();
+        if (Capacitor.isNativePlatform()) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const pdfBase64DataUri = await html2pdf().set(opt as any).from(element).outputPdf("datauristring");
+            const base64Data = pdfBase64DataUri.split(",")[1];
+
+            const savedFile = await Filesystem.writeFile({
+                path: filename,
+                data: base64Data,
+                directory: Directory.Cache,
+            });
+
+            await Share.share({
+                title: "Fogyasztási Jelentés",
+                url: savedFile.uri,
+            });
+        } else {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            await html2pdf().set(opt as any).from(element).save();
+        }
 
         setIsPending(false);
         onReady();

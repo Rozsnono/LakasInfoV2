@@ -12,6 +12,8 @@
     "@capacitor/android": "^8.2.0",
     "@capacitor/camera": "^8.0.2",
     "@capacitor/core": "^8.2.0",
+    "@capacitor/filesystem": "^8.1.2",
+    "@capacitor/share": "^8.0.1",
     "@google/generative-ai": "^0.24.1",
     "bcryptjs": "^3.0.3",
     "framer-motion": "^12.38.0",

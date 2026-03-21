@@ -10,6 +10,7 @@ import Image from "next/image";
 import Link from "@/contexts/router.context";
 import { useHouse } from "@/contexts/house.context";
 import ReadingDetailSheet from "@/components/ReadingDetailSheet";
+import { exportFile } from "@/lib/file-export";
 
 interface Reading {
     _id: string;
@@ -245,29 +246,7 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
                                     <X size={24} />
                                 </button>
                                 <button
-                                    onClick={async () => {
-                                        try {
-                                            const response = await fetch(selectedPhoto);
-                                            const blob = await response.blob();
-                                            const file = new File([blob], "kiválasztott_foto.jpg", { type: blob.type });
-
-                                            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                                                await navigator.share({
-                                                    title: "Nézd meg ezt a fotót!",
-                                                    files: [file]
-                                                });
-                                            } else {
-                                                const link = document.createElement("a");
-                                                link.href = selectedPhoto;
-                                                link.download = "letoltott_foto.jpg";
-                                                document.body.appendChild(link);
-                                                link.click();
-                                                document.body.removeChild(link);
-                                            }
-                                        } catch (err) {
-                                            console.log("Hiba történt a megosztáskor", err);
-                                        }
-                                    }}
+                                    onClick={async () => {await exportFile(selectedPhoto, "image/jpeg", `reading_photo_${selectedReading?._id}.jpg`, false, () => {})}}
                                     className="absolute right-6 top-6 z-10 flex h-12 w-12 items-center justify-center rounded-2xl bg-black/50 text-white backdrop-blur-md transition-transform active:scale-90"
                                 >
                                     <Share size={22} className="ml-[-2px]" />
