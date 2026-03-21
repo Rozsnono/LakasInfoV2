@@ -12,19 +12,19 @@ interface Props {
 export default function WebCameraScanner({ onCapture, onClose }: Props) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [stream, setStream] = useState<MediaStream | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        let currentStream: MediaStream | null = null;
+
         async function startCamera() {
-            // 1. ELLENŐRZÉS: Létezik-e egyáltalán az API?
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                setError("A kamera API nem elérhető. Ez valószínűleg a titkosítatlan (HTTP) kapcsolat miatt van. Használj HTTPS-t vagy localhost-ot!");
+                setError("A kamera API nem elérhető. Engedélyezd a hozzáférést!");
                 return;
             }
 
             try {
-                const s = await navigator.mediaDevices.getUserMedia({
+                const stream = await navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: "environment",
                         width: { ideal: 1280 },
@@ -32,16 +32,17 @@ export default function WebCameraScanner({ onCapture, onClose }: Props) {
                     },
                     audio: false,
                 });
-                setStream(s);
+
+                currentStream = stream;
+
                 if (videoRef.current) {
-                    videoRef.current.srcObject = s;
+                    videoRef.current.srcObject = stream;
                 }
-            } catch (err: Error | unknown) {
-                console.error("Kamera hiba:", err);
+            } catch (err: unknown) {
                 if (err instanceof Error && err.name === "NotAllowedError") {
-                    setError("Megtagadtad a kamera hozzáférést. Kérlek, engedélyezd a böngészőben!");
+                    setError("Megtagadtad a kamera hozzáférést. Kérlek, engedélyezd a beállításokban!");
                 } else {
-                    setError("Nem sikerült elindítani a kamerát. Próbáld meg frissíteni az oldalt!");
+                    setError("Nem sikerült elindítani a kamerát. Próbáld meg újra!");
                 }
             }
         }
@@ -49,8 +50,8 @@ export default function WebCameraScanner({ onCapture, onClose }: Props) {
         startCamera();
 
         return () => {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
+            if (currentStream) {
+                currentStream.getTracks().forEach((track) => track.stop());
             }
         };
     }, []);
@@ -75,34 +76,48 @@ export default function WebCameraScanner({ onCapture, onClose }: Props) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black z-[300] flex flex-col"
+            className="fixed inset-0 z-[300] flex flex-col bg-black"
         >
-            <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-10 bg-gradient-to-b from-black/70 to-transparent">
-                <button onClick={onClose} className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-xl flex items-center justify-center text-white">
+            <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between bg-gradient-to-b from-black/70 to-transparent p-6">
+                <button
+                    onClick={onClose}
+                    className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-xl"
+                >
                     <X size={24} />
                 </button>
-                <span className="text-white font-black uppercase tracking-[0.3em] text-[10px] italic">Scanner Mode</span>
+                <span className="text-[10px] font-black uppercase italic tracking-[0.3em] text-white">Scanner Mode</span>
                 <div className="w-12" />
             </div>
 
-            <div className="relative flex-1 flex items-center justify-center overflow-hidden">
+            <div className="relative flex flex-1 items-center justify-center overflow-hidden">
                 {error ? (
-                    <div className="px-10 text-center flex flex-col items-center gap-4">
-                        <AlertCircle className="text-red-500 w-12 h-12" />
-                        <p className="text-white text-xs font-bold uppercase tracking-widest leading-relaxed max-w-xs">
+                    <div className="flex flex-col items-center gap-4 px-10 text-center">
+                        <AlertCircle className="h-12 w-12 text-red-500" />
+                        <p className="max-w-xs text-xs font-bold uppercase leading-relaxed tracking-widest text-white">
                             {error}
                         </p>
-                        <button onClick={onClose} className="mt-4 px-8 py-3 bg-white text-black rounded-2xl text-[10px] font-black uppercase">Bezárás</button>
+                        <button
+                            onClick={onClose}
+                            className="mt-4 rounded-2xl bg-white px-8 py-3 text-[10px] font-black uppercase text-black"
+                        >
+                            Bezárás
+                        </button>
                     </div>
                 ) : (
                     <>
-                        <video ref={videoRef} autoPlay playsInline className="h-full w-full object-cover" />
-                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <div className="w-[80%] aspect-video border-2 border-white/20 rounded-3xl relative">
-                                <div className="absolute -top-1 -left-1 w-8 h-8 border-t-4 border-l-4 border-primary rounded-tl-xl" />
-                                <div className="absolute -top-1 -right-1 w-8 h-8 border-t-4 border-r-4 border-primary rounded-tr-xl" />
-                                <div className="absolute -bottom-1 -left-1 w-8 h-8 border-b-4 border-l-4 border-primary rounded-bl-xl" />
-                                <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b-4 border-r-4 border-primary rounded-br-xl" />
+                        <video
+                            ref={videoRef}
+                            autoPlay
+                            playsInline
+                            muted
+                            className="h-full w-full object-cover"
+                        />
+                        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                            <div className="relative aspect-video w-[80%] rounded-3xl border-2 border-white/20">
+                                <div className="border-primary absolute -left-1 -top-1 h-8 w-8 rounded-tl-xl border-l-4 border-t-4" />
+                                <div className="border-primary absolute -right-1 -top-1 h-8 w-8 rounded-tr-xl border-r-4 border-t-4" />
+                                <div className="border-primary absolute -bottom-1 -left-1 h-8 w-8 rounded-bl-xl border-b-4 border-l-4" />
+                                <div className="border-primary absolute -bottom-1 -right-1 h-8 w-8 rounded-br-xl border-b-4 border-r-4" />
                             </div>
                         </div>
                     </>
@@ -110,16 +125,16 @@ export default function WebCameraScanner({ onCapture, onClose }: Props) {
             </div>
 
             {!error && (
-                <div className="p-12 bg-black flex flex-col items-center gap-6">
+                <div className="flex flex-col items-center gap-6 bg-black p-12">
                     <canvas ref={canvasRef} className="hidden" />
                     <motion.button
                         whileTap={{ scale: 0.85 }}
                         onClick={capturePhoto}
-                        className="w-20 h-20 rounded-full border-4 border-white/20 flex items-center justify-center p-1"
+                        className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-white/20 p-1"
                     >
-                        <div className="w-full h-full rounded-full bg-white shadow-lg" />
+                        <div className="h-full w-full rounded-full bg-white shadow-lg" />
                     </motion.button>
-                    <p className="text-white/30 text-[9px] font-black uppercase tracking-[0.3em]">Készíts fotót az óráról</p>
+                    <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">Készíts fotót az óráról</p>
                 </div>
             )}
         </motion.div>
