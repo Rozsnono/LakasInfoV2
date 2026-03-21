@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'LakasInfo',
   webDir: 'public',
   server: {
-    url: 'https://IDE_IRD_AZ_ELES_URL_CIMEDET.com',
+    url: 'https://lakas-info-v2.vercel.app',
     cleartext: true
   }
 };
