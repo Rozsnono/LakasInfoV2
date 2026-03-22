@@ -5,6 +5,7 @@ import { Download, Smartphone, QrCode, Globe } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { getVersionNumber } from "@/lib/versioning";
 
 export default function DesktopWarning() {
     const router = useRouter();
@@ -48,7 +49,7 @@ export default function DesktopWarning() {
                 </div>
 
                 <div className="mt-6 flex w-full flex-col gap-4">
-                    <a href="/LakasInfoV2.apk" download className="w-full">
+                    <a href={`/LakasInfoV${getVersionNumber()}.apk`} download className="w-full">
                         <motion.button
                             whileTap={{ scale: 0.96 }}
                             className="flex w-full items-center justify-center gap-3 rounded-[2rem] bg-primary py-6 font-black uppercase tracking-[0.2em] text-white shadow-[0_0_30px_rgba(255,59,48,0.3)] transition-all active:scale-95"
@@ -65,22 +66,6 @@ export default function DesktopWarning() {
                         <Globe className="h-4 w-4" />
                         Folytatás mégis böngészőből
                     </button>
-
-                    <div className="flex w-full flex-col items-center gap-4 rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-md">
-                        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/50">
-                            <QrCode className="h-4 w-4" />
-                            <span>Vagy olvasd be mobillal</span>
-                        </div>
-                        <div className="flex h-32 w-32 items-center justify-center rounded-xl bg-white p-2">
-                            <Image
-                                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent("https://lakas-info-v2.vercel.app")}`}
-                                alt="LakasInfo QR"
-                                className="h-full w-full object-contain"
-                                width={150}
-                                height={150}
-                            />
-                        </div>
-                    </div>
                 </div>
             </motion.div>
 

@@ -3,6 +3,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, Cpu, Sparkles, Smartphone, ShieldCheck, Code2, Bot } from "lucide-react";
+import { getVersionNumber } from "@/lib/versioning";
 
 interface Props {
     isOpen: boolean;
@@ -44,7 +45,7 @@ export default function AppInfoSheet({ isOpen, onClose }: Props) {
                             </div>
                             <h2 className="text-2xl font-black italic tracking-tight text-white uppercase">Lakas<span className="text-primary">Info</span></h2>
                             <span className="mt-1 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-primary">
-                                Verzió 1.3.4
+                                Verzió {getVersionNumber()}
                             </span>
                         </div>
 
