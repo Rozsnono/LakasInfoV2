@@ -9,6 +9,7 @@ export interface IUser extends Document {
     colorCode: string;
     createdAt: Date;
     updatedAt: Date;
+    selectedHouse?: mongoose.Types.ObjectId | null;
 }
 
 const UserSchema: Schema<IUser> = new Schema(
@@ -46,6 +47,11 @@ const UserSchema: Schema<IUser> = new Schema(
                 ref: "House",
             },
         ],
+        selectedHouse: {
+            type: Schema.Types.ObjectId,
+            ref: "House",
+            default: null,
+        },
     },
     {
         timestamps: true,

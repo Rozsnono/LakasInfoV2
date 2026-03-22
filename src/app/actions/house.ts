@@ -114,6 +114,27 @@ export async function getUserHouseAction() {
 }
 
 /**
+ * Lekéri a felhasználó házának adatait
+ * (Hasznos a middleware-ben vagy az onboarding redirectnél)
+ */
+export async function getUserHousesAction() {
+    try {
+        const userId = await getUserIdFromToken();
+        if (!userId) return { success: false, hasHouse: false };
+
+        const result = await HouseService.getHousesDetailsByUserId(userId);
+
+        return {
+            success: result.success,
+            hasHouse: result.success && !!result.houses && result.houses.length > 0,
+            houses: result.houses ? JSON.parse(JSON.stringify(result.houses)) : null
+        };
+    } catch (error) {
+        return { success: false, hasHouse: false };
+    }
+}
+
+/**
  * Háztartás adatainak frissítése
  */
 export async function updateHouseAction(houseId: string, name: string, address: string) {
@@ -200,6 +221,23 @@ export async function removeRoommateAction(memberId: string) {
 
         const result = await HouseService.removeMember(houseRes.house._id.toString(), memberId, userId);
         if (result.success) revalidatePath("/dashboard/roommates");
+
+        return result;
+    } catch (error) {
+        return { success: false, message: "Hiba történt." };
+    }
+}
+
+/**
+ * Lakás kiválasztása a több ház közül (ha van ilyen)
+ */
+export async function selectHouseAction(houseId: string) {
+    try {
+        const userId = await getUserIdFromToken();
+        if (!userId) return { success: false, message: "Bejelentkezés szükséges." };
+
+        const result = await HouseService.changeSelectedHouse(userId, houseId);
+        if (result.success) revalidatePath("/dashboard");
 
         return result;
     } catch (error) {

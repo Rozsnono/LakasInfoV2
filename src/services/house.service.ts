@@ -14,6 +14,10 @@ export interface HouseServiceResponse {
     newToken?: string;
 }
 
+export interface HousesServiceResponse extends HouseServiceResponse {
+    houses?: IHouse[];
+}
+
 export const HouseService = {
 
     async getHouseById(houseId: string): Promise<IHouse | null> {
@@ -73,6 +77,7 @@ export const HouseService = {
 
             await User.findByIdAndUpdate(ownerObjectId, {
                 $push: { houses: newHouse._id },
+                $set: { selectedHouse: newHouse._id }
             });
 
             return {
@@ -112,6 +117,7 @@ export const HouseService = {
 
             await User.findByIdAndUpdate(userObjectId, {
                 $push: { houses: house._id },
+                $set: { selectedHouse: house._id }
             });
 
             return {
@@ -148,8 +154,8 @@ export const HouseService = {
     async getHouseDetailsByUserId(userId: string): Promise<HouseServiceResponse> {
         try {
             await dbConnect();
-
-            const house = await House.findOne({ members: new mongoose.Types.ObjectId(userId) })
+            const houseId = await User.findById(userId).select("selectedHouse").lean().exec();
+            const house = await House.findOne({ _id: houseId?.selectedHouse })
                 .populate("members", "name email image colorCode").exec();
 
             if (!house) {
@@ -159,6 +165,24 @@ export const HouseService = {
             return { success: true, message: "Adatok lekérve.", house: house };
         } catch (error) {
             console.error("GetHouseDetailsByUserId Error:", error);
+            return { success: false, message: "Hiba történt az adatok lekérésekor." };
+        }
+    },
+
+    async getHousesDetailsByUserId(userId: string): Promise<HousesServiceResponse> {
+        try {
+            await dbConnect();
+
+            const houses = await House.find({ members: new mongoose.Types.ObjectId(userId) })
+                .populate("members", "name email image colorCode").exec();
+
+            if (!houses || houses.length === 0) {
+                return { success: false, message: "A háztartás nem található." };
+            }
+
+            return { success: true, message: "Adatok lekérve.", houses: houses };
+        } catch (error) {
+            console.error("GetHousesDetailsByUserId Error:", error);
             return { success: false, message: "Hiba történt az adatok lekérésekor." };
         }
     },
@@ -301,6 +325,40 @@ export const HouseService = {
             return { success: true, message: "Tag eltávolítva." };
         } catch (error) {
             return { success: false, message: "Hiba az eltávolítás során." };
+        }
+    },
+
+    async changeSelectedHouse(userId: string, houseId: string): Promise<HouseServiceResponse> {
+        try {
+            await dbConnect();
+            const userObjectId = new mongoose.Types.ObjectId(userId);
+            const houseObjectId = new mongoose.Types.ObjectId(houseId);
+
+            const house = await House.findById(houseObjectId);
+            if (!house) {
+                return { success: false, message: "Ház nem található." };
+            }
+
+            const isMember = house.members.some((id: mongoose.Types.ObjectId) =>
+                id.equals(userObjectId)
+            );
+
+            if (!isMember) {
+                return { success: false, message: "Nem vagy tagja ennek a háztartásnak." };
+            }
+
+            await User.findByIdAndUpdate(userObjectId, {
+                $set: { selectedHouse: houseObjectId }
+            });
+
+            return {
+                success: true,
+                message: "Aktív háztartás megváltoztatva.",
+                newToken: await this.getNewUserToken(userId, houseId)
+            };
+        } catch (error) {
+            console.error("ChangeSelectedHouse Error:", error);
+            return { success: false, message: "Hiba a háztartás váltása során." };
         }
     }
 };

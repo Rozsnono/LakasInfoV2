@@ -1,8 +1,10 @@
+"use client";
+
 import { JSX, useEffect, useState } from "react";
 import { useAppearance } from "@/contexts/appearance.context";
 import { motion } from "framer-motion";
 import Link from "@/contexts/router.context";
-import { Crown, CrownIcon, TrendingDown, TrendingUp } from "lucide-react";
+import { CrownIcon, TrendingDown, TrendingUp, Loader2, LayoutGrid } from "lucide-react";
 import { getMetersForWidgetAction } from "@/app/actions/meter"
 import { MeterWithStats } from "@/services/meter.service";
 import { getMeterVisuals } from "@/types/meter";
@@ -14,45 +16,86 @@ export default function Widgets() {
 
     const [meters, setMeters] = useState<MeterWithStats[]>([]);
     const [house, setHouse] = useState<IHouse | null>(null);
-
     const [widgetComponents, setWidgetComponents] = useState<{ id: string; type: 'small' | 'large' | string; component: JSX.Element }[]>([]);
+
+    // Töltési állapot
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchMeters = async () => {
-            const results = await getMetersForWidgetAction();
-            setMeters(results.results.meters);
-            setHouse(results.results.house);
-            const components = [
-                ...MonthlyCandCWidgetByMeter(results.results.meters),
-                {
-                    type: 'large',
-                    id: 'unit-overallStatus',
-                    component: <OverallStatusWidget meters={results.results.meters} />
-                },
-                {
-                    type: 'large',
-                    id: 'unit-roommateStatus',
-                    component: <RoommateStatusWidget members={results.results.house?.members} />
-                }
-            ];
-            setWidgetComponents(components);
+            setIsLoading(true);
+            try {
+                const results = await getMetersForWidgetAction();
+                setMeters(results.results.meters);
+                setHouse(results.results.house);
+                const components = [
+                    ...MonthlyCandCWidgetByMeter(results.results.meters),
+                    {
+                        type: 'large',
+                        id: 'unit-overallStatus',
+                        component: <OverallStatusWidget meters={results.results.meters} />
+                    },
+                    {
+                        type: 'large',
+                        id: 'unit-roommateStatus',
+                        component: <RoommateStatusWidget members={results.results.house?.members} />
+                    }
+                ];
+                setWidgetComponents(components);
+            } catch (error) {
+                console.error("Hiba a widgetek betöltésekor:", error);
+            } finally {
+                setIsLoading(false);
+            }
         };
         fetchMeters();
     }, []);
 
+    // 1. Töltőképernyő
+    if (isLoading) {
+        return (
+            <div className="col-span-2 flex flex-col items-center justify-center py-16 gap-4 opacity-70">
+                <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-white/60">
+                    Widgetek töltése...
+                </span>
+            </div>
+        );
+    }
+
+    // Szűrjük a megjelenítendő widgeteket
+    const activeWidgets = widgetComponents.filter(f => widgets[house?._id.toString() || ""]?.includes(f.id));
+
+    // 2. Üres állapot (ha nincs bekapcsolva egy widget sem)
+    if (activeWidgets.length === 0) {
+        return (
+            <div className="col-span-2 flex flex-col items-center justify-center py-12 px-6 mt-2 bg-white/[0.02] border border-dashed border-white/10 rounded-[2.5rem] gap-4">
+                <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center shadow-inner">
+                    <LayoutGrid className="w-6 h-6 text-white/30" />
+                </div>
+                <div className="text-center space-y-1">
+                    <span className="block text-white/60 text-sm font-black uppercase tracking-widest">Nincs aktív widget</span>
+                    <span className="block text-white/30 text-[10px] font-bold uppercase tracking-wider leading-relaxed">
+                        Kattints a fenti + gombra,<br />hogy személyre szabd a kezdőképernyőd!
+                    </span>
+                </div>
+            </div>
+        );
+    }
+
+    // 3. Rendereljük a widgeteket, ha vannak
     return (
         <React.Fragment>
-            {widgetComponents.filter(f => widgets.includes(f.id)).map((w, index) => (
+            {activeWidgets.map((w, index) => (
                 <div key={index} className={`${w.type === 'small' ? '' : 'col-span-2'} `}>
                     {w.component}
                 </div>
             ))}
         </React.Fragment>
-    )
+    );
 }
 
 function MonthlyCandCWidgetByMeter(meters: MeterWithStats[]) {
-
     const graphPaths =
     {
         villany: { up: "M 0 45 Q 40 40 80 30 T 160 10", down: "M 0 10 Q 40 15 80 30 T 160 40" },
@@ -239,4 +282,3 @@ function RoommateAvatar({ name, init, color, isOwner }: { name: string; init: st
         </div>
     );
 }
-

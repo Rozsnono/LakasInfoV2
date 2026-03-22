@@ -54,7 +54,7 @@ export class SettingsService {
      * @param data A frissítendő beállítások adatai
      * @returns A frissített beállítások vagy hiba esetén egy hibaüzenet
      */
-    static async updateSettings(userId: string, data: { theme: "dark" | "light" | "system"; accent: string; animations: boolean; wallpaper: string, widgets: string[] }) {
+    static async updateSettings(userId: string, data: { theme: "dark" | "light" | "system"; accent: string; animations: boolean; wallpaper: string, widgets: { [houseId: string]: string[] } }) {
         try {
             await dbConnect();
 

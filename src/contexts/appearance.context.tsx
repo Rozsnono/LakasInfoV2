@@ -53,25 +53,25 @@ interface AppearanceContextType {
     accent: string;
     animations: boolean;
     wallpaper: string;
-    widgets: string[];
+    widgets: { [houseId: string]: string[] };
     setTheme: (t: "dark" | "light" | "system") => void;
     setAccent: (a: string) => void;
     setAnimations: (enabled: boolean) => void;
     setWallpaper: (id: string) => void;
-    setWidgets: (widgets: string[]) => void;
+    setWidgets: (widgets: { [houseId: string]: string[] }) => void;
 }
 
 const AppearanceContext = createContext<AppearanceContextType | undefined>(undefined);
 
 export function AppearanceProvider({ children, initialValues }: {
     children: React.ReactNode;
-    initialValues: { theme: string | undefined; accent: string | undefined; animations: string | undefined; wallpaper: string | undefined; widgets: string[] | undefined }
+    initialValues: { theme: string | undefined; accent: string | undefined; animations: string | undefined; wallpaper: string | undefined; widgets: { [houseId: string]: string[] } | undefined }
 }) {
     const [theme, setThemeState] = useState<"dark" | "light" | "system">(initialValues.theme as "dark" | "light" | "system" || "dark");
     const [accent, setAccentState] = useState(initialValues.accent || "#ff3b30");
     const [animations, setAnimationsState] = useState(initialValues.animations !== "false");
     const [wallpaper, setWallpaperState] = useState(initialValues.wallpaper || "v1");
-    const [widgets, setWidgetsState] = useState(initialValues.widgets || []);
+    const [widgets, setWidgetsState] = useState(initialValues.widgets || {});
 
     const setterThemeState = (t: "dark" | "light" | "system") => {
         setThemeState(t);
@@ -97,7 +97,7 @@ export function AppearanceProvider({ children, initialValues }: {
         updateSettingsAction({ theme, accent, animations, wallpaper: id, widgets });
     }
 
-    const setterWidgetsState = (w: string[]) => {
+    const setterWidgetsState = (w: { [houseId: string]: string[] }) => {
         setWidgetsState(w);
         saveCookie("app_widgets", JSON.stringify(w));
         updateSettingsAction({ theme, accent, animations, wallpaper, widgets: w });

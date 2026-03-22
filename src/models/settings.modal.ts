@@ -6,7 +6,7 @@ export interface ISettings extends Document {
     accent: string;
     animations: boolean;
     wallpaper: string;
-    widgets: string[];
+    widgets: { [houseId: string]: string[] };
 }
 
 const SettingsSchema: Schema<ISettings> = new Schema(
@@ -16,7 +16,7 @@ const SettingsSchema: Schema<ISettings> = new Schema(
         accent: { type: String, default: "#ff3b30" },
         animations: { type: Boolean, default: true },
         wallpaper: { type: String, default: "v6" },
-        widgets: { type: [String], default: [] },
+        widgets: { type: Map, of: [String], default: {} },
     },
     { timestamps: true, versionKey: false }
 );

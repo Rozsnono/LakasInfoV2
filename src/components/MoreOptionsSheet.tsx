@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { FileDown, Settings, Users, PenTool, CheckCircle, ChevronLeft, FileSpreadsheet, Printer } from "lucide-react";
+import { FileDown, Settings, Users, PenTool, CheckCircle, ChevronLeft, FileSpreadsheet, Printer, House, HousePlug, HousePlus } from "lucide-react";
 import { useRouter } from "@/contexts/router.context";
 import { HouseData, useHouse } from "@/contexts/house.context";
 import { getAllReadingsAction } from "@/app/actions/reading";
@@ -137,6 +137,15 @@ export default function MoreOptionsSheet({ isOpen, onClose }: MoreOptionsSheetPr
                                     icon={<Settings className="w-6 h-6 text-white/60" />}
                                     label="Ház beállításai"
                                     sub="Cím és fogyasztási keretek"
+                                    onClick={() => { }}
+                                />
+                            </Link>
+
+                            <Link href={'/dashboard/properties'}>
+                                <OptionItem
+                                    icon={<HousePlus className="w-6 h-6 text-white/60" />}
+                                    label="Házak kezelése"
+                                    sub="Házváltás és új ház létrehozása"
                                     onClick={() => { }}
                                 />
                             </Link>

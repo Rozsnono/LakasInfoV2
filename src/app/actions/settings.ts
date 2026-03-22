@@ -30,7 +30,7 @@ export async function getSettingsAction() {
     };
 }
 
-export async function updateSettingsAction(data: { theme: "dark" | "light" | "system"; accent: string; animations: boolean; wallpaper: string, widgets: string[] }) {
+export async function updateSettingsAction(data: { theme: "dark" | "light" | "system"; accent: string; animations: boolean; wallpaper: string, widgets: { [houseId: string]: string[] } }) {
     const userId = await getUserIdFromToken();
     if (!userId) return { success: false, error: "Auth hiba" };
 

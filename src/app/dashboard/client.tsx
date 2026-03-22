@@ -26,6 +26,7 @@ import { useUser } from "@/contexts/user.context";
 import { getNotificationsAction } from "@/app/actions/notification";
 import Widgets from "@/components/Widgets";
 import { useAppearance } from "@/contexts/appearance.context";
+import { useHouse } from "@/contexts/house.context";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -77,7 +78,8 @@ export default function DashboardClient({
     const [isWidgetSheetOpen, setIsWidgetSheetOpen] = useState(false);
 
     const { widgets, setWidgets } = useAppearance();
-    const [activeWidgetIds, setActiveWidgetIds] = useState<string[]>(widgets);
+    const { house } = useHouse();
+    const [activeWidgetIds, setActiveWidgetIds] = useState<string[]>(widgets[house?._id.toString() || ""] || []);
 
     const [unreadCount, setUnreadCount] = useState(initialUnreadCount);
     const { user } = useUser();
@@ -90,8 +92,8 @@ export default function DashboardClient({
     };
 
     useEffect(() => {
-        if (activeWidgetIds.length != widgets.length) {
-            setWidgets(activeWidgetIds);
+        if (activeWidgetIds.length != (widgets[house?._id.toString() || ""] || []).length) {
+            setWidgets({ ...widgets, [house?._id.toString() || ""]: activeWidgetIds });
         }
     }, [activeWidgetIds]);
 
@@ -168,10 +170,12 @@ export default function DashboardClient({
                     <h2 className="text-6xl font-black tracking-tighter text-text-primary italic">
                         {totalMonthlyCost.toLocaleString()} <span className="text-2xl text-primary not-italic">Ft</span>
                     </h2>
-                    <div className="flex items-center gap-2 mt-4 text-text-secondary text-[10px] font-bold uppercase tracking-wider bg-surface-elevated/50 px-4 py-1.5 rounded-full border border-white/5 shadow-sm">
-                        <MapPin className="w-3 h-3 text-primary" />
-                        {houseAddress}
-                    </div>
+                    <motion.div whileTap={{ scale: 1.02 }} className="mt-3">
+                        <Link href="/dashboard/properties" className="flex items-center gap-2 mt-4 text-text-secondary text-[10px] font-bold uppercase tracking-wider bg-surface-elevated/50 px-4 py-1.5 rounded-full border border-white/5 shadow-sm">
+                            <MapPin className="w-3 h-3 text-primary" />
+                            {houseAddress}
+                        </Link>
+                    </motion.div>
                 </motion.div>
 
                 <motion.div variants={itemVariants} className="flex justify-between px-2 mt-4">
