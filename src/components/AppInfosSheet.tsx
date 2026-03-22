@@ -44,7 +44,7 @@ export default function AppInfoSheet({ isOpen, onClose }: Props) {
                             </div>
                             <h2 className="text-2xl font-black italic tracking-tight text-white uppercase">Lakas<span className="text-primary">Info</span></h2>
                             <span className="mt-1 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-primary">
-                                Verzió 1.3.3
+                                Verzió 1.3.4
                             </span>
                         </div>
 

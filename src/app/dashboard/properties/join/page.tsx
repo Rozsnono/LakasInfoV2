@@ -85,6 +85,10 @@ export default function JoinHousePage() {
             const newCodeArr = scannedText.toUpperCase().split("");
             setCode(newCodeArr);
             setIsScanning(false); // Kamera bezárása
+        } else {
+            setError("A beolvasott QR kód érvénytelen. Győződj meg róla, hogy a kód pontosan 6 karakterből áll.");
+            setIsScanning(false);
+            if (navigator.vibrate) navigator.vibrate(300);
         }
     };
 
