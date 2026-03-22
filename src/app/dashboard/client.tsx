@@ -13,7 +13,8 @@ import {
     Flame,
     Droplets,
     TrendingUp,
-    TrendingDown
+    TrendingDown,
+    ChartColumn
 } from "lucide-react";
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "@/contexts/router.context";
@@ -151,6 +152,11 @@ export default function DashboardClient({
                             className="bg-transparent text-text-primary text-sm font-medium w-full focus:outline-none placeholder:text-text-secondary"
                         />
                     </div>
+                    <Link href="/dashboard/stats">
+                        <div className="w-10 h-10 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center border border-white/5 shrink-0 relative active:scale-95 transition-transform">
+                            <ChartColumn className="w-5 h-5 text-text-primary" />
+                        </div>
+                    </Link>
                     <button
                         onClick={() => setIsNotificationsOpen(true)}
                         className="w-10 h-10 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center border border-white/5 shrink-0 relative active:scale-95 transition-transform"

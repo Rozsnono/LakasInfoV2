@@ -18,8 +18,14 @@ export default function InviteCodeSheet({ isOpen, onClose, inviteCode, copied, o
     // Lucide ikon konvertálása QR-kód barát formátumba
     const iconAsDataUrl = useMemo(() => {
         const svgString = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles-icon lucide-sparkles"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>
-    `;
+            <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="180 160 230 230" preserveAspectRatio="xMidYMid meet" width="100%" height="100%">
+            <g transform="translate(0.000000,600.000000) scale(0.100000,-0.100000)" fill="#ffffff" stroke="none">
+                <path d="M2120 4148 c-85 -43 -81 13 -78 -880 3 -777 3 -787 24 -814 11 -15 33 -37 48 -48 27 -20 41 -21 489 -24 518 -3 523 -3 575 66 22 29 27 46 27 93 0 70 -21 104 -85 137 -44 22 -50 22 -417 22 l-373 0 0 678 c0 636 -1 679 -18 712 -19 36 -88 80 -127 80 -11 0 -41 -10 -65 -22z"/>
+                <path d="M3860 4154 c-22 -9 -168 -147 -382 -362 l-348 -347 0 270 c0 295 -3 315 -61 358 -63 46 -171 27 -210 -37 -18 -29 -19 -60 -19 -551 0 -571 -2 -548 60 -580 68 -35 127 -13 190 72 24 32 252 268 507 524 l463 465 0 53 c0 65 -26 105 -84 132 -49 22 -70 23 -116 3z"/>
+                <path d="M3425 3242 c-41 -25 -103 -96 -111 -126 -3 -13 0 -35 8 -49 20 -38 247 -267 275 -278 116 -44 237 69 191 179 -7 17 -71 90 -142 162 -141 142 -158 150 -221 112z"/>
+            </g>
+            </svg>
+        `.trim();
         return `data:image/svg+xml;base64,${btoa(svgString)}`;
     }, []);
 

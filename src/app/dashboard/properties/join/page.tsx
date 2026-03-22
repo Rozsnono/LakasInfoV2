@@ -4,8 +4,9 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import { ArrowLeft, Loader2, AlertCircle, QrCode, ScanLine, X, Sparkles } from "lucide-react";
 import Link from "@/contexts/router.context";
 import { useRouter } from "@/contexts/router.context";
-import React, { useState, useRef, KeyboardEvent, ChangeEvent } from "react";
+import React, { useState, useRef, KeyboardEvent, ChangeEvent, useEffect } from "react";
 import { joinHouseAction } from "@/app/actions/house";
+import jsQR from "jsqr"; // A JSQR CSOMAG IMPORTÁLÁSA
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -77,7 +78,7 @@ export default function JoinHousePage() {
         }
     };
 
-    // Callback a jövőbeli QR kód olvasóhoz
+    // Callback a QR kód olvasóhoz
     const onScanSuccess = (scannedText: string) => {
         if (scannedText && scannedText.length === 6) {
             const newCodeArr = scannedText.toUpperCase().split("");
@@ -214,11 +215,6 @@ export default function JoinHousePage() {
                                         <ScanLine className="w-16 h-16 text-primary/50 animate-pulse" strokeWidth={1.5} />
                                     </div>
 
-                                    {/* IDE JÖN A KAMERA KOMPONENS! */}
-                                    <p className="text-white/20 text-[10px] font-black uppercase tracking-widest z-20">
-                                        Kamera engedélyezése...
-                                    </p>
-
                                     {/* Szkennelő keret */}
                                     <div className="absolute inset-8 border-2 border-dashed border-white/20 rounded-[2rem] z-20 pointer-events-none" />
                                 </div>
@@ -244,6 +240,159 @@ export default function JoinHousePage() {
             >
                 LakasInfo Ecosystem
             </motion.p>
+
+            {/* QR SZKENNER OVERLAY */}
+            <AnimatePresence>
+                {isScanning && (
+                    <QRScannerOverlay
+                        onClose={() => setIsScanning(false)}
+                        onSuccess={onScanSuccess}
+                    />
+                )}
+            </AnimatePresence>
+        </motion.div>
+    );
+}
+
+// --- NATÍV KAMERA KOMPONENS A JSQR-REL BEÉPÍTVE ---
+interface ScannerProps {
+    onClose: () => void;
+    onSuccess: (code: string) => void;
+}
+
+function QRScannerOverlay({ onClose, onSuccess }: ScannerProps) {
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        let currentStream: MediaStream | null = null;
+        let scanInterval: NodeJS.Timeout;
+
+        async function startCamera() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                setError("A kamera API nem elérhető. Engedélyezd a hozzáférést!");
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } },
+                    audio: false,
+                });
+
+                currentStream = stream;
+
+                if (videoRef.current) {
+                    videoRef.current.srcObject = stream;
+
+                    // JSQR logikája beépítve a video frame-ek elemzésére
+                    scanInterval = setInterval(() => {
+                        const canvas = canvasRef.current;
+                        const video = videoRef.current;
+                        
+                        if (canvas && video && video.readyState === video.HAVE_ENOUGH_DATA) {
+                            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                            if (!ctx) return;
+
+                            canvas.width = video.videoWidth;
+                            canvas.height = video.videoHeight;
+                            
+                            // Képkocka felrajzolása a láthatatlan vászonra
+                            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                            
+                            // QR keresés: Az inversionAttempts a kulcs a sötét/inverz kódokhoz!
+                            const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                                inversionAttempts: "attemptBoth",
+                            });
+                            
+                            if (code && code.data) {
+                                clearInterval(scanInterval);
+                                onSuccess(code.data);
+                            }
+                        }
+                    }, 300); // 300ms-enként szkennel (kíméli az akkumulátort)
+                }
+            } catch (err: unknown) {
+                if (err instanceof Error && err.name === "NotAllowedError") {
+                    setError("Megtagadtad a kamera hozzáférést. Kérlek, engedélyezd a beállításokban!");
+                } else {
+                    setError("Nem sikerült elindítani a kamerát. Próbáld meg újra!");
+                }
+            }
+        }
+
+        startCamera();
+
+        return () => {
+            if (currentStream) currentStream.getTracks().forEach((track) => track.stop());
+            if (scanInterval) clearInterval(scanInterval);
+        };
+    }, [onSuccess]);
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: "100%" }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-[300] flex flex-col bg-black"
+        >
+            <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between bg-gradient-to-b from-black/80 to-transparent p-6 pt-12">
+                <button
+                    onClick={onClose}
+                    className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-xl active:scale-90 transition-transform"
+                >
+                    <X size={24} />
+                </button>
+                <span className="text-[10px] font-black uppercase italic tracking-[0.3em] text-white">Kód beolvasása</span>
+                <div className="w-12" />
+            </div>
+
+            <div className="relative flex flex-1 items-center justify-center overflow-hidden">
+                {error ? (
+                    <div className="flex flex-col items-center gap-4 px-10 text-center z-20">
+                        <AlertCircle className="h-12 w-12 text-red-500" />
+                        <p className="text-xs font-bold uppercase leading-relaxed tracking-widest text-white/60">
+                            {error}
+                        </p>
+                        <button
+                            onClick={onClose}
+                            className="mt-4 rounded-2xl bg-white/10 border border-white/20 px-8 py-4 text-[10px] font-black uppercase tracking-widest text-white active:bg-white/20 transition-colors"
+                        >
+                            Vissza a kézi bevitelhez
+                        </button>
+                    </div>
+                ) : (
+                    <>
+                        <video ref={videoRef} autoPlay playsInline muted className="h-full w-full object-cover opacity-60" />
+                        <canvas ref={canvasRef} className="hidden" />
+
+                        {/* Scanner célkereszt és animáció */}
+                        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-8">
+                            <div className="relative aspect-square w-[70%] rounded-3xl border border-white/20 bg-white/5 backdrop-blur-[2px] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+                                {/* Pásztázó lézer animáció */}
+                                <motion.div
+                                    animate={{ y: ["0%", "400%", "0%"] }}
+                                    transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
+                                    className="absolute top-0 w-full h-1/4 bg-gradient-to-b from-primary/0 via-primary/30 to-primary/0"
+                                />
+
+                                {/* Sarkok (célkereszt) */}
+                                <div className="absolute -left-1 -top-1 h-12 w-12 rounded-tl-3xl border-l-4 border-t-4 border-primary" />
+                                <div className="absolute -right-1 -top-1 h-12 w-12 rounded-tr-3xl border-r-4 border-t-4 border-primary" />
+                                <div className="absolute -bottom-1 -left-1 h-12 w-12 rounded-bl-3xl border-b-4 border-l-4 border-primary" />
+                                <div className="absolute -bottom-1 -right-1 h-12 w-12 rounded-br-3xl border-b-4 border-r-4 border-primary" />
+                            </div>
+                            <div className="flex flex-col items-center gap-2 bg-black/40 px-6 py-3 rounded-full backdrop-blur-md">
+                                <ScanLine className="w-6 h-6 text-primary animate-pulse" />
+                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/80">Illeszd a kódot a keretbe</p>
+                            </div>
+                        </div>
+                    </>
+                )}
+            </div>
         </motion.div>
     );
 }
