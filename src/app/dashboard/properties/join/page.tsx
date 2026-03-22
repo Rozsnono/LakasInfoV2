@@ -6,7 +6,7 @@ import Link from "@/contexts/router.context";
 import { useRouter } from "@/contexts/router.context";
 import React, { useState, useRef, KeyboardEvent, ChangeEvent, useEffect } from "react";
 import { joinHouseAction } from "@/app/actions/house";
-import jsQR from "jsqr"; // A JSQR CSOMAG IMPORTÁLÁSA
+import QrScanner from "qr-scanner"; // A LEGERŐSEBB WEBASSEMBLY MOTOR
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -80,11 +80,11 @@ export default function JoinHousePage() {
 
     // Callback a QR kód olvasóhoz
     const onScanSuccess = (scannedText: string) => {
+        console.log("Scanned QR Code:", scannedText);
         if (scannedText && scannedText.length === 6) {
             const newCodeArr = scannedText.toUpperCase().split("");
             setCode(newCodeArr);
-            setIsScanning(false);
-            handleJoin(undefined, scannedText);
+            setIsScanning(false); // Kamera bezárása
         }
     };
 
@@ -110,9 +110,7 @@ export default function JoinHousePage() {
 
             <div className="relative z-10 w-full max-w-sm mx-auto flex flex-col gap-10 flex-1">
                 <motion.div variants={itemVariants} className="space-y-4">
-                    <h2 className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-2">
-                        {isScanning ? "Kód beolvasása" : "Meghívó kód"}
-                    </h2>
+                    <h2 className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-2">Meghívó kód</h2>
 
                     {/* Hibaüzenet */}
                     <AnimatePresence mode="wait">
@@ -215,7 +213,7 @@ export default function JoinHousePage() {
                                         <ScanLine className="w-16 h-16 text-primary/50 animate-pulse" strokeWidth={1.5} />
                                     </div>
 
-                                    {/* Szkennelő keret */}
+                                    {/* Szkennelő keret helyőrzője, amíg tölt a kamera */}
                                     <div className="absolute inset-8 border-2 border-dashed border-white/20 rounded-[2rem] z-20 pointer-events-none" />
                                 </div>
 
@@ -254,7 +252,7 @@ export default function JoinHousePage() {
     );
 }
 
-// --- NATÍV KAMERA KOMPONENS A JSQR-REL BEÉPÍTVE ---
+// --- NATÍV KAMERA KOMPONENS (QR-SCANNER WEBASSEMBLY MOTORRAL) ---
 interface ScannerProps {
     onClose: () => void;
     onSuccess: (code: string) => void;
@@ -262,72 +260,46 @@ interface ScannerProps {
 
 function QRScannerOverlay({ onClose, onSuccess }: ScannerProps) {
     const videoRef = useRef<HTMLVideoElement>(null);
-    const canvasRef = useRef<HTMLCanvasElement>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        let currentStream: MediaStream | null = null;
-        let scanInterval: NodeJS.Timeout;
+        let isMounted = true;
+        let qrScanner: QrScanner | null = null;
 
-        async function startCamera() {
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                setError("A kamera API nem elérhető. Engedélyezd a hozzáférést!");
-                return;
-            }
+        const startScanner = async () => {
+            if (!videoRef.current) return;
 
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } },
-                    audio: false,
-                });
-
-                currentStream = stream;
-
-                if (videoRef.current) {
-                    videoRef.current.srcObject = stream;
-
-                    // JSQR logikája beépítve a video frame-ek elemzésére
-                    scanInterval = setInterval(() => {
-                        const canvas = canvasRef.current;
-                        const video = videoRef.current;
-                        
-                        if (canvas && video && video.readyState === video.HAVE_ENOUGH_DATA) {
-                            const ctx = canvas.getContext('2d', { willReadFrequently: true });
-                            if (!ctx) return;
-
-                            canvas.width = video.videoWidth;
-                            canvas.height = video.videoHeight;
-                            
-                            // Képkocka felrajzolása a láthatatlan vászonra
-                            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                            
-                            // QR keresés: Az inversionAttempts a kulcs a sötét/inverz kódokhoz!
-                            const code = jsQR(imageData.data, imageData.width, imageData.height, {
-                                inversionAttempts: "attemptBoth",
-                            });
-                            
-                            if (code && code.data) {
-                                clearInterval(scanInterval);
-                                onSuccess(code.data);
-                            }
+                // A qr-scanner csomag inicializálása
+                qrScanner = new QrScanner(
+                    videoRef.current,
+                    (result: string) => {
+                        // HA MEGTALÁLTA A KÓDOT!
+                        if (isMounted && result) {
+                            isMounted = false;
+                            qrScanner?.stop();
+                            onSuccess(result);
                         }
-                    }, 300); // 300ms-enként szkennel (kíméli az akkumulátort)
-                }
+                    }
+                );
+
+                await qrScanner.start();
             } catch (err: unknown) {
-                if (err instanceof Error && err.name === "NotAllowedError") {
-                    setError("Megtagadtad a kamera hozzáférést. Kérlek, engedélyezd a beállításokban!");
-                } else {
-                    setError("Nem sikerült elindítani a kamerát. Próbáld meg újra!");
+                if (isMounted) {
+                    setError((err as Error).message || "Kamera hozzáférés megtagadva vagy nem elérhető.");
+                    console.error("Scanner Error:", err);
                 }
             }
-        }
+        };
 
-        startCamera();
+        startScanner();
 
         return () => {
-            if (currentStream) currentStream.getTracks().forEach((track) => track.stop());
-            if (scanInterval) clearInterval(scanInterval);
+            isMounted = false;
+            if (qrScanner) {
+                qrScanner.stop();
+                qrScanner.destroy();
+            }
         };
     }, [onSuccess]);
 
@@ -366,8 +338,10 @@ function QRScannerOverlay({ onClose, onSuccess }: ScannerProps) {
                     </div>
                 ) : (
                     <>
-                        <video ref={videoRef} autoPlay playsInline muted className="h-full w-full object-cover opacity-60" />
-                        <canvas ref={canvasRef} className="hidden" />
+                        <video
+                            ref={videoRef}
+                            className="absolute inset-0 w-full h-full object-cover opacity-60"
+                        />
 
                         {/* Scanner célkereszt és animáció */}
                         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-8">

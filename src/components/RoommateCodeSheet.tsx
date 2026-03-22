@@ -82,13 +82,11 @@ export default function InviteCodeSheet({ isOpen, onClose, inviteCode, copied, o
                                         quietZone={10}
                                         bgColor="transparent"
                                         fgColor="white"
-                                        qrStyle="dots"
-                                        eyeRadius={50}
+                                        eyeRadius={3}
                                         logoImage={iconAsDataUrl}
                                         logoWidth={50}
                                         logoHeight={50}
                                         logoPadding={5}
-                                        logoPaddingStyle="circle"
                                         removeQrCodeBehindLogo
                                     />
                                 </div>
