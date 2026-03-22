@@ -170,6 +170,13 @@ export async function deleteHouseAction(houseId: string) {
         if (result.success) {
             revalidatePath("/dashboard");
             revalidatePath("/onboarding");
+            (await cookies()).set("token", "", {
+                httpOnly: true,
+                maxAge: 0,
+                path: "/",
+                sameSite: "lax",
+            });
+
             return { success: true, message: "Háztartás törölve." };
         }
 

@@ -50,12 +50,13 @@ export const AuthService = {
                 return { success: false, message: "Hibás e-mail cím vagy jelszó." };
             }
 
-            const token = signToken({ userId: user._id.toString(), email: user.email, name: user.name, colorCode: user.colorCode, houseId: user.houses[0] ? user.houses[0].toString() : null });
+            const houseId = user.selectedHouse ? user.selectedHouse.toString() : (user.houses[0] ? user.houses[0].toString() : null);
+            const token = signToken({ userId: user._id.toString(), email: user.email, name: user.name, colorCode: user.colorCode, houseId });
 
             return {
                 success: true,
                 token,
-                user: { id: user._id.toString(), name: user.name, email: user.email, colorCode: user.colorCode, houseId: user.houses[0] ? user.houses[0].toString() : null },
+                user: { id: user._id.toString(), name: user.name, email: user.email, colorCode: user.colorCode, houseId },
             };
         } catch (error) {
             console.error("AuthService Login Error:", error);

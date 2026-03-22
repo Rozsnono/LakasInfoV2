@@ -2,6 +2,7 @@ import dbConnect from "@/lib/dbConnect";
 import { signToken } from "@/lib/jwt";
 import House, { IHouse } from "@/models/house.model";
 import User, { IUser } from "@/models/user.model";
+import Settings from "@/models/settings.modal";
 import mongoose from "mongoose";
 
 /**
@@ -28,6 +29,7 @@ export const HouseService = {
             _id: house._id,
             name: house.name,
             address: house.address,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             members: house.members.map((member: any) => ({
                 _id: member._id,
                 name: member.name,
@@ -154,8 +156,11 @@ export const HouseService = {
     async getHouseDetailsByUserId(userId: string): Promise<HouseServiceResponse> {
         try {
             await dbConnect();
-            const houseId = await User.findById(userId).select("selectedHouse").lean().exec();
-            const house = await House.findOne({ _id: houseId?.selectedHouse })
+            const houseId = await User.findById(userId).select("selectedHouse houses").lean().exec();
+            if (!houseId || !houseId.selectedHouse && (!houseId.houses || houseId.houses.length === 0)) {
+                return { success: false, message: "Nincs aktív háztartás." };
+            }
+            const house = await House.findOne({ _id: houseId?.selectedHouse || houseId?.houses[0]?.toString() })
                 .populate("members", "name email image colorCode").exec();
 
             if (!house) {
@@ -226,7 +231,12 @@ export const HouseService = {
             // 2. Távolítsuk el a ház hivatkozást az összes tagnál a User modellben
             await User.updateMany(
                 { _id: { $in: house.members } },
-                { $pull: { houses: houseObjectId } }
+                { $pull: { houses: houseObjectId }, $set: { selectedHouse: null } }
+            );
+
+            await Settings.updateMany(
+                { userId: { $in: house.members } },
+                { $pull: { "widgets": { [houseId]: { $exists: true } } } }
             );
 
             // 3. Töröljük magát a házat

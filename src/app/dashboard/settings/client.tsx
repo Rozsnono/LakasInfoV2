@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, Variants } from "framer-motion";
-import { ArrowLeft, Home, MapPin, Save, Trash2, ShieldAlert, Loader2, CheckCircle2 } from "lucide-react";
+import { motion, Variants, AnimatePresence } from "framer-motion";
+import { ArrowLeft, Home, MapPin, Save, Trash2, ShieldAlert, Loader2, X, Check } from "lucide-react";
 import Link from "@/contexts/router.context";
 import { useRouter } from "@/contexts/router.context";
 import { updateHouseAction, deleteHouseAction } from "@/app/actions/house";
@@ -39,6 +39,7 @@ export default function HouseSettingsClient({ initialHouse }: SettingsClientProp
 
     const [isSaving, setIsSaving] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false); // ÚJ: Megerősítés állapota
     const [status, setStatus] = useState<{ type: 'success' | 'error', msg: string } | null>(null);
 
     const handleSave = async () => {
@@ -57,18 +58,16 @@ export default function HouseSettingsClient({ initialHouse }: SettingsClientProp
         setIsSaving(false);
     };
 
-    const handleDelete = async () => {
-        const confirmDelete = confirm("Biztosan törölni szeretnéd a háztartást? Minden adat (mérések, fotók) véglegesen elveszik!");
-        if (!confirmDelete) return;
-
+    const handleConfirmDelete = async () => {
         setIsDeleting(true);
         const result = await deleteHouseAction(initialHouse._id);
 
         if (result.success) {
             router.push("/onboarding");
         } else {
-            alert(result.message);
+            setStatus({ type: 'error', msg: result.message || "Hiba a törlés során" });
             setIsDeleting(false);
+            setIsConfirmingDelete(false); // Visszaállítjuk az állapotot hiba esetén
         }
     };
 
@@ -77,7 +76,7 @@ export default function HouseSettingsClient({ initialHouse }: SettingsClientProp
             initial="hidden"
             animate="visible"
             variants={containerVariants}
-            className="relative min-h-screen  px-4 pt-12 pb-24 flex flex-col gap-8 overflow-x-hidden"
+            className="relative min-h-screen px-4 pt-12 pb-24 flex flex-col gap-8 overflow-x-hidden"
         >
 
             <motion.header variants={itemVariants} className="relative z-10 flex items-center gap-4">
@@ -119,16 +118,19 @@ export default function HouseSettingsClient({ initialHouse }: SettingsClientProp
                     </div>
                 </div>
 
-                {status && (
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className={`p-4 rounded-2xl border text-xs font-bold uppercase tracking-widest text-center ${status.type === 'success' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-red-500/10 border-red-500/20 text-red-500'
-                            }`}
-                    >
-                        {status.msg}
-                    </motion.div>
-                )}
+                <AnimatePresence>
+                    {status && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className={`p-4 rounded-2xl border text-xs font-bold uppercase tracking-widest text-center ${status.type === 'success' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-red-500/10 border-red-500/20 text-red-500'
+                                }`}
+                        >
+                            {status.msg}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
                 <button
                     onClick={handleSave}
@@ -157,14 +159,46 @@ export default function HouseSettingsClient({ initialHouse }: SettingsClientProp
                         A háztartás törlésével az összes lakótárs hozzáférése megszűnik, és minden rögzített mérési adat véglegesen törlődik. Ez a művelet nem vonható vissza.
                     </p>
 
-                    <button
-                        onClick={handleDelete}
-                        disabled={isDeleting}
-                        className="w-full py-5 bg-red-500/10 text-red-500 rounded-2xl font-black uppercase tracking-widest text-[10px] border border-red-500/20 active:bg-red-500/20 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                    >
-                        {isDeleting && <Loader2 className="w-3 h-3 animate-spin" />}
-                        Háztartás végleges törlése
-                    </button>
+                    {/* Változó Gomb Szekció */}
+                    <AnimatePresence mode="wait">
+                        {!isConfirmingDelete ? (
+                            <motion.button
+                                key="delete-btn"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                onClick={() => setIsConfirmingDelete(true)}
+                                className="w-full py-5 bg-red-500/10 text-red-500 rounded-2xl font-black uppercase tracking-widest text-[10px] border border-red-500/20 active:bg-red-500/20 transition-all flex items-center justify-center gap-2"
+                            >
+                                Háztartás végleges törlése
+                            </motion.button>
+                        ) : (
+                            <motion.div
+                                key="confirm-btns"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                className="flex gap-3"
+                            >
+                                <button
+                                    onClick={() => setIsConfirmingDelete(false)}
+                                    disabled={isDeleting}
+                                    className="flex-1 py-5 bg-white/5 text-white/60 rounded-2xl font-black uppercase tracking-widest text-[10px] border border-white/5 active:bg-white/10 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                >
+                                    <X className="w-4 h-4" />
+                                    Mégsem
+                                </button>
+                                <button
+                                    onClick={handleConfirmDelete}
+                                    disabled={isDeleting}
+                                    className="flex-1 py-5 bg-red-500 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-[0_0_20px_rgba(239,68,68,0.3)] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                                >
+                                    {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+                                    Biztosan!
+                                </button>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             </motion.div>
         </motion.div>
