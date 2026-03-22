@@ -26,10 +26,11 @@ export default async function RootLayout({
   const cookieStore = await cookies();
 
   const initialValues = {
-    theme: cookieStore.get("app_theme")?.value || "dark",
-    accent: cookieStore.get("app_accent")?.value || "#ff3b30",
-    animations: cookieStore.get("app_animations")?.value || "true",
-    wallpaper: cookieStore.get("app_wallpaper")?.value || "v1",
+    theme: cookieStore.get("app_theme")?.value || undefined,
+    accent: cookieStore.get("app_accent")?.value || undefined,
+    animations: cookieStore.get("app_animations")?.value || undefined,
+    wallpaper: cookieStore.get("app_wallpaper")?.value || undefined,
+    widgets: JSON.parse(cookieStore.get("app_widgets")?.value || "null") || undefined
   };
 
   return (

@@ -27,6 +27,7 @@ export async function getCurrentUserAction(): Promise<{ success: boolean; user?:
             _id: userId,
             name: (payload.name as string) || "Felhasználó",
             email: (payload.email as string) || "",
+            colorCode: (payload.colorCode as string) || "#ff3b30",
             houseId: houseRes.house?._id?.toString(),
             house: houseRes.house ? {
                 _id: houseRes.house._id.toString(),
@@ -44,26 +45,23 @@ export async function getCurrentUserAction(): Promise<{ success: boolean; user?:
 /**
  * Profil adatok frissítése
  */
-export async function updateProfileAction(data: { name: string; email: string }): Promise<{ success: boolean; message?: string }> {
+export async function updateProfileAction(data: { name: string; email: string, colorCode: string }): Promise<{ success: boolean; message?: string }> {
     try {
         const cookieStore = await cookies();
         const token = cookieStore.get("token")?.value;
 
         if (!token) return { success: false, message: "Nincs bejelentkezve" };
 
-        // 1. Token ellenőrzése és userId kinyerése
         const { payload } = await jwtVerify(token, JWT_SECRET);
         const userId = payload.userId as string;
 
-        // 2. Adatbázis frissítése (Service hívás)
-        // Itt a te UserService-edet vagy AuthService-edet kell hívni
         await UserService.updateProfile(userId, data);
 
-        // 3. ÚJ TOKEN GENERÁLÁSA (hogy a frontend azonnal lássa az új nevet/emailt)
         const newToken = await new SignJWT({
-            ...payload, // Megtartjuk a régi adatokat (pl. role, userId)
-            name: data.name, // De felülírjuk az újakkal
-            email: data.email
+            ...payload,
+            name: data.name,
+            email: data.email,
+            colorCode: data.colorCode
         })
             .setProtectedHeader({ alg: "HS256" })
             .setIssuedAt()

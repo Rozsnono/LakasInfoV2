@@ -34,19 +34,13 @@ export default function DashboardNav() {
             href: "/dashboard/stats",
             icon: <BarChart3 className="w-5 h-5" strokeWidth={2} />,
             isActive: pathname.startsWith("/dashboard/stats"),
-        },
-        {
-            label: "Profil",
-            href: "/dashboard/profile",
-            icon: <User className="w-5 h-5" strokeWidth={2} />,
-            isActive: pathname.startsWith("/dashboard/profile"),
-        },
+        }
     ];
 
     return (
         <>
             {/* Lebegő alsó navigációs sáv */}
-            <div className="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-md bg-[#131314]/90 backdrop-blur-xl border border-white/10 rounded-[2rem] px-6 py-4 flex justify-between items-center z-50 shadow-2xl">
+            <div className="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-md bg-[#131314]/90 backdrop-blur-xl border border-white/10 rounded-[2rem] px-6 py-4 flex justify-between items-center z-50 shadow-2xl">
                 {navItems.map((item) => (
                     <Link
                         key={item.href}

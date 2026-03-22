@@ -14,6 +14,7 @@ export interface JWTPayload {
     userId: string;
     email: string;
     name: string;
+    colorCode?: string;
     houseId?: string | null;
 }
 
@@ -26,5 +27,6 @@ export interface AuthResponse {
         name: string;
         email: string;
         houseId?: string | null;
+        colorCode?: string;
     };
 }

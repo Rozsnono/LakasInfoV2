@@ -140,15 +140,6 @@ export default function MoreOptionsSheet({ isOpen, onClose }: MoreOptionsSheetPr
                                     onClick={() => { }}
                                 />
                             </Link>
-
-                            <Link href={'/dashboard/appearance'}>
-                                <OptionItem
-                                    icon={<PenTool className="w-6 h-6 text-white/60" />}
-                                    label="Megjelenés"
-                                    sub="Sötét mód és színek"
-                                    onClick={() => { }}
-                                />
-                            </Link>
                         </div>
                     </motion.div>
                 </>

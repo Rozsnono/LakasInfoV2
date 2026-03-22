@@ -218,7 +218,7 @@ export default function StatsPage() {
                                         Teljes fogyasztás
                                     </span>
                                     <div className="flex items-end gap-3 mt-1">
-                                        <h2 className="text-4xl font-black">{statsData?.totalConsumption || "0"}</h2>
+                                        <h2 className="text-2xl font-black">{statsData?.totalConsumption || "0"}</h2>
                                         <span className={`${trendColor} text-sm font-bold mb-1`}>{trendIcon} {statsData?.trend || "0%"}</span>
                                     </div>
                                 </div>

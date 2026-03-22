@@ -20,9 +20,12 @@ import Link from "@/contexts/router.context";
 import NewReadingSheet from "@/components/NewReadingSheet";
 import MoreOptionsSheet from "@/components/MoreOptionsSheet";
 import NotificationsSheet from "@/components/NotificationsSheet";
+import WidgetSelectionSheet from "@/components/WidgetSheet";
 import { MeterWithStats } from "@/services/meter.service";
 import { useUser } from "@/contexts/user.context";
-import { getNotificationsAction } from "@/app/actions/notification"; // Importálva a frissítéshez
+import { getNotificationsAction } from "@/app/actions/notification";
+import Widgets from "@/components/Widgets";
+import { useAppearance } from "@/contexts/appearance.context";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -59,22 +62,26 @@ const balanceVariants: Variants = {
     },
 };
 
-export default function DashboardClient({ 
-    houseAddress, 
+export default function DashboardClient({
+    houseAddress,
     initialMeters,
-    initialUnreadCount 
-}: { 
-    houseAddress: string; 
+    initialUnreadCount
+}: {
+    houseAddress: string;
     initialMeters: MeterWithStats[];
     initialUnreadCount: number;
 }) {
     const [isNewReadingOpen, setIsNewReadingOpen] = useState(false);
     const [isMoreOpen, setIsMoreOpen] = useState(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+    const [isWidgetSheetOpen, setIsWidgetSheetOpen] = useState(false);
+
+    const { widgets, setWidgets } = useAppearance();
+    const [activeWidgetIds, setActiveWidgetIds] = useState<string[]>(widgets);
+
     const [unreadCount, setUnreadCount] = useState(initialUnreadCount);
     const { user } = useUser();
 
-    // Értesítések számának frissítése a backendből
     const refreshNotifications = async () => {
         const res = await getNotificationsAction();
         if (res.success) {
@@ -82,7 +89,12 @@ export default function DashboardClient({
         }
     };
 
-    // Ha bezáródik a sheet, frissítsük a számot
+    useEffect(() => {
+        if (activeWidgetIds.length != widgets.length) {
+            setWidgets(activeWidgetIds);
+        }
+    }, [activeWidgetIds]);
+
     useEffect(() => {
         if (!isNotificationsOpen) {
             // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -93,6 +105,16 @@ export default function DashboardClient({
     const totalMonthlyCost = useMemo(() => {
         return initialMeters.reduce((acc, meter) => acc + meter.stats.totalCost, 0);
     }, [initialMeters]);
+
+    const filteredMeters = useMemo(() => {
+        return initialMeters.filter(meter => activeWidgetIds.includes(meter._id.toString()));
+    }, [initialMeters, activeWidgetIds]);
+
+    const handleToggleWidget = (id: string) => {
+        setActiveWidgetIds(prev =>
+            prev.includes(id) ? prev.filter(wId => wId !== id) : [...prev, id]
+        );
+    };
 
     const getMeterVisuals = (type: string) => {
         switch (type) {
@@ -110,12 +132,11 @@ export default function DashboardClient({
             variants={containerVariants}
             className="relative min-h-full"
         >
-
-            <div className="relative z-10 px-4 pt-12 pb-6 flex flex-col gap-8">
+            <div className="relative z-10 px-4 pt-12 pb-12 flex flex-col gap-8">
                 <motion.header variants={itemVariants} className="flex items-center gap-3">
                     <Link href={'/dashboard/profile'}>
-                        <div className="w-10 h-10 rounded-full bg-surface-elevated overflow-hidden border border-white/10 shrink-0 flex items-center justify-center">
-                            <span className="font-bold text-text-primary text-sm uppercase">
+                        <div style={{ background: user?.colorCode }} className="w-10 h-10 rounded-full p-[0.1rem] overflow-hidden border border-white/10 shrink-0 flex items-center justify-center">
+                            <span className="font-bold text-text-primary text-sm uppercase bg-surface-elevated px-2 rounded-full w-full text-center tracking-tighter h-full flex items-center justify-center">
                                 {user?.name ? (user.name.charAt(0) + (user.name.split(' ')[1]?.charAt(0) || '')) : "?"}
                             </span>
                         </div>
@@ -133,7 +154,6 @@ export default function DashboardClient({
                         className="w-10 h-10 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center border border-white/5 shrink-0 relative active:scale-95 transition-transform"
                     >
                         <Bell className="w-5 h-5 text-text-primary" />
-                        {/* Dinamikus Badge: Csak ha van olvasatlan */}
                         {unreadCount > 0 && (
                             <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-primary rounded-full border-2 border-surface shadow-[0_0_10px_rgba(255,59,48,0.5)]"></span>
                         )}
@@ -174,57 +194,40 @@ export default function DashboardClient({
                 </motion.div>
 
                 <motion.div variants={itemVariants} className="grid grid-cols-2 gap-4 mt-2">
-                    {initialMeters.slice(0, 2).map((meter) => {
-                        const visual = getMeterVisuals(meter.type);
-                        const isWarning = meter.stats.isOverLimit;
-
-                        return (
-                            <UsageGraphCard
-                                key={meter._id.toString()}
-                                title={meter.name}
-                                value={`${meter.stats.consumption} ${meter.unit}`}
-                                trend={`${meter.stats.totalCost.toLocaleString()} Ft`}
-                                trendUp={isWarning}
-                                color={visual.hex}
-                                graphPath={isWarning
-                                    ? "M 0 45 Q 40 40 80 30 T 160 10"
-                                    : "M 0 10 Q 40 15 80 30 T 160 40"
-                                }
-                            />
-                        );
-                    })}
+                    <Widgets />
                 </motion.div>
 
-                <motion.div variants={itemVariants} className="bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-xl mt-2 flex flex-col gap-6">
-                    <div className="flex justify-between items-center mb-1">
-                        <h3 className="text-text-primary font-black text-lg tracking-tight uppercase italic">Aktuális állapot</h3>
-                        <Link href="/dashboard/meters" className="text-primary text-xs font-black uppercase tracking-widest active:opacity-70">
-                            Összes
-                        </Link>
-                    </div>
-
-                    <div className="flex flex-col gap-5">
-                        {initialMeters.map((meter) => {
-                            const visual = getMeterVisuals(meter.type);
-                            return (
-                                <Link key={meter._id.toString()} href={`/dashboard/meters/${meter._id}`}>
-                                    <ReadingItem
-                                        title={meter.name}
-                                        time={meter.stats.isOverLimit ? "Limit felett!" : "Kereten belül"}
-                                        value={`${meter.lastReadingValue.toLocaleString()} ${meter.unit}`}
-                                        icon={visual.icon}
-                                        color={visual.color}
-                                    />
-                                </Link>
-                            );
-                        })}
-                    </div>
+                <motion.div
+                    variants={itemVariants}
+                    className="flex justify-center mt-4"
+                >
+                    <motion.button
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setIsWidgetSheetOpen(true)}
+                        className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-8 py-4 shadow-lg backdrop-blur-sm"
+                    >
+                        <Plus className="w-5 h-5 text-text-primary" strokeWidth={3} />
+                        <span className="text-text-primary font-black uppercase tracking-widest text-xs">
+                            Widgetek hozzáadása
+                        </span>
+                    </motion.button>
                 </motion.div>
+
+
             </div>
 
             <NewReadingSheet isOpen={isNewReadingOpen} onClose={() => setIsNewReadingOpen(false)} />
             <MoreOptionsSheet isOpen={isMoreOpen} onClose={() => setIsMoreOpen(false)} />
             <NotificationsSheet isOpen={isNotificationsOpen} onClose={() => setIsNotificationsOpen(false)} />
+
+            <WidgetSelectionSheet
+                isOpen={isWidgetSheetOpen}
+                onClose={() => setIsWidgetSheetOpen(false)}
+                activeWidgetIds={activeWidgetIds}
+                onToggleWidget={handleToggleWidget}
+                meters={initialMeters}
+            />
+
         </motion.div>
     );
 }
@@ -271,7 +274,9 @@ function UsageGraphCard({ title, value, trend, trendUp, color, graphPath }: Usag
                 <div className="w-2 h-2 rounded-full shadow-lg" style={{ backgroundColor: color, boxShadow: `0 0 10px ${color}` }}></div>
             </div>
             <div className="z-10">
-                <div className="text-text-primary font-black text-2xl tracking-tighter italic">{parseFloat(value).toFixed(2)}</div>
+                <div className="text-text-primary font-black text-2xl tracking-tighter italic">
+                    {parseFloat(value).toFixed(2).toLocaleString()}
+                </div>
                 <div className="text-[10px] font-black flex items-center gap-1 mt-1 uppercase tracking-tight" style={{ color: trendUp ? '#ef4444' : '#10b981' }}>
                     {trendUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                     {trend}

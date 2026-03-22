@@ -50,7 +50,7 @@ export default function AllReadingsClient({ initialReadings }: { initialReadings
     }, [searchQuery, initialReadings]);
 
     const handleShare = async (url: string) => {
-        await exportFile(url, "meroorafoto.jpg", "image/jpeg", false, () => {});
+        await exportFile(url, "meroorafoto.jpg", "image/jpeg", false, () => { });
         // if (navigator.share) {
         //     try {
         //         await navigator.share({ title: "Mérőóra rögzített fotó", url });
@@ -133,17 +133,19 @@ export default function AllReadingsClient({ initialReadings }: { initialReadings
                                                 <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${config.bg}`}>
                                                     {config.icon}
                                                 </div>
+                                                {item.photoUrl && <Camera className="w-3.5 h-3.5 text-primary opacity-80 absolute bottom-0 right-0" />}
                                             </div>
                                             <div className="flex flex-col text-left">
                                                 <span className="font-bold text-[17px] tracking-tight text-white">{item.name}</span>
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-[14px] font-semibold text-text-secondary opacity-70">{item.value}</span>
-                                                    {item.photoUrl && <Camera className="w-3.5 h-3.5 text-primary opacity-80" />}
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <span className="text-xs font-bold text-text-secondary opacity-40 uppercase tracking-widest">{item.dateLabel}</span>
+                                            <div className="flex flex-col items-end">
+                                                <span className="text-[0.5rem] font-bold text-text-secondary opacity-40 uppercase tracking-widest">{item.dateLabel}</span>
+                                            </div>
                                             <ChevronRight className="w-5 h-5 opacity-10" />
                                         </div>
                                     </motion.div>

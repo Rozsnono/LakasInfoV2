@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import mongoose from "mongoose";
+import { HouseService } from "@/services/house.service";
 
 const JWT_SECRET = new TextEncoder().encode(
     process.env.JWT_SECRET || "valami-nagyon-titkos-kulcs"
@@ -132,4 +133,14 @@ export async function analyzeMeterPhotoAction(base64Image: string) {
         if (!result.success) return { success: false, error: result.message };
         return { success: true, value: result.value };
     } catch (error) { return { success: false, error: "AI hiba." }; }
+}
+
+export async function getMetersForWidgetAction() {
+    try {
+        const userId = await getUserIdFromToken();
+        if (!userId) return { success: false, error: "Nincs auth!" };
+        const houseId = await HouseService.getHouseDetailsByUserId(userId);
+        const meters = await MeterService.getWidgetsData(houseId.house?._id.toString() || "");
+        return { success: true, results: JSON.parse(JSON.stringify(meters)) };
+    } catch (error) { return { success: false, error: "Lekérési hiba." }; }
 }

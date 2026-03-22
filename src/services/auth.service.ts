@@ -23,12 +23,12 @@ export const AuthService = {
                 password: hashedPassword,
             });
 
-            const token = signToken({ userId: newUser._id.toString(), email: newUser.email, name: newUser.name });
+            const token = signToken({ userId: newUser._id.toString(), email: newUser.email, name: newUser.name, colorCode: newUser.colorCode });
 
             return {
                 success: true,
                 token,
-                user: { id: newUser._id.toString(), name: newUser.name, email: newUser.email },
+                user: { id: newUser._id.toString(), name: newUser.name, email: newUser.email, colorCode: newUser.colorCode },
             };
         } catch (error) {
             console.error("AuthService Register Error:", error);
@@ -50,12 +50,12 @@ export const AuthService = {
                 return { success: false, message: "Hibás e-mail cím vagy jelszó." };
             }
 
-            const token = signToken({ userId: user._id.toString(), email: user.email, name: user.name, houseId: user.houses[0] ? user.houses[0].toString() : null });
+            const token = signToken({ userId: user._id.toString(), email: user.email, name: user.name, colorCode: user.colorCode, houseId: user.houses[0] ? user.houses[0].toString() : null });
 
             return {
                 success: true,
                 token,
-                user: { id: user._id.toString(), name: user.name, email: user.email, houseId: user.houses[0] ? user.houses[0].toString() : null },
+                user: { id: user._id.toString(), name: user.name, email: user.email, colorCode: user.colorCode, houseId: user.houses[0] ? user.houses[0].toString() : null },
             };
         } catch (error) {
             console.error("AuthService Login Error:", error);

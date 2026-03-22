@@ -19,6 +19,7 @@ export interface ProfileData {
     image?: string;
     houseId?: string;
     house?: HouseData;
+    colorCode?: string;
     firstName?: string;
     householdCode?: string;
 }

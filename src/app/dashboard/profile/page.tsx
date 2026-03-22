@@ -126,7 +126,7 @@ export default function ProfilePage() {
             {/* PROFIL AVATAR */}
             <motion.div variants={itemVariants} className="flex flex-col items-center mt-2">
                 <div onClick={() => setActiveSheet("qr")} className="relative cursor-pointer group">
-                    <div className="w-28 h-28 rounded-full bg-gradient-to-tr from-primary to-orange-500 p-1">
+                    <div className="w-28 h-28 rounded-full p-1" style={{ background: profile?.colorCode }}>
                         <div className="w-full h-full rounded-full bg-surface flex items-center justify-center border-[3px] border-background">
                             <span className="text-4xl font-black text-white tracking-tighter">{initials}</span>
                         </div>
@@ -141,7 +141,7 @@ export default function ProfilePage() {
             {/* GYORS KÁRTYÁK */}
             <div className="grid grid-cols-2 gap-4">
                 <motion.div variants={itemVariants} className="bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-xl flex flex-col justify-between aspect-square">
-                    <div className="w-12 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl" />
+                    <div className="w-12 h-8 rounded-xl" style={{ background: profile?.colorCode }} />
                     <div>
                         <h3 className="text-white font-black text-xl leading-none">{isPro ? "Pro" : "Alap"}</h3>
                         <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest mt-2 block">Csomag</span>

@@ -15,6 +15,26 @@ export interface HouseServiceResponse {
 }
 
 export const HouseService = {
+
+    async getHouseById(houseId: string): Promise<IHouse | null> {
+        await dbConnect();
+        const house = await House.findById(houseId).populate({ path: "members", select: "_id name email colorCode" }).lean<IHouse>().exec();
+        if (!house) return null;
+        const cleanHouse = {
+            _id: house._id,
+            name: house.name,
+            address: house.address,
+            members: house.members.map((member: any) => ({
+                _id: member._id,
+                name: member.name,
+                email: member.email,
+                colorCode: member.colorCode,
+                isOwner: house.ownerId.equals(member._id)
+            }))
+        };
+        return cleanHouse as unknown as IHouse;
+    },
+
     async generateUniqueInviteCode(): Promise<string> {
         await dbConnect();
         let isUnique = false;
@@ -130,14 +150,13 @@ export const HouseService = {
             await dbConnect();
 
             const house = await House.findOne({ members: new mongoose.Types.ObjectId(userId) })
-                .populate("members", "name email image")
-                .exec();
+                .populate("members", "name email image colorCode").exec();
 
             if (!house) {
                 return { success: false, message: "A háztartás nem található." };
             }
 
-            return { success: true, message: "Adatok lekérve.", house };
+            return { success: true, message: "Adatok lekérve.", house: house };
         } catch (error) {
             console.error("GetHouseDetailsByUserId Error:", error);
             return { success: false, message: "Hiba történt az adatok lekérésekor." };

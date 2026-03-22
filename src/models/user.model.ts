@@ -6,6 +6,7 @@ export interface IUser extends Document {
     password: string;
     image?: string;
     houses: mongoose.Types.ObjectId[];
+    colorCode: string;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -34,6 +35,10 @@ const UserSchema: Schema<IUser> = new Schema(
         image: {
             type: String,
             default: null,
+        },
+        colorCode: {
+            type: String,
+            default: "#ff3b30",
         },
         houses: [
             {

@@ -3,6 +3,7 @@ import Meter, { IMeter, IMeterBase } from "@/models/meter.model";
 import Reading from "@/models/reading.model";
 import mongoose from "mongoose";
 import { NotificationService } from "./notification.service";
+import { HouseService } from "./house.service";
 
 export interface CalculationResult {
     consumption: number;
@@ -128,6 +129,32 @@ export const MeterService = {
         }));
 
         return results;
+    },
+
+    async getWidgetsData(houseId: string) {
+        await dbConnect();
+        const houseObjectId = new mongoose.Types.ObjectId(houseId);
+        const house = await HouseService.getHouseById(houseId);
+        const meters = await Meter.find({ houseId: houseObjectId }).lean<IMeterBase[]>().exec();
+        const results = await Promise.all(meters.map(async (meter) => {
+            const readings = await Reading.find({ meterId: meter._id })
+                .sort({ date: -1 })
+                .limit(2)
+                .exec();
+
+            const currentReadingValue = readings[0]?.value ?? meter.initialValue ?? 0;
+            const previousReadingValue = readings[1]?.value ?? meter.initialValue ?? 0;
+
+            const stats = this.calculateConsumptionStats(meter, currentReadingValue, previousReadingValue);
+
+            return {
+                ...meter,
+                lastReadingValue: currentReadingValue,
+                lastReadingDate: readings[0]?.date,
+                stats
+            } as MeterWithStats;
+        }));
+        return { house, meters: results };
     },
 
     calculateConsumptionStats(meter: IMeterBase, current: number, previous: number): CalculationResult {

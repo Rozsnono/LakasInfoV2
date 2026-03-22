@@ -9,7 +9,8 @@ import {
     History,
     MoreVertical,
     AlertCircle,
-    ArrowLeft
+    ArrowLeft,
+    Check
 } from "lucide-react";
 import React, { useState } from "react";
 import Link from "@/contexts/router.context";
@@ -125,16 +126,16 @@ export default function MetersClient({ initialMeters }: { initialMeters: MeterWi
                                         {meter.stats.isOverLimit ? (
                                             <div className="flex items-center gap-2 text-red-500 bg-red-500/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-red-500/20">
                                                 <AlertCircle className="w-3.5 h-3.5" />
-                                                Keret felett!
+                                                
                                             </div>
                                         ) : meter.stats.consumption > (meter.tierLimit || 999999) * 0.8 ? (
                                             <div className="flex items-center gap-2 text-orange-500 bg-orange-500/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-orange-500/20">
                                                 <AlertCircle className="w-3.5 h-3.5" />
-                                                Keret közelében
+                                               
                                             </div>
                                         ) : (
                                             <div className="text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-500/20">
-                                                Optimális
+                                                <Check className="w-3.5 h-3.5" />
                                             </div>
                                         )}
                                     </div>
@@ -152,13 +153,12 @@ export default function MetersClient({ initialMeters }: { initialMeters: MeterWi
                                             <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center">
                                                 <History className="w-4 h-4 opacity-40" />
                                             </div>
-                                            <span className="text-xs font-bold uppercase tracking-widest opacity-60">Előzmények & Grafikon</span>
+                                            <span className="text-xs font-bold uppercase tracking-widest opacity-60">Előzmények</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <span className="text-white font-black text-sm tracking-tight">
-                                                {meter.stats.consumption > 0 ? "+" : ""}{meter.stats.consumption}
+                                                {meter.stats.consumption > 0 ? "+" : ""}{meter.stats.consumption.toFixed(2)} {meter.unit}
                                             </span>
-                                            <span className="text-white/20 font-bold text-[10px] uppercase">/ hó</span>
                                         </div>
                                     </motion.div>
                                 </Link>

@@ -75,7 +75,7 @@ export default function DetailedStatsPage() {
     return (
         <motion.div initial="hidden" animate="visible" className="min-h-screen  flex flex-col text-text-primary">
 
-            <motion.header variants={itemVariants} className="p-6 flex justify-between items-center z-20 gap-3">
+            <motion.header variants={itemVariants} className="p-6 flex justify-between items-center z-20 gap-3 pt-12">
                 <Link href="/dashboard/stats" className="w-10 h-10 rounded-full bg-surface-elevated flex items-center justify-center border border-white/5 shadow-xl shrink-0"><ArrowLeft className="w-5 h-5" /></Link>
 
                 <button
@@ -101,16 +101,13 @@ export default function DetailedStatsPage() {
                     <motion.div variants={itemVariants} className="px-8 mt-4 flex justify-between items-end">
                         <div>
                             <span className="text-text-secondary font-black text-[10px] uppercase opacity-50">{configs[filter].label} • Állás</span>
-                            <h2 className="text-5xl font-black mt-2 tracking-tighter italic">{viewMode === "cost" ? data?.totalCost : data?.totalConsumption}</h2>
+                            <h2 className="text-3xl font-black mt-2 tracking-tighter italic">{viewMode === "cost" ? data?.totalCost : data?.totalConsumption}</h2>
                             <div className={`flex items-center gap-2 font-bold mt-3 text-xs uppercase ${data?.isTrendPositive ? "text-primary" : "text-emerald-500"}`}>
                                 {data?.isTrendPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
                                 <span>{data?.trend} változás</span>
                             </div>
                         </div>
-                        <div className="flex bg-surface-elevated p-1 rounded-2xl border border-white/5 mb-2">
-                            <button onClick={() => setViewMode("cost")} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase ${viewMode === "cost" ? "bg-primary text-white" : "text-white/20"}`}>Ft</button>
-                            <button onClick={() => setViewMode("consumption")} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase ${viewMode === "consumption" ? "bg-primary text-white" : "text-white/20"}`}>Unit</button>
-                        </div>
+
                     </motion.div>
 
                     <motion.div variants={itemVariants} className="flex-1 mt-10 relative px-6 min-h-[300px] flex items-end">
@@ -179,7 +176,7 @@ export default function DetailedStatsPage() {
 
                     <div className="h-10" />
 
-                    <div className="bg-surface rounded-[3rem] p-8 flex-1 border-t border-white/5 z-10 shadow-2xl">
+                    <div className="bg-surface rounded-[3rem] px-6 py-8 flex-1 border-t border-white/5 z-10 shadow-2xl mx-2">
                         <h3 className="font-black text-xl italic uppercase mb-8">Kategóriák</h3>
                         <div className="flex flex-col gap-6">
                             {(Object.keys(cleanConfig) as MeterFilter[]).map(key => (
@@ -188,14 +185,19 @@ export default function DetailedStatsPage() {
                                         <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center">{cleanConfig[key].icon}</div>
                                         <span className="font-black text-lg">{cleanConfig[key].label}</span>
                                     </div>
-                                    <div className="text-right">
-                                        <span className="font-black text-lg italic block">{filter === key ? (viewMode === "cost" ? data?.totalCost : data?.totalConsumption) : "•••"}</span>
+                                    <div className="text-right text-xs">
+                                        <span className="font-black italic block">{filter === key ? (viewMode === "cost" ? data?.totalCost : data?.totalConsumption) : "•••"}</span>
                                         {filter === key && viewMode === "consumption" && key !== "all" && <span className="text-[10px] font-bold text-white/30 uppercase">{cleanConfig[key].unit}</span>}
                                     </div>
                                 </button>
                             ))}
                         </div>
                     </div>
+
+                    {/* <div className="flex bg-surface-elevated p-1 rounded-2xl border border-white/5 mb-2">
+                        <button onClick={() => setViewMode("cost")} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase ${viewMode === "cost" ? "bg-primary text-white" : "text-white/20"}`}>Ft</button>
+                        <button onClick={() => setViewMode("consumption")} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase ${viewMode === "consumption" ? "bg-primary text-white" : "text-white/20"}`}>Unit</button>
+                    </div> */}
                 </>
             )}
 
