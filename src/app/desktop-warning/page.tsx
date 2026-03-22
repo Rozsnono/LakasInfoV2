@@ -49,7 +49,7 @@ export default function DesktopWarning() {
                 </div>
 
                 <div className="mt-6 flex w-full flex-col gap-4">
-                    <a href={`/LakasInfoV${getVersionNumber()}.apk`} download className="w-full">
+                    <a href={`/LakasInfoV2.apk`} download className="w-full">
                         <motion.button
                             whileTap={{ scale: 0.96 }}
                             className="flex w-full items-center justify-center gap-3 rounded-[2rem] bg-primary py-6 font-black uppercase tracking-[0.2em] text-white shadow-[0_0_30px_rgba(255,59,48,0.3)] transition-all active:scale-95"
