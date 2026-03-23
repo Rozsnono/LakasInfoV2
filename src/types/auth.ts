@@ -16,6 +16,7 @@ export interface JWTPayload {
     name: string;
     colorCode?: string;
     houseId?: string | null;
+    subscriptionPlan?: "free" | "pro" | "enterprise";
 }
 
 export interface AuthResponse {
@@ -28,5 +29,6 @@ export interface AuthResponse {
         email: string;
         houseId?: string | null;
         colorCode?: string;
+        subscriptionPlan?: "free" | "pro" | "enterprise";
     };
 }

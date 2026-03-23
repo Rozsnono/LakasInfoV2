@@ -29,6 +29,7 @@ export async function getCurrentUserAction(): Promise<{ success: boolean; user?:
             email: (payload.email as string) || "",
             colorCode: (payload.colorCode as string) || "#ff3b30",
             houseId: houseRes.house?._id?.toString(),
+            subscriptionPlan: (payload.subscriptionPlan as "free" | "pro" | "enterprise") || "free",
             house: houseRes.house ? {
                 _id: houseRes.house._id.toString(),
                 joinCode: houseRes.house.inviteCode,

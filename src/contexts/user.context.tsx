@@ -22,6 +22,7 @@ export interface ProfileData {
     colorCode?: string;
     firstName?: string;
     householdCode?: string;
+    subscriptionPlan?: "free" | "pro" | "enterprise";
 }
 
 interface ProfileContextType {

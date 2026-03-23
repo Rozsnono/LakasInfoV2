@@ -5,7 +5,8 @@ import { motion, Variants } from "framer-motion";
 import {
     X, Gem, QrCode, UserPlus, HelpCircle, User,
     Home, FileText, Lightbulb, Bell, LogOut,
-    PenTool
+    PenTool,
+    ShieldCheck
 } from "lucide-react";
 import Link from "@/contexts/router.context";
 import PersonalDataSheet from "@/components/PersonalDataSheet";
@@ -20,6 +21,7 @@ import { useHouse } from "@/contexts/house.context";
 import { getNotificationsAction } from "@/app/actions/notification";
 import { useRouter } from "@/contexts/router.context";
 import AppInfoSheet from "@/components/AppInfosSheet";
+import { getSubscriptionStatusTitle } from "@/types/subscription";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -40,9 +42,10 @@ const itemVariants: Variants = {
 
 export default function ProfilePage() {
     const { user: profile, logout } = useUser();
+
     const { house } = useHouse();
     const [activeSheet, setActiveSheet] = useState<string | null>(null);
-    const [isPro, setIsPro] = useState(false);
+    const [isPro, setIsPro] = useState(profile?.subscriptionPlan === "pro");
     const [copied, setCopied] = useState(false);
     const router = useRouter();
 
@@ -118,8 +121,12 @@ export default function ProfilePage() {
                     onClick={() => setIsPro(!isPro)}
                     className={`flex items-center gap-2 px-5 py-2.5 rounded-full border transition-all active:scale-95 ${isPro ? "bg-primary border-primary" : "bg-surface-elevated border-white/5"}`}
                 >
-                    <Gem className={`w-4 h-4 ${isPro ? "text-white" : "text-primary"}`} />
-                    <span className={`text-[10px] font-black uppercase tracking-widest ${isPro ? "text-white" : "text-white"}`}>LakasInfo Pro</span>
+                    {
+                        isPro ?
+                            <Gem className="w-4 h-4 text-white" /> :
+                            <ShieldCheck className="w-4 h-4 text-primary" />
+                    }
+                    <span className={`text-[10px] font-black uppercase tracking-widest ${isPro ? "text-white" : "text-white"}`}>LakasInfo {getSubscriptionStatusTitle(profile?.subscriptionPlan || "free")}</span>
                 </button>
             </motion.header>
 
@@ -140,13 +147,15 @@ export default function ProfilePage() {
 
             {/* GYORS KÁRTYÁK */}
             <div className="grid grid-cols-2 gap-4">
-                <motion.div variants={itemVariants} className="bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-xl flex flex-col justify-between aspect-square">
-                    <div className="w-12 h-8 rounded-xl" style={{ background: profile?.colorCode }} />
-                    <div>
-                        <h3 className="text-white font-black text-xl leading-none">{isPro ? "Pro" : "Alap"}</h3>
-                        <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest mt-2 block">Csomag</span>
-                    </div>
-                </motion.div>
+                <Link href="/dashboard/profile/subscriptions">
+                    <motion.div whileTap={{ scale: 0.95 }} variants={itemVariants} className={`bg-surface rounded-[2.5rem] p-6 ${isPro ? "border-2 border-primary" : "border border-white/5"} shadow-xl flex flex-col justify-between aspect-square`}>
+                        <div className="w-12 h-8 rounded-xl" style={{ background: profile?.colorCode }} />
+                        <div>
+                            <h3 className="text-white font-black text-xl leading-none">{getSubscriptionStatusTitle(profile?.subscriptionPlan || "free")}</h3>
+                            <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest mt-2 block">Csomag</span>
+                        </div>
+                    </motion.div>
+                </Link>
 
                 <motion.div variants={itemVariants} onClick={handleCopy} className="bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-xl flex flex-col justify-between aspect-square cursor-pointer active:scale-95 transition-transform">
                     <div className="w-12 h-12 bg-surface-elevated rounded-2xl flex items-center justify-center border border-white/5">

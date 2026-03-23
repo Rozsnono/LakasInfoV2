@@ -3,6 +3,7 @@ import User from "@/models/user.model";
 import bcrypt from "bcryptjs";
 import { signToken } from "@/lib/jwt";
 import { RegisterInput, LoginInput, AuthResponse } from "@/types/auth";
+import { SubscriptionService } from "./subscription.service";
 
 export const AuthService = {
 
@@ -15,6 +16,7 @@ export const AuthService = {
                 return { success: false, message: "Ezzel az e-mail címmel már regisztráltak." };
             }
 
+
             const hashedPassword = await bcrypt.hash(data.password, 12);
 
             const newUser = await User.create({
@@ -23,12 +25,13 @@ export const AuthService = {
                 password: hashedPassword,
             });
 
-            const token = signToken({ userId: newUser._id.toString(), email: newUser.email, name: newUser.name, colorCode: newUser.colorCode });
+            await SubscriptionService.createSubscription(newUser._id.toString());
+            const token = signToken({ userId: newUser._id.toString(), email: newUser.email, name: newUser.name, colorCode: newUser.colorCode, subscriptionPlan: "free" });
 
             return {
                 success: true,
                 token,
-                user: { id: newUser._id.toString(), name: newUser.name, email: newUser.email, colorCode: newUser.colorCode },
+                user: { id: newUser._id.toString(), name: newUser.name, email: newUser.email, colorCode: newUser.colorCode, subscriptionPlan: "free" },
             };
         } catch (error) {
             console.error("AuthService Register Error:", error);
@@ -50,13 +53,15 @@ export const AuthService = {
                 return { success: false, message: "Hibás e-mail cím vagy jelszó." };
             }
 
+            const subscription = await SubscriptionService.getSubscriptionStatus(user._id.toString());
+
             const houseId = user.selectedHouse ? user.selectedHouse.toString() : (user.houses[0] ? user.houses[0].toString() : null);
-            const token = signToken({ userId: user._id.toString(), email: user.email, name: user.name, colorCode: user.colorCode, houseId });
+            const token = signToken({ userId: user._id.toString(), email: user.email, name: user.name, colorCode: user.colorCode, houseId, subscriptionPlan: subscription.plan || "free" });
 
             return {
                 success: true,
                 token,
-                user: { id: user._id.toString(), name: user.name, email: user.email, colorCode: user.colorCode, houseId },
+                user: { id: user._id.toString(), name: user.name, email: user.email, colorCode: user.colorCode, houseId, subscriptionPlan: subscription.plan || "free" },
             };
         } catch (error) {
             console.error("AuthService Login Error:", error);
