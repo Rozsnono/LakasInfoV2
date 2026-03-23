@@ -12,6 +12,8 @@ import {
 import { MeterWithStats } from "@/services/meter.service";
 import { getMeterVisuals } from "@/types/meter";
 import { useAppearance } from "@/contexts/appearance.context";
+import { HouseMapWidget, UpcomingReadingsWidget } from "./Widgets";
+import { useHouse } from "@/contexts/house.context";
 
 interface WidgetSelectionSheetProps {
     isOpen: boolean;
@@ -46,6 +48,8 @@ export default function WidgetSelectionSheet({
     onToggleWidget,
     meters
 }: WidgetSelectionSheetProps) {
+
+    const { house } = useHouse();
 
     const removeAccents = (str: string): string => {
         return str
@@ -157,6 +161,12 @@ export default function WidgetSelectionSheet({
                                         <RoommateAvatar name="Elek" init="TE" color="bg-cyan-400" />
                                     </div>
                                 </motion.div>
+                            </section>
+
+                            <section className="space-y-4">
+                                <UpcomingReadingsWidget meters={meters} isSelection={() => onToggleWidget("unit-upcomingReadings")} isSelected={activeWidgetIds.includes("unit-upcomingReadings")} />
+
+                                <HouseMapWidget address={house?.address} isSelection={() => onToggleWidget("unit-houseMap")} isSelected={activeWidgetIds.includes("unit-houseMap")} />
                             </section>
                         </div>
 

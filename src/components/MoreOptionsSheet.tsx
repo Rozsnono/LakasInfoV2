@@ -47,14 +47,6 @@ export default function MoreOptionsSheet({ isOpen, onClose }: MoreOptionsSheetPr
         }, 150);
     };
 
-    const handleExportCSV = async () => {
-        await exportCsv(house as HouseData, isExporting, setIsExporting, onClose);
-    }
-
-    const handlePrint = async () => {
-        await exportPDF(house as HouseData, isExporting, setIsExporting, onClose);
-    }
-
     return (
         <AnimatePresence>
             {isOpen && (
@@ -105,21 +97,15 @@ export default function MoreOptionsSheet({ isOpen, onClose }: MoreOptionsSheetPr
                                 )}
                             </AnimatePresence>
 
-                            <OptionItem
-                                icon={<FileSpreadsheet className="w-6 h-6 text-emerald-500" />}
-                                label={isExporting ? "Exportálás..." : "Adat-export (CSV)"}
-                                sub="Excel és Google Sheets barát"
-                                onClick={handleExportCSV}
-                                isLoading={isExporting}
-                            />
-
-                            <OptionItem
-                                icon={<Printer className="w-6 h-6 text-blue-400" />}
-                                label="Nyomtatás / PDF"
-                                sub="Lista mentése vagy nyomtatása"
-                                onClick={handlePrint}
-                                isLoading={isExporting}
-                            />
+                            <Link href={'/dashboard/export'} >
+                                <OptionItem
+                                    icon={<Printer className="w-6 h-6 text-blue-400" />}
+                                    label="Nyomtatás / PDF"
+                                    sub="Lista mentése vagy nyomtatása"
+                                    onClick={() => { }}
+                                    isLoading={isExporting}
+                                />
+                            </Link>
 
                             <div className="h-px w-full bg-white/5 my-2" />
 

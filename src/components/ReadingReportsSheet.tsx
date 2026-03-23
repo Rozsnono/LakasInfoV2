@@ -46,13 +46,22 @@ export default function ReadingReportsSheet({ isOpen, onClose }: Props) {
     if (!house) return;
     const month = report.isFullYear ? { start: 0, end: 11 } : report.monthNumeric;
     await exportPDF(
-      house,
-      isExporting,
-      setIsExporting,
-      () => { }, // onReady
       {
-        month: month,
-        year: parseInt(report.year),
+        house: house,
+        isPending: isExporting,
+        setIsPending: setIsExporting,
+        onReady: () => { },
+        date: {
+          month: month,
+          year: parseInt(report.year)
+        },
+        containsOptions: {
+          isContainedMeterValue: true,
+          isContainedMeterDifference: true,
+          isContainedReadingDate: true,
+          isContainedPriceInfo: false,
+          containedMeterTypes: null
+        }
       }
     );
   };

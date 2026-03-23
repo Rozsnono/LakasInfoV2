@@ -90,7 +90,10 @@ export async function getAllReadingsPerMonthAction(houseId: string, month: numbe
             meterName: r.meterName || "Ismeretlen óra",
             meterUnit: r.meterUnit || "",
             difference: r.difference || 0,
-            type: r.meterType || "villany"
+            type: r.meterType || "villany",
+            tierLimit: r.tierLimit || null,
+            basePrice: r.basePrice || null,
+            marketPrice: r.marketPrice || null,
         }));
 
         return { success: true, value: serializedReadings };

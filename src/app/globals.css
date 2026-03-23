@@ -8,7 +8,7 @@
 
 @theme {
   --color-background: #000000;
-  --color-surface: #1c1c1e;
+  --color-surface: #1c1c1ec1;
   --color-surface-elevated: #2c2c2e;
 
   /* Itt összekötjük a Tailwind 'primary' kulcsszót a változónkkal */

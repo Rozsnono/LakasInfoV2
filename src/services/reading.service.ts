@@ -28,6 +28,9 @@ export interface ReadingWithMeterInfo extends IReading {
     meterType: "villany" | "gaz" | "viz";
     meterUnit: string;
     type: "villany" | "gaz" | "viz";
+    tierLimit?: number | null;
+    basePrice?: number | null;
+    marketPrice?: number | null;
 }
 
 export const ReadingService = {
@@ -129,6 +132,9 @@ export const ReadingService = {
                 meterName: (r.meterId as unknown as Record<string, unknown>).name as string,
                 meterType: (r.meterId as unknown as Record<string, unknown>).type as "villany" | "gaz" | "viz",
                 meterUnit: (r.meterId as unknown as Record<string, unknown>).unit as string,
+                tierLimit: (r.meterId as unknown as Record<string, unknown>).tierLimit as number | null,
+                basePrice: (r.meterId as unknown as Record<string, unknown>).basePrice as number | null,
+                marketPrice: (r.meterId as unknown as Record<string, unknown>).marketPrice as number | null,
             }));
 
 
@@ -164,7 +170,7 @@ export const ReadingService = {
                 });
             }
 
-            if(!monthsMap.has(`${year}-full`) && month === 11) {
+            if (!monthsMap.has(`${year}-full`) && month === 11) {
                 monthsMap.set(`${year}-full`, {
                     month: year,
                     monthNumeric: 0,

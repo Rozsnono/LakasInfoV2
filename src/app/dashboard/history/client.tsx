@@ -102,7 +102,7 @@ export default function AllReadingsClient({ initialReadings }: { initialReadings
                 </div>
             </motion.header>
 
-            <motion.main variants={itemVariants} className="px-4 pb-32 flex flex-col flex-1 z-10">
+            <motion.main variants={itemVariants} className=" pb-32 flex flex-col flex-1 z-10">
                 <div className="bg-surface rounded-[2.5rem] border border-white/5 shadow-xl overflow-hidden min-h-[200px]">
                     <AnimatePresence mode="popLayout">
                         {filteredReadings.length === 0 ? (
