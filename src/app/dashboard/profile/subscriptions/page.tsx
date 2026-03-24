@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, Variants } from "framer-motion";
-import { ArrowLeft, Check, Sparkles, Crown, Zap, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { motion, AnimatePresence, Variants } from "framer-motion";
+import { ArrowLeft, Check, Sparkles, Crown, Zap, ShieldCheck, CheckCircle2, CalendarDays } from "lucide-react";
 import Link from "@/contexts/router.context";
 import { useRouter } from "@/contexts/router.context";
 import { updateSubscriptionAction } from "@/app/actions/subscription";
 import { PLANS } from "@/lib/subscriptionPlans";
 import { useUser } from "@/contexts/user.context";
+import React, { useState } from "react";
 
 const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -19,6 +19,8 @@ export default function SubscriptionPageClient() {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const { user: profile } = useUser();
+
+    console.log(profile);
 
     // Fizetés indítás / Frissítés
     const handleUpgrade = async (planId: string) => {
@@ -85,7 +87,7 @@ export default function SubscriptionPageClient() {
 
             {/* Kártyák */}
             <div className="flex flex-col gap-6 relative z-10 mt-2">
-                {PLANS.map((plan, index) => {
+                {PLANS.map((plan) => {
                     const isPro = plan.id === "pro";
                     const price = billingCycle === "monthly" ? plan.priceMonthly : plan.priceYearly;
                     // Jelenlegi csomag ellenőrzése
@@ -96,10 +98,10 @@ export default function SubscriptionPageClient() {
                             key={plan.id}
                             variants={itemVariants}
                             className={`relative rounded-[2.5rem] p-6 flex flex-col gap-6 overflow-hidden transition-all duration-300 ${isCurrentPlan
-                                    ? "bg-surface border-2 border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.15)]" // Jelenlegi: Smaragdzöld dizájn
-                                    : isPro
-                                        ? "bg-surface border-2 border-primary/50 shadow-[0_0_40px_rgba(var(--primary),0.1)]" // Pro: Elsődleges szín
-                                        : "bg-surface-elevated border border-white/5 shadow-xl" // Sima: Alap
+                                ? "bg-surface border-2 border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.15)]" // Jelenlegi: Smaragdzöld dizájn
+                                : isPro
+                                    ? "bg-surface border-2 border-primary/50 shadow-[0_0_40px_rgba(var(--primary),0.1)]" // Pro: Elsődleges szín
+                                    : "bg-surface-elevated border border-white/5 shadow-xl" // Sima: Alap
                                 }`}
                         >
                             {/* Háttér csillogás a Pro-nak és az Aktívnak */}
@@ -125,7 +127,6 @@ export default function SubscriptionPageClient() {
                                             ? "bg-primary/20 text-primary border border-primary/20"
                                             : "bg-white/10 text-white/60"
                                     }`}>
-                                    {/* Biztonsági ellenőrzés, ha a badge string vagy function */}
                                     {typeof plan.badge === 'function' ? plan.badge(isCurrentPlan) : (isCurrentPlan ? "Aktív" : plan.badge)}
                                 </div>
                             </div>
@@ -158,16 +159,25 @@ export default function SubscriptionPageClient() {
                                 ))}
                             </div>
 
+                            {/* Dátum kijelzés, ha ez az aktív, fizetős csomag */}
+                            {isCurrentPlan && plan.id !== "free" && profile.subscriptionExpiresAt && (
+                                <div className="flex items-center justify-center gap-2 mt-2 mb-[-8px] relative z-10">
+                                    <CalendarDays className="w-3.5 h-3.5 text-emerald-500/60" />
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-500/60">
+                                        Érvényes: {new Date(profile.subscriptionExpiresAt).toLocaleDateString("hu-HU", { year: 'numeric', month: 'short', day: 'numeric' })}
+                                    </span>
+                                </div>
+                            )}
+
                             <button
                                 onClick={() => handleUpgrade(plan.id)}
-                                // Ha ez a jelenlegi csomagja, akkor nem kattintható!
                                 disabled={isCurrentPlan || isLoading}
                                 className={`w-full mt-4 py-5 rounded-[2rem] font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center justify-center gap-2 relative z-10 
                                     ${isCurrentPlan
-                                        ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 cursor-default" // Aktív gomb dizájn
+                                        ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 cursor-default"
                                         : isPro
-                                            ? "bg-primary text-white shadow-lg shadow-primary/20 active:scale-95 cursor-pointer" // Pro gomb dizájn
-                                            : "bg-white/10 text-white hover:bg-white/20 active:scale-95 cursor-pointer" // Sima gomb dizájn
+                                            ? "bg-primary text-white shadow-lg shadow-primary/20 active:scale-95 cursor-pointer"
+                                            : "bg-white/10 text-white hover:bg-white/20 active:scale-95 cursor-pointer"
                                     }`}
                             >
                                 {isLoading && !isCurrentPlan ? (

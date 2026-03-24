@@ -2,6 +2,8 @@
 export interface SubscriptionResponse {
     success: boolean;
     message?: string;
+    endDate?: Date | null;
+    plan?: "free" | "pro" | "enterprise";
 }
 
 export interface SubscriptionStatus {

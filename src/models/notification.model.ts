@@ -5,6 +5,7 @@ export interface INotification extends Document {
     meterId?: mongoose.Types.ObjectId;
     title: string;
     message: string;
+    for?: "subscription" | "meterAlert" | "general";
     type: "info" | "warning" | "danger";
     isRead: boolean;
     createdAt: Date;
@@ -15,6 +16,7 @@ const NotificationSchema = new Schema<INotification>({
     meterId: { type: Schema.Types.ObjectId, ref: "Meter" },
     title: { type: String, required: true },
     message: { type: String, required: true },
+    for: { type: String, enum: ["subscription", "meterAlert", "general"], default: "general" },
     type: { type: String, enum: ["info", "warning", "danger"], default: "info" },
     isRead: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now }

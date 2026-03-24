@@ -23,6 +23,7 @@ export interface ProfileData {
     firstName?: string;
     householdCode?: string;
     subscriptionPlan?: "free" | "pro" | "enterprise";
+    subscriptionExpiresAt?: string | null;
 }
 
 interface ProfileContextType {

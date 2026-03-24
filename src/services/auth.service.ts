@@ -26,12 +26,12 @@ export const AuthService = {
             });
 
             await SubscriptionService.createSubscription(newUser._id.toString());
-            const token = signToken({ userId: newUser._id.toString(), email: newUser.email, name: newUser.name, colorCode: newUser.colorCode, subscriptionPlan: "free" });
+            const token = signToken({ userId: newUser._id.toString(), email: newUser.email, name: newUser.name, colorCode: newUser.colorCode, subscriptionPlan: "free", subscriptionExpiresAt: null });
 
             return {
                 success: true,
                 token,
-                user: { id: newUser._id.toString(), name: newUser.name, email: newUser.email, colorCode: newUser.colorCode, subscriptionPlan: "free" },
+                user: { id: newUser._id.toString(), name: newUser.name, email: newUser.email, colorCode: newUser.colorCode, subscriptionPlan: "free", subscriptionExpiresAt: null },
             };
         } catch (error) {
             console.error("AuthService Register Error:", error);
@@ -56,12 +56,12 @@ export const AuthService = {
             const subscription = await SubscriptionService.getSubscriptionStatus(user._id.toString());
 
             const houseId = user.selectedHouse ? user.selectedHouse.toString() : (user.houses[0] ? user.houses[0].toString() : null);
-            const token = signToken({ userId: user._id.toString(), email: user.email, name: user.name, colorCode: user.colorCode, houseId, subscriptionPlan: subscription.plan || "free" });
+            const token = signToken({ userId: user._id.toString(), email: user.email, name: user.name, colorCode: user.colorCode, houseId, subscriptionPlan: subscription.plan || "free", subscriptionExpiresAt: subscription.expiresAt ? subscription.expiresAt.toISOString() : null });
 
             return {
                 success: true,
                 token,
-                user: { id: user._id.toString(), name: user.name, email: user.email, colorCode: user.colorCode, houseId, subscriptionPlan: subscription.plan || "free" },
+                user: { id: user._id.toString(), name: user.name, email: user.email, colorCode: user.colorCode, houseId, subscriptionPlan: subscription.plan || "free", subscriptionExpiresAt: subscription.expiresAt ? subscription.expiresAt.toISOString() : null },
             };
         } catch (error) {
             console.error("AuthService Login Error:", error);

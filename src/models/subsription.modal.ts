@@ -6,6 +6,7 @@ export interface ISubscription extends Document {
     endDate: Date;
     plan: "free" | "pro" | "enterprise";
     isPaid: boolean;
+    isRenewable?: boolean;
 }
 
 const SubscriptionSchema: Schema<ISubscription> = new Schema(
@@ -15,6 +16,7 @@ const SubscriptionSchema: Schema<ISubscription> = new Schema(
         endDate: { type: Date, default: null },
         plan: { type: String, enum: ["free", "pro", "enterprise"], default: "free" },
         isPaid: { type: Boolean, default: false },
+        isRenewable: { type: Boolean, default: true },
     },
     { timestamps: true, versionKey: false }
 );

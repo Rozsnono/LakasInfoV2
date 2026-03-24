@@ -19,6 +19,7 @@ export const SubscriptionService = {
                     startDate: new Date(),
                     endDate: data.type === "monthly" ? new Date(new Date().setMonth(new Date().getMonth() + 1)) : new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
                     plan: data.plan,
+                    isRenewable: true,
                     isPaid: true,
                 },
                 { new: true }
@@ -27,6 +28,8 @@ export const SubscriptionService = {
             return {
                 success: true,
                 message: "Előfizetés sikeresen frissítve.",
+                plan: newData?.plan || "free",
+                endDate: newData?.endDate || null,
             };
         } catch (error) {
             console.error("AuthService Update Subscription Error:", error);
@@ -107,5 +110,27 @@ export const SubscriptionService = {
             console.error("AuthService User Has Pro Subscription Error:", error);
             return false;
         }
+    },
+
+    async checkAndDowngradeExpiredSubscription(userId: string): Promise<{ plan: "free" | "pro" | "enterprise", expiresAt: Date | null } | null> {
+        try {
+            await dbConnect();
+            const subscription = await Subscription.findOne({ userId });
+            if (subscription && subscription.isPaid && !subscription.isRenewable && subscription.endDate && subscription.endDate <= new Date()) {
+                subscription.isPaid = false;
+                subscription.plan = "free";
+                await subscription.save();
+                return { plan: "free", expiresAt: null };
+            } else if (subscription && subscription.isPaid && subscription.isRenewable && subscription.endDate && subscription.endDate <= new Date()) {
+                subscription.endDate = new Date(new Date(subscription.endDate).getTime() + (new Date(subscription.endDate).getTime() - new Date(subscription.startDate).getTime()));
+                await subscription.save();
+                return { plan: subscription.plan, expiresAt: subscription.endDate };
+            } else {
+                return { plan: subscription?.plan || "free", expiresAt: subscription?.endDate || null };
+            }
+        } catch (error) {
+            console.error("AuthService Check And Downgrade Expired Subscription Error:", error);
+        }
+        return null;
     }
 };

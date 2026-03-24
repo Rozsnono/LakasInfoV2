@@ -30,6 +30,7 @@ import Widgets from "@/components/Widgets";
 import { useAppearance } from "@/contexts/appearance.context";
 import { useHouse } from "@/contexts/house.context";
 import PremiumBadge from "@/components/PremiumBadge";
+import { subscriptionIsExpiredAction } from "../actions/subscription";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -95,6 +96,7 @@ export default function DashboardClient({
     };
 
     useEffect(() => {
+        subscriptionIsExpiredAction()
         if (activeWidgetIds.length != (widgets[house?._id.toString() || ""] || []).length) {
             setWidgets({ ...widgets, [house?._id.toString() || ""]: activeWidgetIds });
         }

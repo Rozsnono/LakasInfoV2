@@ -5,6 +5,7 @@ import { jwtVerify, SignJWT } from "jose"; // Hozzáadtuk a SignJWT-t is
 import { HouseService } from "@/services/house.service";
 import { UserService } from "@/services/profile.service"; // Feltételezve, hogy itt van az update
 import { ProfileData } from "@/contexts/user.context";
+import { SubscriptionService } from "@/services/subscription.service";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "valami-titkos-kulcs");
 
@@ -57,12 +58,15 @@ export async function updateProfileAction(data: { name: string; email: string, c
         const userId = payload.userId as string;
 
         await UserService.updateProfile(userId, data);
+        const isExpired = await SubscriptionService.checkAndDowngradeExpiredSubscription(userId);
 
         const newToken = await new SignJWT({
             ...payload,
             name: data.name,
             email: data.email,
-            colorCode: data.colorCode
+            colorCode: data.colorCode,
+            subscriptionPlan: isExpired ? isExpired.plan : (payload.subscriptionPlan as "free" | "pro" | "enterprise"),
+            subscriptionExpiresAt: isExpired ? (isExpired.expiresAt ? isExpired.expiresAt.toISOString() : null) : (payload.subscriptionExpiresAt as string | null)
         })
             .setProtectedHeader({ alg: "HS256" })
             .setIssuedAt()

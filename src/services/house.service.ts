@@ -59,8 +59,9 @@ export const HouseService = {
 
     async getNewUserToken(userId: string, houseId?: string): Promise<string> {
         const user = await User.findById(userId);
+        const subscription = await SubscriptionService.getSubscriptionStatus(userId);
         if (!user) throw new Error("User not found for token generation");
-        const token = signToken({ userId: user._id.toString(), email: user.email, name: user.name, houseId: houseId || null });
+        const token = signToken({ userId: user._id.toString(), email: user.email, name: user.name, houseId: houseId || null, colorCode: user.colorCode, subscriptionPlan: subscription.plan || "free", subscriptionExpiresAt: subscription.expiresAt ? subscription.expiresAt.toISOString() : null });
         return token;
     },
 

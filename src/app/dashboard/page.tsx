@@ -5,6 +5,7 @@ import { NotificationService } from "@/services/notification.service"; // Import
 import DashboardClient from "./client";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
+import { subscriptionIsExpiredAction } from "../actions/subscription";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "valami-nagyon-titkos-kulcs");
 
@@ -25,6 +26,7 @@ export default async function DashboardPage() {
     if (!result.success || !result.hasHouse || !userId) {
         redirect("/onboarding");
     }
+
 
     await NotificationService.makeForSubscriptionEnding(userId);
     // Párhuzamosan kérjük le a mérőórákat és az olvasatlan értesítések számát

@@ -46,7 +46,14 @@ export const NotificationService = {
     async makeForSubscriptionEnding(userId: string) {
         await dbConnect();
         const userSubscription = await SubscriptionService.getSubscriptionStatus(userId);
-        if (!userSubscription || new Date(userSubscription.expiresAt!) > new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)) {
+        const hasNotification = await Notification.findOne({
+            userId: new mongoose.Types.ObjectId(userId),
+            for: "subscription",
+        });
+        if (hasNotification && hasNotification.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) {
+            return null;
+        }
+        if (!userSubscription || !userSubscription.isActive || new Date(userSubscription.expiresAt!) > new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)) {
             // Nincs előfizetés vagy nem jár le 7 napon belül, így nem kell értesítést létrehozni
             return null;
         }
@@ -54,7 +61,8 @@ export const NotificationService = {
             userId: new mongoose.Types.ObjectId(userId),
             title: "Előfizetés lejáróban",
             message: "Az előfizetésed hamarosan lejár. Ne maradj le a prémium funkciókról, újítsd meg most!",
-            type: "warning"
+            type: "warning",
+            for: "subscription"
         });
         return notification;
     }
