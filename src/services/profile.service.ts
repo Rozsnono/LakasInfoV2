@@ -39,4 +39,24 @@ export class UserService {
             throw error; // Továbbdobjuk a Server Action-nek
         }
     }
+
+    static async getUserById(userId: string) {
+        try {
+            await dbConnect();
+            if (!ObjectId.isValid(userId)) {
+                throw new Error("Érvénytelen felhasználó azonosító");
+            }
+
+            const user = await User.findById(userId).select("-password"); // Jelszó kizárása a lekérdezésből
+
+            if (!user) {
+                return { success: false, message: "A felhasználó nem található az adatbázisban" };
+            }
+
+            return { success: true, user };
+        } catch (error) {
+            console.error("UserService Get User Error:", error);
+            return { success: false, message: "Hiba történt a felhasználó lekérdezése során" };
+        }
+    }
 }

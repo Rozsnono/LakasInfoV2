@@ -52,6 +52,10 @@ export async function middleware(request: NextRequest) {
                 return NextResponse.redirect(new URL("/onboarding", request.url));
             }
 
+            if (payload.subscriptionPlan === 'free' && pathname.includes("/calculator")) {
+                return NextResponse.redirect(new URL("/dashboard/profile/subscriptions", request.url));
+            }
+
             return NextResponse.next();
         } catch {
             const response = NextResponse.redirect(new URL("/login", request.url));

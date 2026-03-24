@@ -20,8 +20,6 @@ export default function SubscriptionPageClient() {
     const router = useRouter();
     const { user: profile } = useUser();
 
-    console.log(profile);
-
     // Fizetés indítás / Frissítés
     const handleUpgrade = async (planId: string) => {
         setIsLoading(true);

@@ -22,16 +22,10 @@ async function getUserId() {
 export default async function CalculatorPage() {
     const houseResult = await getUserHouseAction();
     const userId = await getUserId();
-    const isPro = await SubscriptionService.userHasProSubscription(userId?.toString() || "");
 
     if (!houseResult.success || !houseResult.hasHouse) {
         redirect("/onboarding");
     }
-
-    if (!isPro) {
-        redirect("/dashboard");
-    }
-
     // Lekérjük az összes mérőórát a házhoz
     const meters = await MeterService.getMetersByHouse(houseResult.house!._id);
 

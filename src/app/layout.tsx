@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { AppearanceProvider } from "@/contexts/appearance.context";
 import "./globals.css";
 import { ProfileProvider } from "@/contexts/user.context";
+import { StartupProvider } from "@/contexts/startup.context";
 
 export const metadata: Metadata = {
   title: "LakasInfo",
@@ -45,13 +46,15 @@ export default async function RootLayout({
         animation: "var(--app-bg-animation, none)",         // <--- ÉS EZT IS!
         backgroundAttachment: "fixed"
       }}>
-        <AppearanceProvider initialValues={initialValues}>
-          <ProfileProvider >
-            <main className="flex-1 w-full max-w-md mx-auto relative flex flex-col shadow-2xl shadow-black/50  border-x border-white/5">
-              {children}
-            </main>
-          </ProfileProvider>
-        </AppearanceProvider>
+        <StartupProvider>
+          <AppearanceProvider initialValues={initialValues}>
+            <ProfileProvider >
+              <main className="flex-1 w-full max-w-md mx-auto relative flex flex-col shadow-2xl shadow-black/50  border-x border-white/5">
+                {children}
+              </main>
+            </ProfileProvider>
+          </AppearanceProvider>
+        </StartupProvider>
       </body>
     </html >
   );
