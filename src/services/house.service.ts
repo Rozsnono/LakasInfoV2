@@ -4,6 +4,7 @@ import House, { IHouse } from "@/models/house.model";
 import User, { IUser } from "@/models/user.model";
 import Settings from "@/models/settings.modal";
 import mongoose from "mongoose";
+import { SubscriptionService } from "./subscription.service";
 
 /**
  * Szerviz válasz interfész a konzisztens hibakezeléshez
@@ -29,6 +30,7 @@ export const HouseService = {
             _id: house._id,
             name: house.name,
             address: house.address,
+            ownerId: house.ownerId,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             members: house.members.map((member: any) => ({
                 _id: member._id,
@@ -69,6 +71,16 @@ export const HouseService = {
             const inviteCode = await this.generateUniqueInviteCode();
             const ownerObjectId = new mongoose.Types.ObjectId(ownerId);
 
+            const isPro = await SubscriptionService.userHasProSubscription(ownerId);
+            const hasHouse = await User.findById(ownerObjectId).select("houses").lean().exec();
+
+            if (!isPro && hasHouse && hasHouse.houses && hasHouse.houses.length > 0) {
+                return {
+                    success: false,
+                    message: "A háztartás létrehozásához Pro előfizetés szükséges. Kattints a bővebb információért!",
+                };
+            }
+
             const newHouse = await House.create({
                 name,
                 address: address || undefined,
@@ -104,13 +116,21 @@ export const HouseService = {
             if (!house) {
                 return { success: false, message: "Érvénytelen vagy lejárt meghívó kód." };
             }
-
             const isMember = house.members.some((id: mongoose.Types.ObjectId) =>
                 id.equals(userObjectId)
             );
 
             if (isMember) {
                 return { success: false, message: "Már tagja vagy ennek a háztartásnak." };
+            }
+
+            const isPro = await SubscriptionService.userHasProSubscription(house?.ownerId.toString() || "");
+
+            if (!isPro && house?.members.length >= 2) {
+                return {
+                    success: false,
+                    message: "A háztartáshoz való csatlakozáshoz Pro előfizetés szükséges. Kattints a bővebb információért!",
+                };
             }
 
             await House.findByIdAndUpdate(house._id, {

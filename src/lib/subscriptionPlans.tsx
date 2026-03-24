@@ -4,24 +4,24 @@ export const PLANS = [
     {
         id: "free",
         name: "Alap Csomag",
-        badge: "Jelenlegi",
+        badge: (cond: boolean) => cond ? "Jelenlegi" : 'Ingyenes',
         description: "Kezdő háztartásoknak, az alapvető rezsi követéséhez.",
         priceMonthly: 0,
         priceYearly: 0,
         features: [
-            "Maximum 2 mérőóra kezelése",
+            "Maximum 3 mérőóra kezelése",
             "Alap havi statisztikák",
             "1 lakótárs meghívása",
             "Csak kézi óraállás rögzítés"
         ],
-        buttonText: "Jelenlegi Csomagod",
+        buttonText: (cond: boolean) => cond ? "Jelenlegi Csomagod" : "Váltás Ingyenes Csomagra",
         isPopular: false,
         icon: <ShieldCheck className="w-6 h-6 text-white/40" />
     },
     {
         id: "pro",
         name: "Pro Modell",
-        badge: "Legnépszerűbb",
+        badge: (cond: boolean) => cond ? "Jelenlegi" : "Legnépszerűbb",
         description: "Teljes kontroll, AI előrejelzések és korlátlan funkciók.",
         priceMonthly: 1490,
         priceYearly: 14900, // 2 hónap ingyen!
@@ -33,7 +33,7 @@ export const PLANS = [
             "Intelligens fogyasztás-előrejelzés",
             "Kiemelt ügyfélszolgálat"
         ],
-        buttonText: "Váltás Pro Csomagra",
+        buttonText: (cond: boolean) => cond ? "Jelenlegi Csomagod" : "Váltás Pro Csomagra",
         isPopular: true,
         icon: <Crown className="w-6 h-6 text-yellow-400" />
     }

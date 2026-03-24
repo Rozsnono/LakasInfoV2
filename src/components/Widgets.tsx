@@ -2,15 +2,16 @@
 
 import { JSX, useEffect, useState } from "react";
 import { useAppearance } from "@/contexts/appearance.context";
-import { motion, Variants, AnimatePresence } from "framer-motion";
+import { motion, Variants, AnimatePresence, TargetAndTransition, VariantLabels } from "framer-motion";
 import Link from "@/contexts/router.context";
 import { useRouter } from "@/contexts/router.context";
-import { CrownIcon, TrendingDown, TrendingUp, Loader2, LayoutGrid, Camera, ChevronRight, CalendarClock, Map, MapPin, ChevronLeft, Check, Plus } from "lucide-react";
-import { getMetersForWidgetAction } from "@/app/actions/meter"
+import { CrownIcon, TrendingDown, TrendingUp, Loader2, LayoutGrid, CalendarClock, Map, MapPin, Check, Plus, Gem } from "lucide-react";
+import { getMetersForWidgetAction } from "@/app/actions/meter";
 import { MeterWithStats } from "@/services/meter.service";
 import { getMeterVisuals } from "@/types/meter";
 import { IHouse } from "@/models/house.model";
 import React from "react";
+import { useUser } from "@/contexts/user.context";
 
 const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -24,14 +25,98 @@ const itemVariants: Variants = {
     },
 };
 
+// ===========================================================================
+// 1. ÚJRAHASZNOSÍTHATÓ SABLONOK (TEMPLATES)
+// ===========================================================================
+
+interface WidgetContainerProps {
+    children: React.ReactNode;
+    className?: string;
+    onClick?: () => void;
+    isSelectionMode?: boolean;
+    isSelected?: boolean;
+    isSelectable?: boolean;
+    isProWidget?: boolean;
+    whileTap?: TargetAndTransition | VariantLabels | undefined;
+}
+
+// A közös "Doboz", ami lekezeli a hátteret, animációt és a kiválasztó/Pro badge-eket
+function WidgetContainer({ children, className = "", onClick, isSelectionMode, isSelected, isSelectable, isProWidget, whileTap }: WidgetContainerProps) {
+    const baseClass = !isSelectionMode
+        ? 'bg-surface'
+        : isSelected && isSelectable ? "bg-white/10 border-white/20 shadow-xl" : "bg-white/[0.03] border-white/5 opacity-60";
+
+    return (
+        <motion.div
+            onClick={onClick}
+            variants={isSelectionMode ? undefined : itemVariants}
+            whileTap={whileTap}
+            className={`${baseClass} rounded-[2.5rem] border border-white/5 shadow-xl mt-2 relative ${className}`}
+        >
+            {/* Jobb felső extra ikonok (Kiválasztás Pipa / Plusz) */}
+            {isSelectable && isSelectionMode && (
+                <div className={`w-6 h-6 absolute top-6 right-6 rounded-full flex items-center justify-center ${isSelected ? "bg-primary" : "bg-white/10"} z-50`}>
+                    {isSelected ? <Check className="w-3.5 h-3.5 text-white" strokeWidth={4} /> : <Plus className="w-3.5 h-3.5 text-white/40" />}
+                </div>
+            )}
+
+            {/* Pro Badge (Ha kiválasztható is, akkor beljebb toljuk, hogy ne takarják egymást!) */}
+            {isProWidget && isSelectionMode && (
+                <div className={`w-6 h-6 absolute top-6 ${isSelectable ? 'right-14' : 'right-6'} rounded-full flex items-center justify-center bg-white/10 z-50`}>
+                    <Gem className="w-3.5 h-3.5 text-yellow-500/60" />
+                </div>
+            )}
+
+            {children}
+        </motion.div>
+    );
+}
+
+// A közös Fejléc (Cím, Ikon és Jobb oldali akció)
+function WidgetHeader({ title, icon, action, isProWidget, isSelectable }: { title: string, icon?: React.ReactNode, action?: React.ReactNode, isProWidget?: boolean, isSelectable?: boolean }) {
+    return (
+        <div className="flex justify-between items-center mb-1 w-full relative z-10">
+            <div className="flex items-center gap-3" style={{ filter: `${isProWidget && !isSelectable ? 'blur(4px)' : ''}` }}>
+                {icon && (
+                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
+                        {icon}
+                    </div>
+                )}
+                <h3 className="text-text-primary font-black text-lg tracking-tight uppercase italic">{title}</h3>
+            </div>
+            {action}
+        </div>
+    );
+}
+
+// A közös Lista Elem
+function BaseListItem({ icon, iconColorClass, title, subtitle, rightElement }: { icon: React.ReactNode, iconColorClass: string, title: string, subtitle?: string, rightElement: React.ReactNode }) {
+    return (
+        <div className="flex items-center justify-between w-full active:opacity-60 transition-all group">
+            <div className="flex items-center gap-4">
+                <div className={`w-12 h-12 rounded-2xl ${iconColorClass} flex items-center justify-center shadow-lg transition-transform group-active:scale-90`}>
+                    {icon}
+                </div>
+                <div className="flex flex-col items-start leading-tight">
+                    <span className="text-text-primary font-bold text-[16px] tracking-tight italic">{title}</span>
+                    {subtitle && <span className="text-text-secondary text-[10px] font-black opacity-40 uppercase tracking-widest">{subtitle}</span>}
+                </div>
+            </div>
+            {rightElement}
+        </div>
+    );
+}
+
+// ===========================================================================
+// 2. FŐ WIDGETS KOMPONENS
+// ===========================================================================
+
 export default function Widgets() {
     const { widgets } = useAppearance();
-
+    const { user } = useUser();
     const [meters, setMeters] = useState<MeterWithStats[]>([]);
     const [house, setHouse] = useState<IHouse | null>(null);
     const [widgetComponents, setWidgetComponents] = useState<{ id: string; type: 'small' | 'large' | string; component: JSX.Element }[]>([]);
-
-    // Töltési állapot
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -46,27 +131,29 @@ export default function Widgets() {
                     {
                         type: 'large',
                         id: 'unit-overallStatus',
+                        isPro: false,
                         component: <OverallStatusWidget meters={results.results.meters} />
                     },
-                    // ÚJ WIDGET: Közeledő diktálások (Nagy)
                     {
                         type: 'large',
                         id: 'unit-upcomingReadings',
-                        component: <UpcomingReadingsWidget meters={results.results.meters} />
+                        isPro: true,
+                        component: <UpcomingReadingsWidget meters={results.results.meters} isProWidget isSelectable={user?.subscriptionPlan == 'pro'} />
                     },
-                    // ÚJ WIDGET: Ház Térkép (Nagy)
                     {
                         type: 'large',
                         id: 'unit-houseMap',
-                        component: <HouseMapWidget address={results.results.house?.address} />
+                        isPro: true,
+                        component: <HouseMapWidget address={results.results.house?.address} isProWidget isSelectable={user?.subscriptionPlan == 'pro'} />
                     },
                     {
                         type: 'large',
                         id: 'unit-roommateStatus',
+                        isPro: false,
                         component: <RoommateStatusWidget members={results.results.house?.members} />
                     }
                 ];
-                setWidgetComponents(components);
+                setWidgetComponents(components.filter(c => !c.isPro || (c.isPro && user?.subscriptionPlan == 'pro')));
             } catch (error) {
                 console.error("Hiba a widgetek betöltésekor:", error);
             } finally {
@@ -76,7 +163,6 @@ export default function Widgets() {
         fetchMeters();
     }, []);
 
-    // 1. Töltőképernyő
     if (isLoading) {
         return (
             <div className="col-span-2 flex flex-col items-center justify-center py-16 gap-4 opacity-70">
@@ -88,10 +174,8 @@ export default function Widgets() {
         );
     }
 
-    // Szűrjük a megjelenítendő widgeteket
     const activeWidgets = widgetComponents.filter(f => widgets[house?._id.toString() || ""]?.includes(f.id));
 
-    // 2. Üres állapot (ha nincs bekapcsolva egy widget sem)
     if (activeWidgets.length === 0) {
         return (
             <div className="col-span-2 flex flex-col items-center justify-center py-12 px-6 mt-2 bg-white/[0.02] border border-dashed border-white/10 rounded-[2.5rem] gap-4">
@@ -108,7 +192,6 @@ export default function Widgets() {
         );
     }
 
-    // 3. Rendereljük a widgeteket, ha vannak
     return (
         <React.Fragment>
             {activeWidgets.map((w, index) => (
@@ -120,118 +203,175 @@ export default function Widgets() {
     );
 }
 
-// Közeledő Diktálások Widget
-export function UpcomingReadingsWidget({ meters, isSelection, isSelected }: { meters: MeterWithStats[], isSelection?: () => void, isSelected?: boolean }) {
-    // Kiszámolja a hátralévő napokat (Utolsó rögzítés + 30 nap logikával)
-    const calculateStatus = (lastReadingDate: Date) => {
-        // Ha nincs adat, berakunk egy alapértelmezett értéket
-        const lastDate = new Date(lastReadingDate);
+// ===========================================================================
+// 3. KÜLÖNÁLLÓ WIDGETEK
+// ===========================================================================
 
+export function UpcomingReadingsWidget({ meters, isSelection, isSelected, isProWidget, isSelectable }: { meters: MeterWithStats[], isSelection?: () => void, isSelected?: boolean, isProWidget?: boolean, isSelectable?: boolean }) {
+    const calculateStatus = (lastReadingDate: Date) => {
+        const lastDate = new Date(lastReadingDate || new Date());
         const nextDate = new Date(lastDate);
-        nextDate.setMonth(nextDate.getMonth() + 1); // Pontosan 1 hónapot adunk hozzá
+        nextDate.setMonth(nextDate.getMonth() + 1);
 
         const today = new Date();
         const diffTime = nextDate.getTime() - today.getTime();
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        if (diffDays < 0) return { text: "Lejárt!", color: "text-red-500", bg: "bg-red-500/10", border: "border-red-500/20", days: diffDays };
-        if (diffDays === 0) return { text: "Ma esedékes", color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/20", days: diffDays };
-        if (diffDays <= 3) return { text: `${diffDays} nap múlva`, color: "text-yellow-500", bg: "bg-yellow-500/10", border: "border-yellow-500/20", days: diffDays };
-        return { text: `${diffDays} nap múlva`, color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/20", days: diffDays };
+        if (diffDays < 0) return { color: "text-red-500", bg: "bg-red-500/10", border: "border-red-500/20", days: diffDays };
+        if (diffDays === 0) return { color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/20", days: diffDays };
+        if (diffDays <= 3) return { color: "text-yellow-500", bg: "bg-yellow-500/10", border: "border-yellow-500/20", days: diffDays };
+        return { color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/20", days: diffDays };
     };
 
     return (
-        <motion.div onClick={isSelection} variants={isSelection ? undefined : itemVariants} className={`${!isSelection ? 'bg-surface' : isSelected ? "bg-white/10 border-white/20 shadow-xl" : "bg-white/[0.03] border-white/5 opacity-60"} rounded-[2.5rem] p-6 border border-white/5 shadow-xl mt-2 flex flex-col gap-6 relative`}>
-            <div className="flex items-center gap-3 mb-1">
-                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
-                    <CalendarClock className="w-4 h-4 text-white/60" />
-                </div>
-                <h3 className="text-text-primary font-black text-lg tracking-tight uppercase italic">Diktálások</h3>
-            </div>
-
-            {
-                isSelection && (
-                    <div className={`w-6 h-6 absolute top-6 right-6 rounded-full flex items-center justify-center ${isSelected ? "bg-primary" : "bg-white/10"}`}>
-                        {isSelected ? <Check className="w-3.5 h-3.5 text-white" strokeWidth={4} /> : <Plus className="w-3.5 h-3.5 text-white/40" />}
-                    </div>
-                )
-            }
-
-            <div className="flex flex-col gap-3">
+        <WidgetContainer onClick={isSelectable ? isSelection : undefined} isSelectionMode={!!isSelection} isSelected={isSelected} isSelectable={isSelectable} isProWidget={isProWidget} className="p-6 flex flex-col gap-6">
+            <WidgetHeader
+                isProWidget={isProWidget}
+                isSelectable={isSelectable}
+                title="Diktálások"
+            />
+            <div className="flex flex-col gap-3" style={{ filter: `${isProWidget && !isSelectable ? 'blur(4px)' : ''}` }}>
                 {meters.map((meter) => {
                     const status = calculateStatus(meter.lastReadingDate!);
                     const visual = getMeterVisuals(meter.type);
+
+                    const badge = status.days < 0
+                        ? <span className={`${status.color} ${status.bg} ${status.border} border px-2 py-1 rounded-full text-xs font-bold`}>Lejárt</span>
+                        : status.days === 0
+                            ? <span className={`${status.color} ${status.bg} ${status.border} border px-2 py-1 rounded-full text-xs font-bold`}>Ma</span>
+                            : <span className={`${status.color} ${status.bg} ${status.border} border px-2 py-1 rounded-full text-xs font-bold`}>{status.days} nap múlva</span>;
+
                     return (
                         <Link key={meter._id.toString()} href={!isSelection ? `/dashboard/meters/${meter._id}` : '#'}>
-                            <UpcomingReadingItem
-                                title={meter.name}
-                                time={meter.stats.isOverLimit ? "Limit felett!" : "Kereten belül"}
-                                date={status}
-                                icon={visual.icon}
-                                color={visual.color}
-                            />
+                            <BaseListItem title={meter.name} icon={visual.icon} iconColorClass={visual.color} rightElement={badge} />
                         </Link>
                     );
                 })}
             </div>
-        </motion.div>
+        </WidgetContainer>
     );
 }
 
-// Térkép Widget (Sötét móddal)
-export function HouseMapWidget({ address, isSelection, isSelected }: { address?: string, isSelection?: () => void, isSelected?: boolean }) {
+export function HouseMapWidget({ address, isSelection, isSelected, isProWidget, isSelectable }: { address?: string, isSelection?: () => void, isSelected?: boolean, isProWidget?: boolean, isSelectable?: boolean }) {
     if (!address) {
         return (
-            <motion.div variants={itemVariants} className="bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-xl mt-2 flex flex-col items-center justify-center gap-3 h-48">
+            <WidgetContainer className="p-6 flex flex-col items-center justify-center gap-3 h-48">
                 <Map className="w-8 h-8 text-white/20" />
                 <span className="text-white/40 text-xs font-bold uppercase tracking-widest text-center">Nincs cím megadva a térképhez</span>
-            </motion.div>
+            </WidgetContainer>
         );
     }
 
     return (
-        <motion.div onClick={isSelection} variants={isSelection ? undefined : itemVariants} className={`${!isSelection ? 'bg-surface' : isSelected ? "bg-white/10 border-white/20 shadow-xl" : "bg-white/[0.03] border-white/5 opacity-60"} rounded-[2.5rem] border border-white/5 shadow-xl mt-2 overflow-hidden h-[220px] relative group cursor-pointer`}>
+        <WidgetContainer
+            onClick={isSelectable ? isSelection : () => { }}
+            isSelectionMode={!!isSelection} isSelected={isSelected} isSelectable={isSelectable} isProWidget={isProWidget}
+            className="overflow-hidden h-[220px] group cursor-pointer"
+        >
             <Link href={isSelection ? '#' : '/dashboard/map'}>
                 <iframe
                     title="House Map"
                     src={`https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
-                    className="w-full h-[300px] -mt-10 pointer-events-none"
-                    style={{
-                        filter: 'invert(100%) hue-rotate(180deg) brightness(60%) contrast(150%) grayscale(100%)',
-                    }}
-                    frameBorder="0"
-                    scrolling="no"
+                    className={`${isProWidget && !isSelectable ? 'blur-xs' : ''} w-full h-[300px] -mt-10 pointer-events-none`}
+                    style={{ filter: `invert(100%) hue-rotate(180deg) brightness(60%) contrast(150%) grayscale(100%) ${isProWidget && !isSelectable ? 'blur(4px)' : ''}` }}
+                    frameBorder="0" scrolling="no"
                 />
-
-                {
-                    isSelection && (
-                        <div className={`w-6 h-6 absolute top-6 right-6 rounded-full flex items-center justify-center ${isSelected ? "bg-primary" : "bg-white/10"} z-50`}>
-                            {isSelected ? <Check className="w-3.5 h-3.5 text-white" strokeWidth={4} /> : <Plus className="w-3.5 h-3.5 text-white/40" />}
-                        </div>
-                    )
-                }
-
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-5 pt-12 flex flex-col justify-end">
-                    <div className="flex items-start gap-3 transform group-active:scale-95 transition-transform">
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-5 pt-12 flex flex-col justify-end pointer-events-none">
+                    <div style={{ filter: isProWidget && !isSelectable ? 'blur(4px)' : 'none' }} className="flex items-start gap-3 transform group-active:scale-95 transition-transform">
                         <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center shrink-0 border border-primary/30 shadow-[0_0_15px_rgba(var(--primary),0.3)]">
                             <MapPin className="text-primary w-5 h-5" />
                         </div>
                         <div className="flex flex-col overflow-hidden">
                             <span className="text-white font-black text-sm tracking-tight truncate">Címünk</span>
-                            <span className="text-white/60 text-[10px] font-bold uppercase tracking-widest mt-0.5 line-clamp-2">
-                                {address}
-                            </span>
+                            <span className="text-white/60 text-[10px] font-bold uppercase tracking-widest mt-0.5 line-clamp-2">{address}</span>
                         </div>
                     </div>
                 </div>
             </Link>
+        </WidgetContainer >
+    );
+}
 
-        </motion.div >
+function OverallStatusWidget({ meters }: { meters: MeterWithStats[] }) {
+    return (
+        <WidgetContainer className="p-6 flex flex-col gap-6">
+            <WidgetHeader
+                title="Aktuális állapot"
+                action={<Link href="/dashboard/meters" className="text-primary text-xs font-black uppercase tracking-widest active:opacity-70">Összes</Link>}
+            />
+            <div className="flex flex-col gap-5">
+                {meters.map((meter) => {
+                    const visual = getMeterVisuals(meter.type);
+                    const valueEl = <span className="text-text-primary font-black text-[15px] tracking-tight">{`${meter.lastReadingValue.toLocaleString()} ${meter.unit}`}</span>;
+
+                    return (
+                        <Link key={meter._id.toString()} href={`/dashboard/meters/${meter._id}`}>
+                            <BaseListItem
+                                title={meter.name}
+                                subtitle={meter.stats.isOverLimit ? "Limit felett!" : "Kereten belül"}
+                                icon={visual.icon}
+                                iconColorClass={visual.color}
+                                rightElement={valueEl}
+                            />
+                        </Link>
+                    );
+                })}
+            </div>
+        </WidgetContainer>
+    )
+}
+
+function RoommateStatusWidget({ members }: { members?: { name: string; colorCode: string; isOwner?: boolean }[] }) {
+    function getInitials(name: string): string {
+        const parts = name.trim().split(" ");
+        if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+        return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+    }
+
+    return (
+        <WidgetContainer whileTap={{ scale: 0.98 }} className="p-6 flex flex-col gap-6">
+            <WidgetHeader
+                title="Lakótársak"
+                action={<Link href="/dashboard/roommates" className="text-primary text-xs font-black uppercase tracking-widest active:opacity-70">Összes</Link>}
+            />
+            <div className="flex gap-6 justify-start items-center">
+                {members?.map((member, index) => (
+                    <div key={index} className="relative">
+                        <RoommateAvatar name={member.name} init={getInitials(member.name)} color={member.colorCode} isOwner={member.isOwner} />
+                    </div>
+                ))}
+            </div>
+        </WidgetContainer>
+    )
+}
+
+function RoommateAvatar({ name, init, color, isOwner }: { name: string; init: string; color: string; isOwner?: boolean }) {
+    function getAdaptiveGray(hex: string) {
+        hex = hex.replace('#', '');
+        const r = parseInt(hex.slice(0, 2), 16);
+        const g = parseInt(hex.slice(2, 4), 16);
+        const b = parseInt(hex.slice(4, 6), 16);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness < 128 ? "#F2F2F7" : "#1C1C1E";
+    }
+
+    return (
+        <div className="flex flex-col items-center gap-2">
+            <div className={`w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg relative border`} style={{ background: color, borderColor: getAdaptiveGray(color) }}>
+                <span style={{ color: getAdaptiveGray(color) }}>{init}</span>
+                {isOwner && (
+                    <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 w-5 h-5 rounded-full text-yellow-400 flex items-center justify-center">
+                        <CrownIcon className="w-3 h-3" />
+                    </div>
+                )}
+            </div>
+            <span className="text-[10px] font-bold text-white/60 text-center">{name}</span>
+        </div>
     );
 }
 
 // ---------------------------------------------------------------------------
-// RÉGI WIDGETEK
+// KIS MÉRETŰ WIDGETEK (Havi Fogyasztás)
 // ---------------------------------------------------------------------------
 
 function MonthlyCandCWidgetByMeter(meters: MeterWithStats[]) {
@@ -259,6 +399,7 @@ function MonthlyCandCWidgetByMeter(meters: MeterWithStats[]) {
         return ({
             type: 'small',
             id: `unit-${removeAccents(meter.name).replace(/\s/g, '-').toLowerCase()}`,
+            isPro: false,
             component: (
                 <MonthlyConsumptionAndCostWidget
                     key={meter._id.toString()}
@@ -302,151 +443,4 @@ function MonthlyConsumptionAndCostWidget({ title, value, unit, trendUp, trend, g
             </div>
         </motion.div>
     )
-}
-
-function OverallStatusWidget({ meters }: { meters: MeterWithStats[] }) {
-    return (
-        <motion.div variants={itemVariants} className="bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-xl mt-2 flex flex-col gap-6">
-            <div className="flex justify-between items-center mb-1">
-                <h3 className="text-text-primary font-black text-lg tracking-tight uppercase italic">Aktuális állapot</h3>
-                <Link href="/dashboard/meters" className="text-primary text-xs font-black uppercase tracking-widest active:opacity-70">
-                    Összes
-                </Link>
-            </div>
-
-            <div className="flex flex-col gap-5">
-                {meters.map((meter) => {
-                    const visual = getMeterVisuals(meter.type);
-                    return (
-                        <Link key={meter._id.toString()} href={`/dashboard/meters/${meter._id}`}>
-                            <ReadingItem
-                                title={meter.name}
-                                time={meter.stats.isOverLimit ? "Limit felett!" : "Kereten belül"}
-                                value={`${meter.lastReadingValue.toLocaleString()} ${meter.unit}`}
-                                icon={visual.icon}
-                                color={visual.color}
-                            />
-                        </Link>
-                    );
-                })}
-            </div>
-        </motion.div>
-    )
-}
-
-interface ReadingItemProps {
-    title: string;
-    time: string;
-    value: string;
-    icon: React.ReactNode;
-    color: string;
-}
-
-interface UpcomingReadingItemProps {
-    title: string;
-    time: string;
-    date: { text: string; color: string; bg: string; border: string; days: number };
-    icon: React.ReactNode;
-    color: string;
-}
-
-function ReadingItem({ title, time, value, icon, color }: ReadingItemProps) {
-    return (
-        <div className="flex items-center justify-between w-full active:opacity-60 transition-all group">
-            <div className="flex items-center gap-4">
-                <div className={`w-12 h-12 rounded-2xl ${color} flex items-center justify-center shadow-lg transition-transform group-active:scale-90`}>
-                    {icon}
-                </div>
-                <div className="flex flex-col items-start leading-tight">
-                    <span className="text-text-primary font-bold text-[16px] tracking-tight italic">{title}</span>
-                    <span className="text-text-secondary text-[10px] font-black opacity-40 uppercase tracking-widest">{time}</span>
-                </div>
-            </div>
-            <span className="text-text-primary font-black text-[15px] tracking-tight">{value}</span>
-        </div>
-    );
-}
-
-function UpcomingReadingItem({ title, time, date, icon, color }: UpcomingReadingItemProps) {
-    return (
-        <div className="flex items-center justify-between w-full active:opacity-60 transition-all group">
-            <div className="flex items-center gap-4">
-                <div className={`w-12 h-12 rounded-2xl ${color} flex items-center justify-center shadow-lg transition-transform group-active:scale-90`}>
-                    {icon}
-                </div>
-                <div className="flex flex-col items-start leading-tight">
-                    <span className="text-text-primary font-bold text-[16px] tracking-tight italic">{title}</span>
-                </div>
-            </div>
-            <span className="text-text-primary font-black text-[15px] tracking-tight">{
-                date.days < 0 ? <span className={`${date.color} ${date.bg} ${date.border} px-2 py-1 rounded-full text-xs font-bold`}>Lejárt</span> :
-                    date.days == 0 ? <span className={`${date.color} ${date.bg} ${date.border} px-2 py-1 rounded-full text-xs font-bold`}>Ma</span> :
-                        <span className={`${date.color} ${date.bg} ${date.border} px-2 py-1 rounded-full text-xs font-bold`}>{date.days} nap múlva</span>
-            }</span>
-        </div>
-    );
-}
-
-function RoommateStatusWidget({ members }: { members?: { name: string; colorCode: string; isOwner?: boolean }[] }) {
-    function getInitials(name: string): string {
-        const parts = name.trim().split(" ");
-        if (parts.length === 1) {
-            return parts[0].charAt(0).toUpperCase();
-        }
-        return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
-    }
-
-    return (
-        <motion.div whileTap={{ scale: 0.98 }} variants={itemVariants}
-            className={`bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-xl mt-2 flex flex-col gap-6`}
-        >
-            <div className="flex justify-between items-center">
-                <div className="flex justify-between items-center w-full">
-                    <h3 className="text-text-primary font-black text-lg tracking-tight uppercase italic">Lakótársak</h3>
-                    <Link href="/dashboard/roommates" className="text-primary text-xs font-black uppercase tracking-widest active:opacity-70">
-                        Összes
-                    </Link>
-                </div>
-            </div>
-            <div className="flex gap-6 justify-start items-center">
-                {members?.map((member, index) => (
-                    <div key={index} className="relative">
-                        <RoommateAvatar name={member.name} init={getInitials(member.name)} color={member.colorCode} isOwner={member.isOwner} />
-                    </div>
-                ))}
-            </div>
-        </motion.div>
-    )
-}
-
-function RoommateAvatar({ name, init, color, isOwner }: { name: string; init: string; color: string; isOwner?: boolean }) {
-    function getAdaptiveGray(hex: string) {
-        hex = hex.replace('#', '');
-
-        const r = parseInt(hex.slice(0, 2), 16);
-        const g = parseInt(hex.slice(2, 4), 16);
-        const b = parseInt(hex.slice(4, 6), 16);
-
-        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-
-        if (brightness < 128) {
-            return "#F2F2F7";
-        } else {
-            return "#1C1C1E";
-        }
-    }
-
-    return (
-        <div className="flex flex-col items-center gap-2">
-            <div className={`w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg relative border`} style={{ background: color, borderColor: getAdaptiveGray(color) }}>
-                <span style={{ color: getAdaptiveGray(color) }}>{init}</span>
-                {isOwner && (
-                    <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 w-5 h-5 rounded-full text-yellow-400 flex items-center justify-center">
-                        <CrownIcon className="w-3 h-3" />
-                    </div>
-                )}
-            </div>
-            <span className="text-[10px] font-bold text-white/60 text-center">{name}</span>
-        </div>
-    );
 }

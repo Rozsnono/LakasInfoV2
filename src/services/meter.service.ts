@@ -4,6 +4,9 @@ import Reading from "@/models/reading.model";
 import mongoose from "mongoose";
 import { NotificationService } from "./notification.service";
 import { HouseService } from "./house.service";
+import { SubscriptionService } from "./subscription.service";
+import { calculateCost } from "@/utils/costCalculator";
+import { th } from "framer-motion/client";
 
 export interface CalculationResult {
     consumption: number;
@@ -28,22 +31,33 @@ export const MeterService = {
     async getMetersByHouse(houseId: string): Promise<IMeter[]> {
         await dbConnect();
         const houseObjectId = new mongoose.Types.ObjectId(houseId);
-        return await Meter.find({ houseId: houseObjectId }).lean<IMeter[]>().exec();
+        return await Meter.find({ houseId: houseObjectId, isArchived: { $ne: true } }).lean<IMeter[]>().exec();
     },
 
     async addMeter(data: Partial<IMeter>): Promise<IMeter> {
         await dbConnect();
+        const house = await HouseService.getHouseById(data.houseId!.toString());
+        if (!house) throw new Error("A háztartás nem található");
+        const isPro = await SubscriptionService.userHasProSubscription(house.ownerId.toString());
+        const meterCount = await Meter.countDocuments({ houseId: data.houseId, isArchived: { $ne: true } });
+        if (!isPro && meterCount >= 3) {
+            throw new Error("A háztartáshoz több mint 3 mérő hozzáadásához Pro előfizetés szükséges.");
+        }
         return await Meter.create(data);
     },
 
     async updateMeter(meterId: string, data: Partial<IMeter>): Promise<IMeter | null> {
         await dbConnect();
-        return await Meter.findByIdAndUpdate(
+        const updatedMeter = await Meter.findByIdAndUpdate(
             meterId,
             { $set: data },
             { new: true }
         ).exec();
+
+        await this.calculateCostForAllReadings(meterId);
+        return updatedMeter;
     },
+
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async deleteMeter(meterId: string): Promise<any> {
@@ -193,12 +207,21 @@ export const MeterService = {
             difference = value - (meter?.initialValue || 0);
         }
 
+        const meter = await Meter.findById(meterObjId).lean();
+
+        if (!meter) {
+            throw new Error("Meter not found");
+        }
+
+        const calcCost = calculateCost(meter.tierLimit!, meter.basePrice!, meter.marketPrice!, difference);
+
         const newReading = await Reading.create({
             meterId: meterObjId,
             userId: new mongoose.Types.ObjectId(userId),
             value: value,
             photoUrl: photoUrl || undefined,
             difference: difference,
+            cost: calcCost,
             date: targetDate
         });
 
@@ -233,6 +256,26 @@ export const MeterService = {
         }
 
         return newReading;
+    },
+
+    async calculateCostForAllReadings(meterId: string) {
+        await dbConnect();
+        const meter = await Meter.findById(meterId).lean();
+        if (!meter) throw new Error("Meter not found");
+        const readings = await Reading.find({ meterId: new mongoose.Types.ObjectId(meterId) }).sort({ date: 1 }).exec();
+        const updatedReadings = await Promise.all(readings.map(async (reading, index) => {
+            const calcCost = meter.isTiered ? calculateCost(
+                meter.tierLimit ?? 0,
+                meter.basePrice ?? 0,
+                meter.marketPrice ?? 0,
+                reading.difference ?? 0
+            ) : null;
+            await Reading.findByIdAndUpdate(reading._id, {
+                cost: calcCost
+            });
+        }));
+        console.log(`Updated costs for ${updatedReadings.length} readings of meter ${meterId}`);
+        return { success: true };
     },
 
     async getMeterDetailsWithReadings(meterId: string) {

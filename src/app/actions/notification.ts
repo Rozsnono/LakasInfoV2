@@ -48,3 +48,11 @@ export async function markAllAsReadAction() {
     revalidatePath("/dashboard");
     return { success: true };
 }
+
+export async function createSubscriptionEndingNotificationAction() {
+    const userId = await getUserIdFromToken();
+    if (!userId) return { success: false };
+    await NotificationService.makeForSubscriptionEnding(userId);
+    revalidatePath("/dashboard");
+    return { success: true };
+}

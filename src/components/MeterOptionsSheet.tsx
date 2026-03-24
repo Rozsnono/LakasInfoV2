@@ -70,7 +70,7 @@ export default function MeterOptionsSheet({ isOpen, onClose, meterId, meterName 
                                 <ChevronLeft className="w-6 h-6 text-white" />
                             </button>
                             <div className="flex flex-col items-center text-center">
-                                <h3 className="text-xl font-black tracking-tight text-white uppercase">Beállítások</h3>
+                                <h3 className="text-xl font-black tracking-tight text-white uppercase italic">Beállít<span className="text-primary">ások</span></h3>
                                 <span className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-0.5">{meterName}</span>
                             </div>
                             <div className="w-10" />
@@ -119,7 +119,7 @@ function OptionItem({ icon, label, onClick }: { icon: React.ReactNode; label: st
             <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center shrink-0 border border-white/5 group-active:scale-90 transition-transform">
                 {icon}
             </div>
-            <span className="text-white font-bold text-[17px] tracking-tight">{label}</span>
+            <span className="text-white font-bold text-[17px] tracking-tight text-left">{label}</span>
         </motion.button>
     );
 }

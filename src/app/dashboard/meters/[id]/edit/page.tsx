@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, Fragment } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import {
     ArrowLeft, Save, Gauge, ChevronDown, Layers,
-    BellRing, Trash2, Check, Zap, Flame, Droplets, Loader2, Info
+    BellRing, Trash2, Check, Zap, Flame, Droplets, Loader2, Info, Archive
 } from "lucide-react";
 import Link from "@/contexts/router.context";
 import { useParams, useSearchParams } from "next/navigation";
@@ -41,11 +41,14 @@ export default function EditMeterPage() {
     const [isTiered, setIsTiered] = useState(false);
     const [isSelectOpen, setIsSelectOpen] = useState(false);
     const [hasAlert, setHasAlert] = useState<boolean>(false);
-    const [alertLimit, setAlertLimit] = useState(""); // Riasztási küszöb
-    const [tierLimit, setTierLimit] = useState("");   // Árazási váltó küszöb
-    const [priceTier1, setPriceTier1] = useState(""); // Alap ár
-    const [priceTier2, setPriceTier2] = useState(""); // Piaci ár
+    const [alertLimit, setAlertLimit] = useState("");
+    const [tierLimit, setTierLimit] = useState("");
+    const [priceTier1, setPriceTier1] = useState("");
+    const [priceTier2, setPriceTier2] = useState("");
     const [highlightAlert, setHighlightAlert] = useState(false);
+
+    // ÚJ: Archivált (inaktív) állapot
+    const [isArchived, setIsArchived] = useState(false);
 
     const selectedType = METER_TYPES.find((t) => t.id === meterType) || METER_TYPES[0];
     const unit = selectedType.unit;
@@ -63,9 +66,12 @@ export default function EditMeterPage() {
                 setTierLimit(m.tierLimit?.toString() || "");
                 setPriceTier1(m.isTiered ? m.basePrice?.toString() : m.flatPrice?.toString() || "");
                 setPriceTier2(m.marketPrice?.toString() || "");
-                // Ha van külön riasztási mező az adatbázisban, ide töltsd be:
                 setAlertLimit(m.alertLimit?.toString() || "");
                 setHasAlert(!!m.alertLimit);
+
+                // Feltételezzük, hogy az adatbázisban "isActive" (vagy isArchived) mezőként van tárolva.
+                // Ha az isActive false, akkor az óra archivált.
+                setIsArchived(m.isActive === false);
             }
             setIsLoading(false);
         }
@@ -90,11 +96,12 @@ export default function EditMeterPage() {
             name: meterName,
             type: meterType,
             isTiered,
-            tierLimit, // Ez az árazási határ
+            tierLimit,
             hasAlert,
-            alertLimit, // Ez a riasztási határ
+            alertLimit,
             priceTier1,
-            priceTier2
+            priceTier2,
+            isArchived: isArchived
         });
 
         if (res.success) {
@@ -123,7 +130,7 @@ export default function EditMeterPage() {
                     <ArrowLeft className="w-5 h-5 text-text-primary" />
                 </Link>
                 <div className="flex flex-col">
-                    <h1 className="text-xl font-black tracking-tight text-white uppercase italic">Beállítások</h1>
+                    <h1 className="text-xl font-black tracking-tight text-white uppercase italic">Beállít<span className="text-primary">ások</span></h1>
                     <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">{meterName}</span>
                 </div>
             </motion.header>
@@ -229,13 +236,32 @@ export default function EditMeterPage() {
                 </AnimatePresence>
             </motion.div>
 
+            {/* ARCHIVÁLÁS / INAKTÍV SZEKCIÓ */}
+            <motion.div variants={itemVariants} className="flex flex-col gap-4">
+                <div className="flex items-center justify-between p-6 bg-white/5 rounded-[2.5rem] border border-white/5 shadow-lg">
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center border border-white/5">
+                            <Archive className="w-6 h-6 text-white/40" />
+                        </div>
+                        <div className="flex flex-col text-left">
+                            <span className="text-white font-bold text-[15px] tracking-tight">Archiválás</span>
+                            <span className="text-white/40 text-[10px] font-black uppercase tracking-widest mt-0.5 italic">Inaktív, nem használt óra</span>
+                        </div>
+                    </div>
+                    {/* Ha be van kapcsolva, akkor narancssárgás/pirosas színt is adhatunk neki, de a primary is tökéletes */}
+                    <button onClick={() => setIsArchived(!isArchived)} className={`w-12 h-7 rounded-full transition-colors relative ${isArchived ? 'bg-primary' : 'bg-white/10'}`}>
+                        <motion.div animate={{ x: isArchived ? 24 : 4 }} className="absolute top-1 w-5 h-5 bg-white rounded-full shadow-lg" />
+                    </button>
+                </div>
+            </motion.div>
+
             {/* GOMBOK */}
             <motion.div variants={itemVariants} className="mt-4 space-y-4 relative z-10">
                 <button onClick={handleSave} disabled={isSaving} className="w-full py-6 bg-white text-black rounded-[2rem] font-black uppercase tracking-[0.2em] text-sm shadow-2xl active:scale-95 flex items-center justify-center gap-3 disabled:opacity-50">
                     {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-5 h-5" /> Mentés</>}
                 </button>
                 <button onClick={handleDelete} disabled={isDeleting} className="w-full py-6 bg-red-500/5 border border-red-500/10 text-red-500 rounded-[2rem] font-black uppercase tracking-[0.1em] text-xs active:bg-red-500/10 flex items-center justify-center gap-3 disabled:opacity-50">
-                    {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Trash2 className="w-4 h-4" /> Mérőóra törlése</>}
+                    {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Trash2 className="w-4 h-4" /> Mérőóra végleges törlése</>}
                 </button>
             </motion.div>
         </motion.div>

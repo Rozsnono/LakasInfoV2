@@ -14,6 +14,7 @@ import { getMeterVisuals } from "@/types/meter";
 import { useAppearance } from "@/contexts/appearance.context";
 import { HouseMapWidget, UpcomingReadingsWidget } from "./Widgets";
 import { useHouse } from "@/contexts/house.context";
+import { useUser } from "@/contexts/user.context";
 
 interface WidgetSelectionSheetProps {
     isOpen: boolean;
@@ -50,6 +51,7 @@ export default function WidgetSelectionSheet({
 }: WidgetSelectionSheetProps) {
 
     const { house } = useHouse();
+    const { user } = useUser();
 
     const removeAccents = (str: string): string => {
         return str
@@ -164,13 +166,13 @@ export default function WidgetSelectionSheet({
                             </section>
 
                             <section className="space-y-4">
-                                <UpcomingReadingsWidget meters={meters} isSelection={() => onToggleWidget("unit-upcomingReadings")} isSelected={activeWidgetIds.includes("unit-upcomingReadings")} />
+                                <UpcomingReadingsWidget isProWidget isSelectable={user?.subscriptionPlan == 'pro'} meters={meters} isSelection={() => onToggleWidget("unit-upcomingReadings")} isSelected={activeWidgetIds.includes("unit-upcomingReadings")} />
 
-                                <HouseMapWidget address={house?.address} isSelection={() => onToggleWidget("unit-houseMap")} isSelected={activeWidgetIds.includes("unit-houseMap")} />
+                                <HouseMapWidget isProWidget isSelectable={user?.subscriptionPlan == 'pro'} address={house?.address} isSelection={() => onToggleWidget("unit-houseMap")} isSelected={activeWidgetIds.includes("unit-houseMap")} />
                             </section>
                         </div>
 
-                        <div className="p-4 bg-gradient-to-t from-surface via-surface to-transparent shrink-0">
+                        <div className="p-4 shrink-0">
                             <button onClick={onClose} className="w-full py-5 rounded-[2rem] bg-white text-black font-black uppercase tracking-widest text-xs shadow-2xl active:scale-[0.98] transition-transform">
                                 Kész
                             </button>

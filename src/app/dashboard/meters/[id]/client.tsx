@@ -19,6 +19,7 @@ interface Reading {
     difference: number;
     cost: number;
     photoUrl?: string | null;
+    isPaid?: boolean;
 }
 
 interface MeterDetailProps {
@@ -212,7 +213,7 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
                                     </div>
                                 </div>
                                 <div className="mt-3 flex w-full items-center justify-between">
-                                    <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
+                                    <span className={`text-[11px] font-bold uppercase tracking-wider ${!item.isPaid ? "text-red-400 font-bolder" : "line-through text-white/40"}`}>
                                         {item.cost.toLocaleString()} Ft
                                     </span>
                                     <span className={`rounded-lg border border-white/5 bg-white/5 px-2 py-1 text-[11px] font-black uppercase tracking-widest ${item.difference > 0 ? "text-white" : "text-emerald-400"}`}>
@@ -246,7 +247,7 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
                                     <X size={24} />
                                 </button>
                                 <button
-                                    onClick={async () => {await exportFile(selectedPhoto, "image/jpeg", `reading_photo_${selectedReading?._id}.jpg`, false, () => {})}}
+                                    onClick={async () => { await exportFile(selectedPhoto, "image/jpeg", `reading_photo_${selectedReading?._id}.jpg`, false, () => { }) }}
                                     className="absolute right-6 top-6 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-primary/80 text-white backdrop-blur-md transition-transform active:scale-90 hover:bg-primary"
                                 >
                                     <Share size={22} className="ml-[-2px]" />

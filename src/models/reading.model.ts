@@ -5,6 +5,8 @@ export interface IReading extends Document {
     date: Date;
     photoUrl?: string;
     difference?: number;
+    isPaid?: boolean;
+    cost?: number;
     meterId: mongoose.Types.ObjectId;
     userId: mongoose.Types.ObjectId;
     createdAt: Date;
@@ -18,6 +20,8 @@ const ReadingSchema: Schema<IReading> = new Schema(
         difference: { type: Number, default: 0 },
         meterId: { type: Schema.Types.ObjectId, ref: "Meter", required: true },
         userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+        isPaid: { type: Boolean, default: false },
+        cost: { type: Number, default: 0 },
     },
     { timestamps: true, versionKey: false }
 );

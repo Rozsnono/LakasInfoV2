@@ -18,6 +18,7 @@ export interface IMeterBase {
     alertLimit?: number | null;
     createdAt: Date;
     updatedAt: Date;
+    isArchived?: boolean; // Ez a mező nem lesz tárolva, csak a frontend használja a régi mérők jelölésére
 }
 
 /**
@@ -40,6 +41,7 @@ const MeterSchema: Schema<IMeter> = new Schema(
         marketPrice: { type: Number, default: null },
         flatPrice: { type: Number, default: null },
         alertLimit: { type: Number, default: null },
+        isArchived: { type: Boolean, default: false }, // Ez a mező nem lesz tárolva, csak a frontend használja a régi mérők jelölésére
     },
     { timestamps: true, versionKey: false }
 );

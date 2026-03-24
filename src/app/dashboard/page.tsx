@@ -26,6 +26,7 @@ export default async function DashboardPage() {
         redirect("/onboarding");
     }
 
+    await NotificationService.makeForSubscriptionEnding(userId);
     // Párhuzamosan kérjük le a mérőórákat és az olvasatlan értesítések számát
     const [meters, unreadCount] = await Promise.all([
         MeterService.getDashboardData(result.house._id.toString()),

@@ -6,7 +6,8 @@ import {
     X, Gem, QrCode, UserPlus, HelpCircle, User,
     Home, FileText, Lightbulb, Bell, LogOut,
     PenTool,
-    ShieldCheck
+    ShieldCheck,
+    Crown
 } from "lucide-react";
 import Link from "@/contexts/router.context";
 import PersonalDataSheet from "@/components/PersonalDataSheet";
@@ -148,12 +149,36 @@ export default function ProfilePage() {
             {/* GYORS KÁRTYÁK */}
             <div className="grid grid-cols-2 gap-4">
                 <Link href="/dashboard/profile/subscriptions">
-                    <motion.div whileTap={{ scale: 0.95 }} variants={itemVariants} className={`bg-surface rounded-[2.5rem] p-6 ${isPro ? "border-2 border-primary" : "border border-white/5"} shadow-xl flex flex-col justify-between aspect-square`}>
+                    <motion.div whileTap={{ scale: 0.95 }} variants={itemVariants} className={`bg-surface rounded-[2.5rem] p-6 ${isPro ? "border-2 border-primary" : "border border-white/5"} shadow-xl flex flex-col justify-between aspect-square relative`}>
                         <div className="w-12 h-8 rounded-xl" style={{ background: profile?.colorCode }} />
                         <div>
                             <h3 className="text-white font-black text-xl leading-none">{getSubscriptionStatusTitle(profile?.subscriptionPlan || "free")}</h3>
                             <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest mt-2 block">Csomag</span>
                         </div>
+                        {
+                            isPro && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{
+                                        opacity: 1,
+                                        y: 0,
+                                        scale: [1, 1.15, 1]
+                                    }}
+                                    transition={{
+                                        delay: 0.3,
+                                        scale: {
+                                            repeat: Infinity,
+                                            duration: 2,
+                                            ease: "easeInOut",
+                                            delay: 0.8
+                                        }
+                                    }}
+                                    className="absolute top-4 right-4 w-6 h-6 bg-primary rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(var(--primary),0.6)]"
+                                >
+                                    <Gem className="w-3 h-3 text-white" />
+                                </motion.div>
+                            )
+                        }
                     </motion.div>
                 </Link>
 

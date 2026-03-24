@@ -65,7 +65,8 @@ export default async function MeterDetailPage({
                 date: new Date(r.date),
                 value: r.value,
                 difference: r.difference,
-                cost: r.calculatedCost || 0,
+                cost: r.cost || 0,
+                isPaid: r.isPaid || false,
                 photoUrl: r.photoUrl
             }))
         };

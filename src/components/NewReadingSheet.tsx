@@ -14,11 +14,13 @@ import {
     Sparkles,
     Loader2,
     Clock,
-    Image as ImageIcon
+    Image as ImageIcon,
+    Gem
 } from "lucide-react";
 import { useHouse } from "@/contexts/house.context";
 import { recordReadingAction, getMetersForHouseAction, analyzeMeterPhotoAction } from "@/app/actions/meter";
 import WebCameraScanner from "./CameraScanner";
+import { useUser } from "@/contexts/user.context";
 
 interface NewReadingSheetProps {
     isOpen: boolean;
@@ -55,6 +57,7 @@ interface SimplifiedMeter {
 
 export default function NewReadingSheet({ isOpen, onClose }: NewReadingSheetProps) {
     const { house } = useHouse();
+    const { user } = useUser();
     const galleryInputRef = useRef<HTMLInputElement>(null);
 
     const [isWebcamOpen, setIsWebcamOpen] = useState(false);
@@ -202,8 +205,8 @@ export default function NewReadingSheet({ isOpen, onClose }: NewReadingSheetProp
                                         <div className="space-y-3">
                                             <motion.button
                                                 whileTap={{ scale: 0.98 }}
-                                                onClick={() => setIsWebcamOpen(true)}
-                                                className="w-full p-6 bg-gradient-to-br from-indigo-500/20 to-purple-600/20 border border-indigo-500/20 rounded-[2.5rem] flex items-center gap-5 relative overflow-hidden group"
+                                                onClick={user?.subscriptionPlan === "pro" ? () => setIsWebcamOpen(true) : () => setError("A mérőóra állás leolvasásához Pro előfizetés szükséges!")}
+                                                className="w-full p-6 bg-gradient-to-br from-indigo-500/20 to-purple-600/20 border border-indigo-500/20 rounded-[2.5rem] flex items-center gap-5 relative overflow-hidden group relative"
                                             >
                                                 <div className="absolute top-0 right-0 p-4 opacity-10 group-active:scale-110 transition-transform"><Sparkles className="w-12 h-12 text-indigo-400" /></div>
                                                 <div className="w-14 h-14 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-lg">
@@ -213,18 +216,13 @@ export default function NewReadingSheet({ isOpen, onClose }: NewReadingSheetProp
                                                     <span className="text-white font-black text-[17px] tracking-tight italic uppercase">Fotózás és AI</span>
                                                     <span className="text-indigo-300/60 text-[10px] font-black uppercase tracking-widest italic tracking-wider">Mérőóra beolvasása</span>
                                                 </div>
-                                            </motion.button>
-
-                                            <motion.button
-                                                whileTap={{ scale: 0.98 }}
-                                                onClick={() => galleryInputRef.current?.click()}
-                                                className="w-full py-4 px-6 bg-white/5 border border-white/5 rounded-2xl flex items-center justify-between group"
-                                            >
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center"><ImageIcon className="w-4 h-4 text-white/40" /></div>
-                                                    <span className="text-white/60 text-[11px] font-black uppercase tracking-widest italic">Kiválasztás galériából</span>
-                                                </div>
-                                                <ChevronRight className="w-4 h-4 text-white/20" />
+                                                {
+                                                    user?.subscriptionPlan !== "pro" && (
+                                                        <motion.div className="absolute top-4 right-4">
+                                                            <Gem className="text-yellow-500/50 h-6 w-6"></Gem>
+                                                        </motion.div>
+                                                    )
+                                                }
                                             </motion.button>
                                         </div>
 

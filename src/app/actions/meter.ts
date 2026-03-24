@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import mongoose from "mongoose";
 import { HouseService } from "@/services/house.service";
+import { SubscriptionService } from "@/services/subscription.service";
 
 const JWT_SECRET = new TextEncoder().encode(
     process.env.JWT_SECRET || "valami-nagyon-titkos-kulcs"
@@ -44,7 +45,7 @@ export async function createMeterAction(data: CreateMeterInput) {
         const meter = await MeterService.addMeter(data as any);
         revalidatePath("/dashboard");
         return { success: true, meterId: meter._id.toString() };
-    } catch (error) { return { success: false, error: "Hiba a mentéskor." }; }
+    } catch (error) { return { success: false, error: (error as Error).message || "Hiba a mentéskor." }; }
 }
 
 export async function getMeterByIdAction(meterId: string) {
@@ -53,7 +54,7 @@ export async function getMeterByIdAction(meterId: string) {
         if (!userId) return { success: false, error: "Bejelentkezés szükséges!" };
         const meter = await MeterService.getMeterById(meterId);
         return { success: true, meter: JSON.parse(JSON.stringify(meter)) };
-    } catch (error) { return { success: false, error: "Hiba a lekéréskor." }; }
+    } catch (error) { return { success: false, error: (error as Error).message || "Hiba a lekéréskor." }; }
 }
 
 export async function updateMeterAction(meterId: string, data: any) {
@@ -129,6 +130,13 @@ export async function analyzeMeterPhotoAction(base64Image: string) {
     try {
         const userId = await getUserIdFromToken();
         if (!userId) return { success: false, error: "Nincs auth!" };
+        const isPro = await SubscriptionService.userHasProSubscription(userId);
+        if (!isPro) {
+            return {
+                success: false,
+                error: "A mérőóra állás leolvasásához Pro előfizetés szükséges. Kattints a bővebb információért!",
+            };
+        }
         const result = await AIService.recognizeMeterReading(base64Image);
         if (!result.success) return { success: false, error: result.message };
         return { success: true, value: result.value };
