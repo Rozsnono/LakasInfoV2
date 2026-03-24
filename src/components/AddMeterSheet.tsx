@@ -5,6 +5,8 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Gauge, ChevronDown, Coins, Layers, ChevronLeft, Zap, Flame, Droplets, Check, Loader2, AlertCircle } from "lucide-react";
 import { createMeterAction, CreateMeterInput } from "@/app/actions/meter";
 import { useHouse } from "@/contexts/house.context"; // Importáljuk a Hook-ot
+import { useUser } from "@/contexts/user.context";
+import PremiumBadge from "./PremiumBadge";
 
 interface AddMeterSheetProps {
     isOpen: boolean;
@@ -38,6 +40,7 @@ const METER_TYPES = [
 export default function AddMeterSheet({ isOpen, onClose }: AddMeterSheetProps) {
     // Kinyerjük a házat a globális állapotból
     const { house } = useHouse();
+    const { user } = useUser();
 
     const [isSelectOpen, setIsSelectOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -239,8 +242,8 @@ export default function AddMeterSheet({ isOpen, onClose }: AddMeterSheetProps) {
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-between p-6 bg-white/5 rounded-[2.5rem] border border-white/5">
-                                <div className="flex items-center gap-4">
+                            <div className="flex items-center justify-between p-6 bg-white/5 rounded-[2.5rem] border border-white/5 relative">
+                                <div className="flex items-center gap-4 ">
                                     <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center border border-white/5 shadow-inner">
                                         <Layers className="w-6 h-6 text-white" />
                                     </div>
@@ -248,10 +251,11 @@ export default function AddMeterSheet({ isOpen, onClose }: AddMeterSheetProps) {
                                         <span className="text-white font-bold text-[15px] tracking-tight">Sávos árazás</span>
                                         <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest mt-0.5">Limit feletti ár</span>
                                     </div>
+                                    <PremiumBadge className="w-4 h-4 text-yellow-400 top-3 right-4" />
                                 </div>
                                 <button
                                     disabled={loading}
-                                    onClick={() => setFormData({ ...formData, isTiered: !formData.isTiered })}
+                                    onClick={user?.subscriptionPlan === 'pro' ? () => setFormData({ ...formData, isTiered: !formData.isTiered }) : undefined}
                                     className={`w-12 h-7 rounded-full transition-colors relative ${formData.isTiered ? "bg-primary" : "bg-white/10"}`}
                                 >
                                     <motion.div

@@ -10,6 +10,8 @@ import Link from "@/contexts/router.context";
 import { useParams, useSearchParams } from "next/navigation";
 import { getMeterByIdAction, updateMeterAction, deleteMeterAction } from "@/app/actions/meter";
 import { redirect } from "next/navigation";
+import { useUser } from "@/contexts/user.context";
+import PremiumBadge from "@/components/PremiumBadge";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -29,6 +31,7 @@ const METER_TYPES = [
 
 export default function EditMeterPage() {
     const params = useParams();
+    const { user } = useUser();
     const searchParams = useSearchParams();
     const alertSectionRef = useRef<HTMLDivElement>(null);
 
@@ -169,12 +172,13 @@ export default function EditMeterPage() {
 
             {/* ÁRAZÁS SZEKCIÓ */}
             <motion.div variants={itemVariants} className="flex flex-col gap-4">
-                <div className="flex items-center justify-between p-6 bg-white/5 rounded-[2.5rem] border border-white/5 shadow-lg">
+                <div className="flex items-center justify-between p-6 bg-white/5 rounded-[2.5rem] border border-white/5 shadow-lg relative">
+                    <PremiumBadge className="w-4 h-4 top-4 right-4" />
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center border border-white/5"><Layers className="w-6 h-6 text-white" /></div>
                         <div className="flex flex-col"><span className="text-white font-bold text-[15px] tracking-tight">Sávos árazás</span><span className="text-white/40 text-[10px] font-black uppercase tracking-widest mt-0.5 italic">Rezsicsökkentett keret</span></div>
                     </div>
-                    <button onClick={() => setIsTiered(!isTiered)} className={`w-12 h-7 rounded-full transition-colors relative ${isTiered ? 'bg-primary' : 'bg-white/10'}`}><motion.div animate={{ x: isTiered ? 24 : 4 }} className="absolute top-1 w-5 h-5 bg-white rounded-full shadow-lg" /></button>
+                    <button onClick={user?.subscriptionPlan == 'pro' ? () => setIsTiered(!isTiered) : undefined} className={`w-12 h-7 rounded-full transition-colors relative ${isTiered ? 'bg-primary' : 'bg-white/10'}`}><motion.div animate={{ x: isTiered ? 24 : 4 }} className="absolute top-1 w-5 h-5 bg-white rounded-full shadow-lg" /></button>
                 </div>
 
                 <AnimatePresence>

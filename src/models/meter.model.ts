@@ -4,7 +4,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
  * Tiszta adat-interfész (Mongoose sallangok nélkül)
  */
 export interface IMeterBase {
-    _id: mongoose.Types.ObjectId;
+    _id: mongoose.Types.ObjectId | string;
     name: string;
     type: "villany" | "gaz" | "viz";
     unit: string;
@@ -25,7 +25,7 @@ export interface IMeterBase {
  * Mongoose Dokumentum interfész (ez kiterjeszti az alapot és a Document-et)
  */
 export interface IMeter extends IMeterBase, Document {
-    _id: mongoose.Types.ObjectId; // Felüldefiniáljuk, hogy ne 'any' legyen a Document-ből
+    _id: mongoose.Types.ObjectId
 }
 
 const MeterSchema: Schema<IMeter> = new Schema(

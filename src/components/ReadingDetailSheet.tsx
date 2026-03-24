@@ -2,8 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, Trash2, Calendar, Gauge, Loader2, Eye, AlertTriangle, XCircle } from "lucide-react";
+import { ChevronLeft, Trash2, Calendar, Gauge, Loader2, Eye, AlertTriangle, XCircle, Wallet, Check } from "lucide-react";
 import { deleteReadingAction } from "@/app/actions/meter";
+import PremiumBadge from "./PremiumBadge";
+import { useUser } from "@/contexts/user.context";
+// import { updateReadingPaymentAction } from "@/app/actions/reading"; // Ezt majd neked kell megírnod a backendhez!
 
 interface Props {
     isOpen: boolean;
@@ -16,6 +19,8 @@ interface Props {
         difference: number;
         unit: string;
         photoUrl?: string | null;
+        isPaid?: boolean;      // ÚJ MEZŐ
+        cost?: number;   // ÚJ MEZŐ
     } | null;
     meterId: string;
 }
@@ -25,15 +30,27 @@ export default function ReadingDetailSheet({ isOpen, onClose, onShowPhoto, readi
     const [showConfirm, setShowConfirm] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    // Alaphelyzetbe állítás bezáráskor
+    const { user } = useUser();
+
+    // Fizetéshez tartozó állapotok
+    const [isPaid, setIsPaid] = useState(false);
+    const [paidAmount, setPaidAmount] = useState<string>("");
+    const [isSavingPayment, setIsSavingPayment] = useState(false);
+
+    // Alaphelyzetbe állítás és adatok betöltése bezáráskor/nyitáskor
     useEffect(() => {
+        if (isOpen && reading) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setIsPaid(reading.isPaid || false);
+            setPaidAmount(reading.cost ? reading.cost.toString() : "");
+        }
         if (!isOpen) {
             // eslint-disable-next-line react-hooks/set-state-in-effect
             setShowConfirm(false);
             setErrorMessage(null);
             setIsDeleting(false);
         }
-    }, [isOpen]);
+    }, [isOpen, reading]);
 
     const handleDelete = async () => {
         if (!reading) return;
@@ -56,12 +73,32 @@ export default function ReadingDetailSheet({ isOpen, onClose, onShowPhoto, readi
         }
     };
 
+    // Fiktív fizetés mentő függvény (Ide kötheted be a backendet)
+    const handleSavePayment = async () => {
+        if (!reading) return;
+        setIsSavingPayment(true);
+
+        try {
+            // PÉLDA: await updateReadingPaymentAction(reading._id, { isPaid, paidAmount: Number(paidAmount) });
+
+            // Szimulált töltés, amíg nincs backend:
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            setIsSavingPayment(false);
+
+            // Opcionális: sikeres mentés után bezárhatjuk a sheetet, vagy csak jelezhetjük a sikert
+            // onClose(); 
+        } catch (error) {
+            console.error("Hiba a fizetés mentésekor:", error);
+            setIsSavingPayment(false);
+        }
+    };
+
     return (
         <AnimatePresence>
             {isOpen && reading && (
                 <>
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="fixed inset-0 bg-black/80 backdrop-blur-md z-[150]" />
-                    <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} transition={{ type: "spring", damping: 25, stiffness: 200 }} className="fixed bottom-0 left-0 right-0 bg-surface border-t border-white/10 rounded-t-[3rem] z-[151] px-8 pt-4 pb-12 shadow-2xl">
+                    <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} transition={{ type: "spring", damping: 25, stiffness: 200 }} className="fixed bottom-0 left-0 right-0 bg-surface border-t border-white/10 rounded-t-[3rem] z-[151] px-8 pt-4 pb-12 shadow-2xl max-h-[90vh] overflow-y-auto">
                         <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mb-8 shrink-0" />
 
                         <div className="flex items-center justify-between mb-8">
@@ -81,10 +118,11 @@ export default function ReadingDetailSheet({ isOpen, onClose, onShowPhoto, readi
                                 )}
                             </AnimatePresence>
 
+                            {/* ALAP ADATOK */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-white/5 p-5 rounded-3xl border border-white/5 flex flex-col gap-1">
                                     <div className="flex items-center gap-2 text-white/30"><Calendar size={12} /><span className="text-[9px] font-black uppercase tracking-widest">Dátum</span></div>
-                                    <p className="text-white font-bold">{reading.date.toLocaleDateString('hu-HU', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
+                                    <p className="text-white font-bold text-sm">{reading.date.toLocaleDateString('hu-HU', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
                                 </div>
                                 <div className="bg-white/5 p-5 rounded-3xl border border-white/5 flex flex-col gap-1">
                                     <div className="flex items-center gap-2 text-white/30"><Gauge size={12} /><span className="text-[9px] font-black uppercase tracking-widest">Állás</span></div>
@@ -92,7 +130,8 @@ export default function ReadingDetailSheet({ isOpen, onClose, onShowPhoto, readi
                                 </div>
                             </div>
 
-                            <div className="bg-primary/10 p-6 rounded-[2rem] border border-primary/20 flex justify-between items-center">
+                            {/* FOGYASZTÁS */}
+                            <div className="bg-primary/10 p-6 rounded-[2rem] border border-primary/20 flex justify-between items-center relative">
                                 <div>
                                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60 italic">Fogyasztás</span>
                                     <p className="text-3xl font-black text-white italic">{reading.difference >= 0 ? '+' : ''}{reading.difference.toFixed(2)} <span className="text-sm font-bold opacity-40">{reading.unit}</span></p>
@@ -104,6 +143,58 @@ export default function ReadingDetailSheet({ isOpen, onClose, onShowPhoto, readi
                                 )}
                             </div>
 
+                            {/* ÚJ: FIZETÉS SZEKCIÓ */}
+                            <div className={`p-6 rounded-[2rem] border transition-all duration-500 relative ${isPaid ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-white/5 border-white/5'}`}>
+                                <div className="flex justify-between items-center">
+                                    <div className="flex items-center gap-4">
+                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${isPaid ? 'bg-emerald-500/20' : 'bg-white/10'}`}>
+                                            <Wallet className={`w-6 h-6 ${isPaid ? 'text-emerald-400' : 'text-white/40'}`} />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="text-white font-bold text-[15px] tracking-tight">Kifizetve</span>
+                                            <span className="text-white/40 text-[10px] font-black uppercase tracking-widest mt-0.5 italic">Számla státusza</span>
+                                        </div>
+
+                                    </div>
+                                    <button
+                                        onClick={user?.subscriptionPlan == 'pro' ? () => setIsPaid(prev => !prev) : undefined}
+                                        className={`w-12 h-7 rounded-full transition-colors relative ${isPaid ? 'bg-emerald-500' : 'bg-white/10'}`}
+                                    >
+                                        <motion.div animate={{ x: isPaid ? 24 : 4 }} className="absolute top-1 w-5 h-5 bg-white rounded-full shadow-lg" />
+                                    </button>
+                                </div>
+
+                                <PremiumBadge className="w-4 h-4 top-4 right-4" />
+
+                                <AnimatePresence>
+                                    {isPaid && (
+                                        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
+                                            <div className="pt-6">
+                                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400/60 ml-2 italic">Számla összege</label>
+                                                <div className="relative mt-1">
+                                                    <input
+                                                        type="number"
+                                                        value={paidAmount}
+                                                        onChange={(e) => setPaidAmount(e.target.value)}
+                                                        placeholder="0"
+                                                        className="w-full bg-emerald-500/5 border border-emerald-500/20 rounded-2xl py-4 px-6 text-emerald-400 font-black text-xl focus:outline-none focus:border-emerald-500/50 transition-colors"
+                                                    />
+                                                    <span className="absolute right-6 top-1/2 -translate-y-1/2 text-xs font-black text-emerald-400/40 uppercase tracking-widest">Ft</span>
+                                                </div>
+                                                <button
+                                                    onClick={handleSavePayment}
+                                                    disabled={isSavingPayment}
+                                                    className="w-full mt-4 py-4 bg-emerald-500/20 text-emerald-400 rounded-2xl font-black uppercase tracking-widest text-[10px] active:scale-95 transition-transform flex items-center justify-center gap-2 disabled:opacity-50"
+                                                >
+                                                    {isSavingPayment ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Check className="w-4 h-4" /> Státusz mentése</>}
+                                                </button>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+
+                            {/* TÖRLÉS SZEKCIÓ */}
                             <div className="pt-4 min-h-[100px] flex items-center">
                                 <AnimatePresence mode="wait">
                                     {!showConfirm ? (

@@ -417,6 +417,7 @@ function MonthlyCandCWidgetByMeter(meters: MeterWithStats[]) {
 }
 
 function MonthlyConsumptionAndCostWidget({ title, value, unit, trendUp, trend, graphPath, color }: { title: string; value: number; unit: string; trendUp: boolean; trend: string; graphPath: string; color: string; }) {
+    const { user } = useUser();
     return (
         <motion.div
             variants={itemVariants}
@@ -431,10 +432,12 @@ function MonthlyConsumptionAndCostWidget({ title, value, unit, trendUp, trend, g
                 <div className="text-text-primary font-black text-2xl tracking-tighter italic leading-none mt-2">
                     {value.toFixed(2).toLocaleString()} <span className="text-xs">{unit}</span>
                 </div>
-                <div className="text-[10px] font-black flex items-center gap-1 mt-2 uppercase tracking-tight" style={{ color: trendUp ? '#ef4444' : '#10b981' }}>
-                    {trendUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                    {trend}
-                </div>
+                {user?.subscriptionPlan === 'pro' && (
+                    <div className="text-[10px] font-black flex items-center gap-1 mt-2 uppercase tracking-tight" style={{ color: trendUp ? '#ef4444' : '#10b981' }}>
+                        {trendUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                        {trend}
+                    </div>
+                )}
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-16 opacity-30 pointer-events-none">
                 <svg viewBox="0 0 160 50" preserveAspectRatio="none" className="w-full h-full">

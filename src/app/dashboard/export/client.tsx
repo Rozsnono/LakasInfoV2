@@ -8,6 +8,9 @@ import TimeRangeSheet from "@/components/TimeRangeSheet";
 import { IMeter } from "@/models/meter.model"; // Cseréld a helyes útvonalra!
 import { exportPDF } from "@/lib/pdf-export";
 import { useHouse } from "@/contexts/house.context";
+import { useUser } from "@/contexts/user.context";
+import PremiumBadge from "@/components/PremiumBadge";
+import { exportCsv } from "@/lib/csv-export";
 
 const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -15,16 +18,17 @@ const itemVariants: Variants = {
 };
 
 const EXPORT_OPTIONS = [
-    { id: "meters", label: "Mérőóra állások és fogyasztás" },
-    { id: "costs", label: "Költségvetés és kiadások" },
+    { id: "meters", label: "Mérőóra állások és fogyasztás", isPro: false },
+    { id: "costs", label: "Költségvetés és kiadások", isPro: true },
 ];
 
 export default function ExportPageClient({ initialMeters }: { initialMeters: IMeter[] }) {
 
     const { house } = useHouse();
+    const { user } = useUser();
     // Állapotok
     const [format, setFormat] = useState<"pdf" | "csv">("pdf");
-    const [selectedData, setSelectedData] = useState<string[]>(["meters", "costs"]);
+    const [selectedData, setSelectedData] = useState<string[]>(["meters"]);
 
     // ÚJ ÁLLAPOT: Multi-select a mérőóráknak (Alapból az összes kiválasztva)
     const [selectedMeters, setSelectedMeters] = useState<string[]>(
@@ -91,23 +95,46 @@ export default function ExportPageClient({ initialMeters }: { initialMeters: IMe
 
         setIsExporting(true);
 
-        exportPDF({
-            house: house!,
-            isPending: isExporting,
-            setIsPending: setIsExporting,
-            onReady: () => { },
-            date: {
-                month: month,
-                year: year
-            },
-            containsOptions: {
-                isContainedMeterValue: selectedData.includes("meters"),
-                isContainedMeterDifference: selectedData.includes("meters"),
-                isContainedReadingDate: true,
-                isContainedPriceInfo: selectedData.includes("costs"),
-                containedMeterTypes: selectedMeters // Itt átadjuk a kiválasztott órákat
-            }
-        });
+        if (format === "csv") {
+            exportCsv({
+                house: house!,
+                isPending: isExporting,
+                setIsPending: setIsExporting,
+                onReady: () => { },
+                date: {
+                    month: month,
+                    year: year
+                },
+                containsOptions: {
+                    isContainedMeterValue: selectedData.includes("meters"),
+                    isContainedMeterDifference: selectedData.includes("meters"),
+                    isContainedReadingDate: true,
+                    isContainedPriceInfo: selectedData.includes("costs"),
+                    containedMeterTypes: selectedMeters
+                }
+            })
+        }
+        else if (format === "pdf") {
+            exportPDF({
+                house: house!,
+                isPending: isExporting,
+                setIsPending: setIsExporting,
+                onReady: () => { },
+                date: {
+                    month: month,
+                    year: year
+                },
+                containsOptions: {
+                    isContainedMeterValue: selectedData.includes("meters"),
+                    isContainedMeterDifference: selectedData.includes("meters"),
+                    isContainedReadingDate: true,
+                    isContainedPriceInfo: selectedData.includes("costs"),
+                    containedMeterTypes: selectedMeters // Itt átadjuk a kiválasztott órákat
+                }
+            });
+        }
+
+
     };
 
     return (
@@ -118,7 +145,7 @@ export default function ExportPageClient({ initialMeters }: { initialMeters: IMe
                 <Link href="/dashboard" className="w-10 h-10 rounded-full bg-surface-elevated flex items-center justify-center border border-white/5 shadow-xl active:scale-90 transition-transform">
                     <ArrowLeft className="w-5 h-5 text-text-primary" />
                 </Link>
-                <h1 className="text-3xl font-black text-text-primary tracking-tight uppercase">Adat <span className="text-primary text-outline">Export</span></h1>
+                <h1 className="text-2xl font-black text-text-primary tracking-tight uppercase italic">Adat <span className="text-primary text-outline">Export</span></h1>
             </motion.header>
 
             <motion.div variants={itemVariants} className="relative flex flex-col gap-8 flex-1">
@@ -201,12 +228,12 @@ export default function ExportPageClient({ initialMeters }: { initialMeters: IMe
                             return (
                                 <button
                                     key={opt.id}
-                                    onClick={() => toggleDataSelection(opt.id)}
+                                    onClick={user?.subscriptionPlan === 'pro' || !opt.isPro ? () => toggleDataSelection(opt.id) : undefined}
                                     className={`w-full p-4 rounded-2xl flex items-center justify-between transition-all active:scale-[0.98] ${isSelected ? "bg-white/5 border border-white/5" : "bg-transparent border border-transparent"
                                         }`}
                                 >
-                                    <span className={`font-bold text-sm tracking-tight ${isSelected ? "text-white" : "text-white/40"}`}>
-                                        {opt.label}
+                                    <span className={`font-bold text-sm tracking-tight flex items-center gap-1 ${isSelected ? "text-white" : "text-white/40"}`}>
+                                        {opt.label} {opt.isPro && <PremiumBadge className="relative w-4 h-4" />}
                                     </span>
                                     <div className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors ${isSelected ? "bg-primary border-primary" : "border-white/10"
                                         }`}>

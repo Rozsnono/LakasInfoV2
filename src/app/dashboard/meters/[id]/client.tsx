@@ -11,6 +11,7 @@ import Link from "@/contexts/router.context";
 import { useHouse } from "@/contexts/house.context";
 import ReadingDetailSheet from "@/components/ReadingDetailSheet";
 import { exportFile } from "@/lib/file-export";
+import { useUser } from "@/contexts/user.context";
 
 interface Reading {
     _id: string;
@@ -56,6 +57,7 @@ const getVisuals = (type: string) => {
 
 export default function MeterDetailClient({ meter }: MeterDetailProps) {
     const { house } = useHouse();
+    const { user } = useUser();
     const [selectedReading, setSelectedReading] = useState<Reading | null>(null);
     const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -214,7 +216,9 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
                                 </div>
                                 <div className="mt-3 flex w-full items-center justify-between">
                                     <span className={`text-[11px] font-bold uppercase tracking-wider ${!item.isPaid ? "text-red-400 font-bolder" : "line-through text-white/40"}`}>
-                                        {item.cost.toLocaleString()} Ft
+                                        {user?.subscriptionPlan === 'pro' &&
+                                            `${item.cost.toLocaleString()} Ft`
+                                        }
                                     </span>
                                     <span className={`rounded-lg border border-white/5 bg-white/5 px-2 py-1 text-[11px] font-black uppercase tracking-widest ${item.difference > 0 ? "text-white" : "text-emerald-400"}`}>
                                         {item.difference > 0 ? "+" : ""}{item.difference.toFixed(2)} {meter.unit}

@@ -4,14 +4,14 @@ import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { ArrowLeft, Calculator, Info, Zap, Flame, Droplets, ChevronDown, Check } from "lucide-react";
 import Link from "@/contexts/router.context";
-import { IMeter } from "@/models/meter.model";
+import { IMeter, IMeterBase } from "@/models/meter.model";
 
 const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
 };
 
-export default function CalculatorClient({ initialMeters }: { initialMeters: IMeter[] }) {
+export default function CalculatorClient({ initialMeters }: { initialMeters: IMeterBase[] }) {
     // Ha nincs választható óra, kezeljük
     const [selectedMeterId, setSelectedMeterId] = useState<string>(initialMeters[0]?._id.toString() || "");
     const [amount, setAmount] = useState<string>("");
@@ -59,16 +59,16 @@ export default function CalculatorClient({ initialMeters }: { initialMeters: IMe
     }
 
     return (
-        <motion.div initial="hidden" animate="visible" className="relative min-h-screen  px-4 pt-12 pb-12 flex flex-col gap-8">
+        <motion.div initial="hidden" animate="visible" className="relative min-h-screen px-4 pt-12 pb-12 flex flex-col gap-8">
 
-            <motion.header variants={itemVariants} className="relative z-10 flex items-center gap-4">
+            <motion.header variants={itemVariants} className="relative flex items-center gap-4">
                 <Link href="/dashboard" className="w-10 h-10 rounded-full bg-surface-elevated flex items-center justify-center border border-white/5 shadow-xl">
                     <ArrowLeft className="w-5 h-5 text-text-primary" />
                 </Link>
-                <h1 className="text-3xl font-black text-text-primary tracking-tight uppercase">Rezsi <span className="text-primary text-outline">Kalkulátor</span></h1>
+                <h1 className="text-2xl font-black text-text-primary tracking-tight uppercase italic">Rezsi <span className="text-primary text-outline">Kalkulátor</span></h1>
             </motion.header>
 
-            <motion.div variants={itemVariants} className="relative z-[100] flex flex-col gap-6">
+            <motion.div variants={itemVariants} className="relative flex flex-col gap-6">
                 {/* EGYEDI SELECTOR */}
                 <div className="flex flex-col gap-2">
                     <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-4">Választott mérőóra</label>

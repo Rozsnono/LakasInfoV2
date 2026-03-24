@@ -112,3 +112,16 @@ export async function getAvailableReportsAction(houseId: string) {
         return { success: false, error: "Hiba az évek lekérésekor" };
     }
 }
+
+export async function payReadingAction(readingId: string, amount: number) {
+    try {
+        const userId = await getUserIdFromToken();
+        if (!userId) return { success: false, error: "Nincs auth!" };
+
+        await ReadingService.payReading(readingId, amount);
+        revalidatePath("/dashboard");
+        return { success: true };
+    } catch (error) {
+        return { success: false, error: "Nem sikerült a fizetés." };
+    }
+}

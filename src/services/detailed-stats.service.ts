@@ -121,6 +121,8 @@ export const DetailedStatsService = {
             statsByMonth[key].cost += cost;
             statsByMonth[key].monthlyDiffSum += diff;
             statsByMonth[key].breakdown[typeKey].cost += cost;
+            statsByMonth[key].breakdown[typeKey].difference = diff;
+            statsByMonth[key].breakdown[typeKey].isOverLimit = meter.isTiered ? meter.tierLimit! < diff : false;
 
             if (!monthlyMeterMax[key]) monthlyMeterMax[key] = {};
             monthlyMeterMax[key][mId] = Math.max(monthlyMeterMax[key][mId] || 0, r.value);
@@ -150,12 +152,20 @@ export const DetailedStatsService = {
         if (filter === "villany") unitLabel = "kWh";
         else if (filter === "gaz" || filter === "viz") unitLabel = "m³";
 
+        const isOverLimitOverAllPercent = chartDataArray.reduce((acc, curr) => {
+            const breakdownValues = Object.values(curr.breakdown);
+            const overLimitCount = breakdownValues.filter(b => b.isOverLimit).length;
+            const totalCount = breakdownValues.length;
+            return acc + (totalCount > 0 ? (overLimitCount / totalCount) : 0);
+        }, 0) / chartDataArray.length * 100;
+
         return {
             chartData: chartDataArray,
             totalCost: `${Math.round(chartDataArray.reduce((acc, curr) => acc + curr.cost, 0)).toLocaleString()} Ft`,
             totalConsumption: `${currentDiffSum.toLocaleString()} ${unitLabel}`,
             trend: `${Math.abs(Math.round(trendVal))}%`,
             isTrendPositive: trendVal > 0,
+            isOverLimitOverAllPercent,
             categoryKeys: types as CategoryKey[]
         };
     }

@@ -183,5 +183,22 @@ export const ReadingService = {
 
         // Sorba rendezés (legfrissebb elöl)
         return Array.from(monthsMap.values()).sort((a, b) => b.rawDate.getTime() - a.rawDate.getTime());
+    },
+
+    async payReading(readingId: string, cost: number): Promise<{ success: boolean; message: string }> {
+        try {
+            await dbConnect();
+            await Reading.findByIdAndUpdate(
+                new mongoose.Types.ObjectId(readingId),
+                {
+                    isPaid: true,
+                    cost: cost
+                }
+            );
+            return { success: true, message: "Fizetés sikeres." };
+        } catch (error) {
+            console.error("ReadingService.payReading Error:", error);
+            return { success: false, message: "Hiba történt a fizetés során." };
+        }
     }
 }

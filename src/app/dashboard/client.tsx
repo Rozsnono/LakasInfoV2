@@ -14,7 +14,8 @@ import {
     Droplets,
     TrendingUp,
     TrendingDown,
-    ChartColumn
+    ChartColumn,
+    Gem
 } from "lucide-react";
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "@/contexts/router.context";
@@ -28,6 +29,7 @@ import { getNotificationsAction } from "@/app/actions/notification";
 import Widgets from "@/components/Widgets";
 import { useAppearance } from "@/contexts/appearance.context";
 import { useHouse } from "@/contexts/house.context";
+import PremiumBadge from "@/components/PremiumBadge";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -172,9 +174,10 @@ export default function DashboardClient({
                     variants={balanceVariants}
                     className="flex flex-col items-center text-center mt-2"
                 >
-                    <span className="text-text-secondary text-sm font-medium mb-1 opacity-60 uppercase tracking-widest">E havi várható költség</span>
+                    <span className="text-text-secondary text-sm font-medium mb-1 opacity-60 uppercase tracking-widest flex items-center justify-center gap-1">E havi várható költség 
+                        <PremiumBadge className="h-3 w-3 relative text-yellow-400" /></span>
                     <h2 className="text-6xl font-black tracking-tighter text-text-primary italic">
-                        {totalMonthlyCost.toLocaleString()} <span className="text-2xl text-primary not-italic">Ft</span>
+                        {user?.subscriptionPlan == 'pro' ? totalMonthlyCost.toLocaleString('hu-HU', { maximumFractionDigits: 0 }) : '---'} <span className="text-2xl text-primary not-italic">Ft</span>
                     </h2>
                     <motion.div whileTap={{ scale: 1.02 }} className="mt-3">
                         <Link href="/dashboard/properties" className="flex items-center gap-2 mt-4 text-text-secondary text-[10px] font-bold uppercase tracking-wider bg-surface-elevated/50 px-4 py-1.5 rounded-full border border-white/5 shadow-sm">
@@ -190,7 +193,8 @@ export default function DashboardClient({
                         label="Új állás"
                         onClick={() => setIsNewReadingOpen(true)}
                     />
-                    <Link href="/dashboard/calculator">
+                    <Link href="/dashboard/calculator" className="relative">
+                        <PremiumBadge className="top-1 right-2 w-4 h-4"/>
                         <ActionButton icon={<Calculator className="w-6 h-6" />} label="Kalkulátor" />
                     </Link>
                     <Link href="/dashboard/meters">

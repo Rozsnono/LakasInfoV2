@@ -9,7 +9,9 @@ export type CategoryKey = "villany" | "gaz" | "viz";
 export interface CategoryData {
     cost: number;
     consumption: number; // Itt az aktuális óraállást tároljuk
+    difference?: number; // Ez az aktuális és előző óraállás különbsége, ha van
     unit: string; // Új mező az egységnek
+    isOverLimit: boolean; // Új mező a limit túllépésének jelzésére
 }
 
 export interface Breakdown {
@@ -32,5 +34,6 @@ export interface DetailedStatsData {
     totalCost: string;
     totalConsumption: string;
     trend: string;
+    isOverLimitOverAllPercent: number;
     isTrendPositive: boolean;
 }
