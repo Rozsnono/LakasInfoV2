@@ -2,8 +2,10 @@
 
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Upload, Check, Play } from "lucide-react";
+import { X, Upload, Check, Play, LockIcon, Gem } from "lucide-react";
 import { useAppearance, WALLPAPERS, CATEGORIES } from "@/contexts/appearance.context";
+import PremiumBadge from "./PremiumBadge";
+import { useUser } from "@/contexts/user.context";
 
 interface Props {
     isOpen: boolean;
@@ -12,7 +14,15 @@ interface Props {
 
 export default function WallpaperSheet({ isOpen, onClose }: Props) {
     const { wallpaper: currentWallpaper, setWallpaper } = useAppearance();
-    const [activeCat, setActiveCat] = useState("Világító");
+    const { user } = useUser();
+    const [activeCat, setActiveCat] = useState(WALLPAPERS.find(wp => wp.id === currentWallpaper)?.category || 'Egyedi');
+    const [isActiveCatPro, setIsActiveCatPro] = useState(false); // Ez a state jelzi, hogy a jelenlegi kategória Pro-e vagy sem
+
+    const handleCategoryChange = (catId: string) => {
+        setActiveCat(catId);
+        const selectedCategory = CATEGORIES.find(cat => cat.id === catId);
+        setIsActiveCatPro(selectedCategory?.type === 'pro' || false); // Frissíti a Pro státuszt a kiválasztott kategória alapján
+    }
 
     // Szűrés a Contextből jövő adatok alapján
     const filteredWallpapers = useMemo(() => {
@@ -51,7 +61,7 @@ export default function WallpaperSheet({ isOpen, onClose }: Props) {
                             </button>
 
                             <h3 className="text-2xl font-black tracking-tighter text-white uppercase italic text-center">
-                                Hát<span className="text-[#34c759]">tér</span>
+                                Hát<span className="text-primary">tér</span>
                             </h3>
                             <div className="w-10"></div>
                         </div>
@@ -60,14 +70,14 @@ export default function WallpaperSheet({ isOpen, onClose }: Props) {
                         <div className="flex gap-3 overflow-x-auto pb-8 scrollbar-hide shrink-0">
                             {CATEGORIES.map((cat) => (
                                 <button
-                                    key={cat}
-                                    onClick={() => setActiveCat(cat)}
-                                    className={`px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all whitespace-nowrap ${activeCat === cat
-                                            ? "bg-white text-black shadow-xl"
-                                            : "bg-white/5 text-white/30"
+                                    key={cat.id}
+                                    onClick={() => handleCategoryChange(cat.id)}
+                                    className={`px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all relative whitespace-nowrap ${activeCat === cat.id
+                                        ? "bg-white text-black shadow-xl"
+                                        : "bg-white/5 text-white/30"
                                         }`}
                                 >
-                                    {cat}
+                                    {cat.name}
                                 </button>
                             ))}
                         </div>
@@ -83,7 +93,7 @@ export default function WallpaperSheet({ isOpen, onClose }: Props) {
                                         animate={{ opacity: 1, scale: 1 }}
                                         exit={{ opacity: 0, scale: 0.9 }}
                                         whileTap={{ scale: 0.92 }}
-                                        onClick={() => setWallpaper(wp.id)} // Közvetlenül a contextet frissíti
+                                        onClick={isActiveCatPro && !(user?.subscriptionPlan === 'pro') ? undefined : () => setWallpaper(wp.id)} // Közvetlenül a contextet frissíti
                                         className="aspect-[3/4.5] rounded-[2.2rem] relative overflow-hidden border-2 transition-all shadow-2xl bg-no-repeat bg-cover group"
                                         style={{
                                             background: wp.css,
@@ -96,6 +106,14 @@ export default function WallpaperSheet({ isOpen, onClose }: Props) {
                                                 <Play className="w-3 h-3 text-white ml-0.5" fill="currentColor" />
                                             </div>
                                         )}
+
+                                        {
+                                            isActiveCatPro && !(user?.subscriptionPlan === 'pro') && (
+                                                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                                    <span className="text-yellow-400 text-sm font-bold"><Gem /></span>
+                                                </div>
+                                            )
+                                        }
 
                                         {/* KIVÁLASZTOTT ÁLLAPOT */}
                                         {currentWallpaper === wp.id && (
