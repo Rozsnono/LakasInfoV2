@@ -125,3 +125,15 @@ export async function payReadingAction(readingId: string, amount: number) {
         return { success: false, error: "Nem sikerült a fizetés." };
     }
 }
+
+export async function updateReadingPaymentAction(readingId: string, isPaid: boolean, paidAmount?: number) {
+    try {
+        const userId = await getUserIdFromToken();
+        if (!userId) return { success: false, error: "Nincs auth!" };
+        await ReadingService.payReading(readingId, paidAmount!);
+        revalidatePath("/dashboard");
+        return { success: true };
+    } catch (error) {
+        return { success: false, error: "Nem sikerült a fizetés frissítése." };
+    }
+}

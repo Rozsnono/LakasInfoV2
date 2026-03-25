@@ -6,6 +6,7 @@ import { ChevronLeft, Trash2, Calendar, Gauge, Loader2, Eye, AlertTriangle, XCir
 import { deleteReadingAction } from "@/app/actions/meter";
 import PremiumBadge from "./PremiumBadge";
 import { useUser } from "@/contexts/user.context";
+import { updateReadingPaymentAction } from "@/app/actions/reading";
 // import { updateReadingPaymentAction } from "@/app/actions/reading"; // Ezt majd neked kell megírnod a backendhez!
 
 interface Props {
@@ -79,14 +80,11 @@ export default function ReadingDetailSheet({ isOpen, onClose, onShowPhoto, readi
         setIsSavingPayment(true);
 
         try {
-            // PÉLDA: await updateReadingPaymentAction(reading._id, { isPaid, paidAmount: Number(paidAmount) });
 
-            // Szimulált töltés, amíg nincs backend:
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await updateReadingPaymentAction(reading._id, isPaid, Number(paidAmount));
             setIsSavingPayment(false);
 
-            // Opcionális: sikeres mentés után bezárhatjuk a sheetet, vagy csak jelezhetjük a sikert
-            // onClose(); 
+            onClose();
         } catch (error) {
             console.error("Hiba a fizetés mentésekor:", error);
             setIsSavingPayment(false);
