@@ -80,7 +80,6 @@ export default function JoinHousePage() {
 
     // Callback a QR kód olvasóhoz
     const onScanSuccess = (scannedText: string) => {
-        console.log("Scanned QR Code:", scannedText);
         if (scannedText && scannedText.length === 6) {
             const newCodeArr = scannedText.toUpperCase().split("");
             setCode(newCodeArr);

@@ -5,7 +5,7 @@ import { useAppearance } from "@/contexts/appearance.context";
 import { motion, Variants, AnimatePresence, TargetAndTransition, VariantLabels } from "framer-motion";
 import Link from "@/contexts/router.context";
 import { useRouter } from "@/contexts/router.context";
-import { CrownIcon, TrendingDown, TrendingUp, Loader2, LayoutGrid, CalendarClock, Map, MapPin, Check, Plus, Gem } from "lucide-react";
+import { CrownIcon, TrendingDown, TrendingUp, Loader2, LayoutGrid, CalendarClock, Map, MapPin, Check, Plus, Gem, Receipt } from "lucide-react";
 import { getMetersForWidgetAction } from "@/app/actions/meter";
 import { MeterWithStats } from "@/services/meter.service";
 import { getMeterVisuals } from "@/types/meter";
@@ -24,10 +24,6 @@ const itemVariants: Variants = {
         },
     },
 };
-
-// ===========================================================================
-// 1. ÚJRAHASZNOSÍTHATÓ SABLONOK (TEMPLATES)
-// ===========================================================================
 
 interface WidgetContainerProps {
     children: React.ReactNode;
@@ -72,7 +68,6 @@ function WidgetContainer({ children, className = "", onClick, isSelectionMode, i
     );
 }
 
-// A közös Fejléc (Cím, Ikon és Jobb oldali akció)
 function WidgetHeader({ title, icon, action, isProWidget, isSelectable }: { title: string, icon?: React.ReactNode, action?: React.ReactNode, isProWidget?: boolean, isSelectable?: boolean }) {
     return (
         <div className="flex justify-between items-center mb-1 w-full relative z-10">
@@ -89,7 +84,6 @@ function WidgetHeader({ title, icon, action, isProWidget, isSelectable }: { titl
     );
 }
 
-// A közös Lista Elem
 function BaseListItem({ icon, iconColorClass, title, subtitle, rightElement }: { icon: React.ReactNode, iconColorClass: string, title: string, subtitle?: string, rightElement: React.ReactNode }) {
     return (
         <div className="flex items-center justify-between w-full active:opacity-60 transition-all group">
@@ -106,10 +100,6 @@ function BaseListItem({ icon, iconColorClass, title, subtitle, rightElement }: {
         </div>
     );
 }
-
-// ===========================================================================
-// 2. FŐ WIDGETS KOMPONENS
-// ===========================================================================
 
 export default function Widgets() {
     const { widgets } = useAppearance();
@@ -142,6 +132,12 @@ export default function Widgets() {
                     },
                     {
                         type: 'large',
+                        id: 'unit-unpaidBills', // Új widget azonosító
+                        isPro: true,
+                        component: <UnpaidBillsWidget meters={results.results.meters} isProWidget isSelectable={user?.subscriptionPlan == 'pro'} />
+                    },
+                    {
+                        type: 'large',
                         id: 'unit-houseMap',
                         isPro: true,
                         component: <HouseMapWidget address={results.results.house?.address} isProWidget isSelectable={user?.subscriptionPlan == 'pro'} />
@@ -161,7 +157,7 @@ export default function Widgets() {
             }
         };
         fetchMeters();
-    }, []);
+    }, [user?.subscriptionPlan]);
 
     if (isLoading) {
         return (
@@ -203,9 +199,46 @@ export default function Widgets() {
     );
 }
 
-// ===========================================================================
-// 3. KÜLÖNÁLLÓ WIDGETEK
-// ===========================================================================
+// ---------------------------------------------------------------------------
+// ÚJ WIDGET: FIZETENDŐ SZÁMLÁK
+// ---------------------------------------------------------------------------
+export function UnpaidBillsWidget({ meters, isSelection, isSelected, isProWidget, isSelectable }: { meters: MeterWithStats[], isSelection?: () => void, isSelected?: boolean, isProWidget?: boolean, isSelectable?: boolean }) {
+    // Kiszűrjük azokat, ahol van fizetendő összeg (ahol totalCost > 0)
+    const unpaidMeters = meters.filter(m => !m.lastReadingIsPaid);
+    return (
+        <WidgetContainer onClick={isSelectable ? isSelection : undefined} isSelectionMode={!!isSelection} isSelected={isSelected} isSelectable={isSelectable} isProWidget={isProWidget} className="p-6 flex flex-col gap-6">
+            <WidgetHeader
+                isProWidget={isProWidget}
+                isSelectable={isSelectable}
+                title="Befizetések"
+            />
+            <div className="flex flex-col gap-3" style={{ filter: `${isProWidget && !isSelectable ? 'blur(4px)' : ''}` }}>
+                {unpaidMeters.length === 0 ? (
+                    <div className="text-center py-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
+                        <span className="text-emerald-500 text-[11px] font-black uppercase tracking-widest">Minden rendezve!</span>
+                    </div>
+                ) : (
+                    unpaidMeters.map(meter => {
+                        const visual = getMeterVisuals(meter.type);
+                        const badge = <span className="bg-red-500/10 text-red-500 border border-red-500/20 px-3 py-1.5 rounded-full text-[0.6rem] font-black">{meter.stats.totalCost.toLocaleString("hu-HU", { maximumFractionDigits: 0 })} Ft</span>;
+
+                        return (
+                            <Link key={meter._id.toString()} href={!isSelection ? `/dashboard/meters/${meter._id}` : '#'}>
+                                <BaseListItem
+                                    title={meter.name}
+                                    subtitle="Fizetendő összeg"
+                                    icon={visual.icon}
+                                    iconColorClass={visual.color}
+                                    rightElement={badge}
+                                />
+                            </Link>
+                        )
+                    })
+                )}
+            </div>
+        </WidgetContainer>
+    );
+}
 
 export function UpcomingReadingsWidget({ meters, isSelection, isSelected, isProWidget, isSelectable }: { meters: MeterWithStats[], isSelection?: () => void, isSelected?: boolean, isProWidget?: boolean, isSelectable?: boolean }) {
     const calculateStatus = (lastReadingDate: Date) => {

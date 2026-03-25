@@ -51,8 +51,8 @@ export async function getAllReadingsAction(houseId: string) {
             userId: r.userId,
             photoUrl: r.photoUrl || null,
             date: new Date(r.date).toLocaleDateString('hu-HU'),
-            meterName: r.meterName || "Ismeretlen óra",
-            meterUnit: r.meterUnit || "",
+            name: r.meterName || "Ismeretlen óra",
+            unit: r.meterUnit || "",
             difference: r.difference || 0,
             type: r.meterType || "villany"
         }));

@@ -12,7 +12,7 @@ import {
 import { MeterWithStats } from "@/services/meter.service";
 import { getMeterVisuals } from "@/types/meter";
 import { useAppearance } from "@/contexts/appearance.context";
-import { HouseMapWidget, UpcomingReadingsWidget } from "./Widgets";
+import { HouseMapWidget, UnpaidBillsWidget, UpcomingReadingsWidget } from "./Widgets";
 import { useHouse } from "@/contexts/house.context";
 import { useUser } from "@/contexts/user.context";
 
@@ -49,7 +49,6 @@ export default function WidgetSelectionSheet({
     onToggleWidget,
     meters
 }: WidgetSelectionSheetProps) {
-
     const { house } = useHouse();
     const { user } = useUser();
 
@@ -169,6 +168,8 @@ export default function WidgetSelectionSheet({
                                 <UpcomingReadingsWidget isProWidget isSelectable={user?.subscriptionPlan == 'pro'} meters={meters} isSelection={() => onToggleWidget("unit-upcomingReadings")} isSelected={activeWidgetIds.includes("unit-upcomingReadings")} />
 
                                 <HouseMapWidget isProWidget isSelectable={user?.subscriptionPlan == 'pro'} address={house?.address} isSelection={() => onToggleWidget("unit-houseMap")} isSelected={activeWidgetIds.includes("unit-houseMap")} />
+
+                                <UnpaidBillsWidget isProWidget isSelectable={user?.subscriptionPlan == 'pro'} isSelection={() => onToggleWidget("unit-unpaidBills")} isSelected={activeWidgetIds.includes("unit-unpaidBills")} meters={meters} />
                             </section>
                         </div>
 

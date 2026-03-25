@@ -27,8 +27,6 @@ export class UserService {
                 { new: true } // A frissített objektumot adja vissza
             );
 
-            console.log("Updated user:", updatedUser?.colorCode);
-
             if (!updatedUser) {
                 throw new Error("A felhasználó nem található az adatbázisban");
             }

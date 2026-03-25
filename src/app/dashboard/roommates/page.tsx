@@ -1,19 +1,192 @@
-import { redirect } from "next/navigation";
-import { getRoommatesAction } from "@/app/actions/house";
-import RoommatesClient from "./client";
+"use client";
 
-export default async function RoommatesPage() {
-    const result = await getRoommatesAction();
+import React, { useState } from "react";
+import { motion, AnimatePresence, Variants } from "framer-motion";
+import {
+    ArrowLeft, UserPlus, ShieldAlert, Crown,
+    User, Trash2, Loader2
+} from "lucide-react";
+import Link from "@/contexts/router.context";
+import { getRoommatesAction, removeRoommateAction } from "@/app/actions/house";
+import InviteCodeSheet from "@/components/RoommateCodeSheet";
+import { useAction } from "@/providers/action.provider";
 
-    if (!result.success) {
-        redirect("/dashboard");
-    }
+interface Member {
+    id: string;
+    name: string;
+    role: string;
+    isMe: boolean;
+    init: string;
+}
+
+const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.08 } }
+};
+
+const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }
+};
+
+export default function RoommatesClient() {
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
+    const [copied, setCopied] = useState(false);
+    const [members, setMembers] = useState<Member[]>([]);
+    const [isOwner, setIsOwner] = useState<boolean>(false);
+    const [inviteCode, setInviteCode] = useState<string>('');
+    const [removingId, setRemovingId] = useState<string | null>(null);
+
+    const { isPending, error, execute } = useAction(
+        getRoommatesAction,
+        {
+            immediate: true,
+            onSuccess: (data) => {
+                setMembers(data.members);
+                setIsOwner(data.members.some((m: Member) => m.id === data.house.ownerId && m.id === data.currentUserId));
+                setInviteCode(data.house.inviteCode);
+            }
+        }
+    );
+
+    const handleCopy = async () => {
+        await navigator.clipboard.writeText(inviteCode);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    const handleRemove = async (memberId: string) => {
+        if (!confirm("Biztosan eltávolítod ezt a lakótársat?")) return;
+        setRemovingId(memberId);
+        const res = await removeRoommateAction(memberId);
+        if (res.success) {
+            setMembers(prev => prev.filter(m => m.id !== memberId));
+        }
+        setRemovingId(null);
+    };
 
     return (
-        <RoommatesClient 
-            initialMembers={result.members} 
-            inviteCode={result.house.inviteCode}
-            isOwner={result.currentUserId === result.house.ownerId}
-        />
+        <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            className="relative min-h-screen px-4 pt-12 pb-24 flex flex-col gap-8 overflow-x-hidden"
+        >
+            <motion.header variants={itemVariants} className="relative z-10 flex items-center gap-4">
+                <Link
+                    href="/dashboard"
+                    className="w-10 h-10 rounded-full bg-surface-elevated flex items-center justify-center border border-white/5 shadow-xl active:scale-90 transition-transform"
+                >
+                    <ArrowLeft className="w-5 h-5 text-text-primary" />
+                </Link>
+                <h1 className="text-3xl font-black text-text-primary tracking-tight uppercase italic">
+                    Lakó<span className="text-primary">társak</span>
+                </h1>
+            </motion.header>
+
+            {/* A gomb csak akkor jelenik meg, ha már betöltött az adat és a user owner */}
+            {isOwner && !isPending && (
+                <motion.div variants={itemVariants} className="relative z-10">
+                    <button
+                        onClick={() => setIsSheetOpen(true)}
+                        className="w-full py-6 px-6 bg-white text-black rounded-[2rem] flex items-center justify-center gap-3 active:scale-95 transition-transform shadow-2xl font-black uppercase tracking-widest text-sm"
+                    >
+                        <UserPlus className="w-5 h-5" strokeWidth={3} />
+                        Új lakótárs meghívása
+                    </button>
+                </motion.div>
+            )}
+
+            <motion.div variants={itemVariants} className="relative z-10 space-y-4">
+                <div className="flex items-center justify-between px-4">
+                    <h3 className="text-white/40 font-black text-[10px] uppercase tracking-[0.2em]">
+                        {isPending ? "Betöltés..." : `Aktív tagok (${members.length})`}
+                    </h3>
+                </div>
+
+                <div className="bg-surface rounded-[2.5rem] border border-white/5 shadow-2xl overflow-hidden min-h-[150px] flex flex-col">
+                    <AnimatePresence mode="popLayout">
+                        {/* TÖLTÉS ÁLLAPOT */}
+                        {isPending ? (
+                            <motion.div
+                                key="loading"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="flex flex-col items-center justify-center py-16 gap-4 m-auto"
+                            >
+                                <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                                <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Tagok betöltése...</p>
+                            </motion.div>
+                        ) : error ? (
+                            /* HIBA ÁLLAPOT */
+                            <motion.div key="error" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-center py-16 px-6 m-auto">
+                                <p className="text-red-400 text-sm font-bold">Hiba történt az adatok betöltésekor.</p>
+                                <button onClick={() => execute()} className="mt-4 text-primary text-xs font-bold uppercase tracking-widest underline">Újrapróbálkozás</button>
+                            </motion.div>
+                        ) : members.length === 0 ? (
+                            /* ÜRES ÁLLAPOT (Bár elméletben legalább 1 ember, a tulaj mindig benne van) */
+                            <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-center py-16 m-auto">
+                                <p className="text-white/20 text-sm font-bold uppercase tracking-widest italic">Nincsenek aktív lakótársak.</p>
+                            </motion.div>
+                        ) : (
+                            /* ADATOK MEGJELENÍTÉSE */
+                            <motion.div key="content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="divide-y divide-white/5">
+                                {members.map((user) => (
+                                    <div key={user.id} className="flex items-center justify-between p-6 group transition-colors">
+                                        <div className="flex items-center gap-5">
+                                            <div className={`w-14 h-14 rounded-2xl ${user.role === 'Tulajdonos' ? 'bg-primary' : 'bg-surface-elevated'} flex items-center justify-center text-white font-black text-xl shadow-inner relative border border-white/5`}>
+                                                {user.init}
+                                                {user.role === 'Tulajdonos' && (
+                                                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-surface rounded-full flex items-center justify-center border-2 border-background shadow-lg">
+                                                        <Crown className="w-3.5 h-3.5 text-yellow-500" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-white font-black text-[17px] tracking-tight">
+                                                    {user.name} {user.isMe && <span className="text-white/20 font-bold ml-1">(Te)</span>}
+                                                </span>
+                                                <div className="flex items-center gap-1.5 mt-1">
+                                                    {user.role === 'Tulajdonos' ? <Crown className="w-3 h-3 text-yellow-500/50" /> : <User className="w-3 h-3 text-white/20" />}
+                                                    <span className="text-white/40 text-[11px] font-black uppercase tracking-wider">{user.role}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {isOwner && !user.isMe && (
+                                            <button
+                                                onClick={() => handleRemove(user.id)}
+                                                disabled={removingId === user.id}
+                                                className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500/40 active:bg-red-500 active:text-white transition-all"
+                                            >
+                                                {removingId === user.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="mt-auto">
+                <div className="bg-orange-500/10 p-6 rounded-[2rem] flex items-start gap-4 border border-orange-500/20 shadow-xl">
+                    <ShieldAlert className="w-6 h-6 text-orange-500 shrink-0" />
+                    <p className="text-orange-500/70 text-[11px] font-bold leading-relaxed uppercase tracking-tight">
+                        A lakótársak láthatják a méréseket és újakat rögzíthetnek, de az órák paramétereit és a ház alapadatait nem módosíthatják.
+                    </p>
+                </div>
+            </motion.div>
+
+            <InviteCodeSheet
+                isOpen={isSheetOpen}
+                onClose={() => setIsSheetOpen(false)}
+                inviteCode={inviteCode}
+                copied={copied}
+                onCopy={handleCopy}
+            />
+        </motion.div>
     );
 }

@@ -5,9 +5,7 @@ import { motion, Variants } from "framer-motion";
 import {
     X, Gem, QrCode, UserPlus, HelpCircle, User,
     Home, FileText, Lightbulb, Bell, LogOut,
-    PenTool,
-    ShieldCheck,
-    Crown
+    PenTool, ShieldCheck, Crown, Loader2
 } from "lucide-react";
 import Link from "@/contexts/router.context";
 import PersonalDataSheet from "@/components/PersonalDataSheet";
@@ -23,6 +21,7 @@ import { getNotificationsAction } from "@/app/actions/notification";
 import { useRouter } from "@/contexts/router.context";
 import AppInfoSheet from "@/components/AppInfosSheet";
 import { getSubscriptionStatusTitle } from "@/types/subscription";
+import { useAction } from "@/providers/action.provider";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -43,26 +42,23 @@ const itemVariants: Variants = {
 
 export default function ProfilePage() {
     const { user: profile, logout } = useUser();
-
     const { house } = useHouse();
+    const router = useRouter();
+
     const [activeSheet, setActiveSheet] = useState<string | null>(null);
     const [isPro, setIsPro] = useState(profile?.subscriptionPlan === "pro");
     const [copied, setCopied] = useState(false);
-    const router = useRouter();
-
-    // Értesítési állapot
-    const [unreadCount, setUnreadCount] = useState(0);
 
     const householdCode = house?.inviteCode || "N/A";
     const displayName = profile?.name || "Felhasználó";
 
-    // Adatok lekérése a backendből
-    const fetchUnreadCount = async () => {
-        const res = await getNotificationsAction();
-        if (res.success) {
-            setUnreadCount(res.unreadCount as number);
-        }
-    };
+    // Az értesítések lekérése useAction segítségével
+    const { data: notifData, isPending: isNotifPending, execute: fetchNotifications } = useAction(
+        getNotificationsAction,
+        { immediate: true }
+    );
+
+    const unreadCount = notifData?.success ? (notifData.unreadCount as number) : 0;
 
     const handleSheetActivation = (sheetId: string) => {
         setActiveSheet(sheetId);
@@ -71,16 +67,12 @@ export default function ProfilePage() {
         }
     }
 
-    // Kezdeti betöltés és frissítés a sheet bezárásakor
+    // Ha bezárunk egy Sheet-et, frissítsük az értesítések számát
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        fetchUnreadCount();
-
-        // Ha visszatérünk az értesítésekből, frissítsük a számot
         if (activeSheet === null) {
-            fetchUnreadCount();
+            fetchNotifications();
         }
-    }, [activeSheet]);
+    }, [activeSheet, fetchNotifications]);
 
     const initials = displayName
         .split(" ")
@@ -102,7 +94,7 @@ export default function ProfilePage() {
         { id: "household", icon: <Home className="w-5 h-5 text-emerald-400" />, label: "Háztartás adatai" },
         { id: "reports", icon: <FileText className="w-5 h-5 text-orange-400" />, label: "Rezsi jelentések" },
         { id: "energy", icon: <Lightbulb className="w-5 h-5 text-yellow-400" />, label: "Energiatakarékosság" },
-        { id: "notifications", icon: <Bell className="w-5 h-5 text-primary" />, label: "Értesítések", badge: unreadCount },
+        { id: "notifications", icon: <Bell className="w-5 h-5 text-primary" />, label: "Értesítések", badge: unreadCount, isLoading: isNotifPending },
         { id: "appinfo", icon: <Gem className="w-5 h-5 text-purple-400" />, label: "Alkalmazás infók" },
     ];
 
@@ -111,7 +103,7 @@ export default function ProfilePage() {
             initial="hidden"
             animate="visible"
             variants={containerVariants}
-            className="relative min-h-screen  px-4 pt-12 pb-32 flex flex-col gap-6"
+            className="relative min-h-screen px-4 pt-12 pb-32 flex flex-col gap-6"
         >
             {/* HEADER */}
             <motion.header variants={itemVariants} className="flex items-center justify-between">
@@ -127,7 +119,9 @@ export default function ProfilePage() {
                             <Gem className="w-4 h-4 text-white" /> :
                             <ShieldCheck className="w-4 h-4 text-primary" />
                     }
-                    <span className={`text-[10px] font-black uppercase tracking-widest ${isPro ? "text-white" : "text-white"}`}>LakasInfo {getSubscriptionStatusTitle(profile?.subscriptionPlan || "free")}</span>
+                    <span className={`text-[10px] font-black uppercase tracking-widest text-white`}>
+                        LakasInfo {getSubscriptionStatusTitle(profile?.subscriptionPlan || "free")}
+                    </span>
                 </button>
             </motion.header>
 
@@ -205,7 +199,13 @@ export default function ProfilePage() {
                             <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">{item.icon}</div>
                             <span className="text-white font-bold text-[17px] tracking-tight">{item.label}</span>
                         </div>
-                        {item.badge && item.badge > 0 ? (
+
+                        {/* Töltés állapot vagy értesítés badge */}
+                        {item.isLoading ? (
+                            <div className="px-2 py-1 flex items-center justify-center">
+                                <Loader2 className="w-4 h-4 text-primary animate-spin" />
+                            </div>
+                        ) : item.badge && item.badge > 0 ? (
                             <div className="px-2.5 py-1 rounded-full bg-primary text-white font-black text-[10px] shadow-[0_0_15px_rgba(255,59,48,0.4)]">
                                 {item.badge}
                             </div>

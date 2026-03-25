@@ -23,6 +23,12 @@ export interface IReadingWithInfo {
     difference: number;
 }
 
+export interface IReadingWithInfoResponse {
+    success: boolean;
+    message?: string;
+    value?: IReadingWithInfo[];
+}
+
 export interface ReadingWithMeterInfo extends IReading {
     meterName: string;
     meterType: "villany" | "gaz" | "viz";

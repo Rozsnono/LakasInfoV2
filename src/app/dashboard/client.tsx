@@ -31,6 +31,7 @@ import { useAppearance } from "@/contexts/appearance.context";
 import { useHouse } from "@/contexts/house.context";
 import PremiumBadge from "@/components/PremiumBadge";
 import { subscriptionIsExpiredAction } from "../actions/subscription";
+import { useAction } from "@/providers/action.provider";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },

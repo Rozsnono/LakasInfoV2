@@ -20,6 +20,7 @@ export interface MeterWithStats extends IMeterBase {
     lastReadingValue: number;
     lastReadingDate?: Date;
     stats: CalculationResult;
+    lastReadingIsPaid: boolean;
 }
 
 export const MeterService = {
@@ -131,13 +132,13 @@ export const MeterService = {
 
             const currentReadingValue = readings[0]?.value ?? meter.initialValue ?? 0;
             const previousReadingValue = readings[1]?.value ?? meter.initialValue ?? 0;
-
             const stats = this.calculateConsumptionStats(meter, currentReadingValue, previousReadingValue);
 
             return {
                 ...meter,
                 lastReadingValue: currentReadingValue,
                 lastReadingDate: readings[0]?.date,
+                lastReadingIsPaid: readings[0]?.isPaid || false,
                 stats
             } as MeterWithStats;
         }));
@@ -165,6 +166,7 @@ export const MeterService = {
                 ...meter,
                 lastReadingValue: currentReadingValue,
                 lastReadingDate: readings[0]?.date,
+                lastReadingIsPaid: readings[0]?.isPaid || readings[0]?.cost === 0,
                 stats
             } as MeterWithStats;
         }));
@@ -274,7 +276,6 @@ export const MeterService = {
                 cost: calcCost
             });
         }));
-        console.log(`Updated costs for ${updatedReadings.length} readings of meter ${meterId}`);
         return { success: true };
     },
 

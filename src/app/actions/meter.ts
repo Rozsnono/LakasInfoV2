@@ -126,6 +126,22 @@ export async function getMetersForHouseAction(houseId: string) {
     } catch (error) { return { success: false, error: "Lekérési hiba." }; }
 }
 
+export async function getMetersAndLastReadingForHouseAction(houseId: string) {
+    try {
+        const userId = await getUserIdFromToken();
+        if (!userId) return { success: false, error: "Nincs auth!" };
+        const meters = await MeterService.getDashboardData(houseId);
+        const simplified = meters.map(m => {
+            return {
+                ...m,
+                _id: m._id.toString(),
+                houseId: m.houseId.toString(),
+            }
+        });
+        return { success: true, meters: simplified };
+    } catch (error) { return { success: false, error: "Lekérési hiba." }; }
+}
+
 export async function analyzeMeterPhotoAction(base64Image: string) {
     try {
         const userId = await getUserIdFromToken();
@@ -150,5 +166,14 @@ export async function getMetersForWidgetAction() {
         const houseId = await HouseService.getHouseDetailsByUserId(userId);
         const meters = await MeterService.getWidgetsData(houseId.house?._id.toString() || "");
         return { success: true, results: JSON.parse(JSON.stringify(meters)) };
+    } catch (error) { return { success: false, error: "Lekérési hiba." }; }
+}
+
+export async function getMetersByHouseAction(houseId: string) {
+    try {
+        const userId = await getUserIdFromToken();
+        if (!userId) return { success: false, error: "Nincs auth!" };
+        const meters = await MeterService.getMetersByHouse(houseId);
+        return { success: true, meters: JSON.parse(JSON.stringify(meters)) };
     } catch (error) { return { success: false, error: "Lekérési hiba." }; }
 }
