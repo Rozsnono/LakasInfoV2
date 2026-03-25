@@ -11,7 +11,8 @@ import {
     AlertCircle,
     ArrowLeft,
     Check,
-    Loader2
+    Loader2,
+    Archive
 } from "lucide-react";
 import React, { useState } from "react";
 import Link from "@/contexts/router.context";
@@ -55,6 +56,12 @@ export default function MetersClient() {
         onSuccess: (freshMeters) => { setMeters(freshMeters.meters as unknown as MeterWithStats[]); },
     });
 
+    // Rendezzük a mérőórákat: az aktívak elöl, az archiváltak hátul
+    const sortedMeters = [...meters].sort((a, b) => {
+        if (a.isArchived === b.isArchived) return 0;
+        return a.isArchived ? 1 : -1;
+    });
+
     return (
         <motion.div
             initial="hidden"
@@ -62,7 +69,6 @@ export default function MetersClient() {
             variants={containerVariants}
             className="relative min-h-full px-4 pt-12 pb-6 flex flex-col gap-6"
         >
-
             <motion.header variants={itemVariants} className="relative z-10 flex items-center justify-between mt-2">
                 <div className="flex items-center gap-4">
                     <Link
@@ -74,7 +80,7 @@ export default function MetersClient() {
                     <div>
                         <h1 className="text-3xl font-black text-text-primary tracking-tight italic uppercase">Mérő<span className="text-primary text-outline">órák</span></h1>
                         <p className="text-text-secondary text-xs font-bold uppercase tracking-widest opacity-60 mt-1">
-                            {isPending ? "Betöltés..." : `${meters.length} aktív eszköz`}
+                            {isPending ? "Betöltés..." : `${meters.length} eszköz`}
                         </p>
                     </div>
                 </div>
@@ -112,7 +118,7 @@ export default function MetersClient() {
                             <p className="text-red-400 text-sm font-bold">Hiba történt az adatok betöltésekor.</p>
                             <button onClick={() => execute(house!._id.toString())} className="mt-4 text-primary text-xs font-bold uppercase tracking-widest underline">Újrapróbálkozás</button>
                         </motion.div>
-                    ) : meters.length === 0 ? (
+                    ) : sortedMeters.length === 0 ? (
                         /* ÜRES ÁLLAPOT */
                         <motion.div
                             key="empty"
@@ -127,8 +133,9 @@ export default function MetersClient() {
                         </motion.div>
                     ) : (
                         /* ADATOK MEGJELENÍTÉSE */
-                        meters.map((meter) => {
+                        sortedMeters.map((meter) => {
                             const visual = getMeterVisuals(meter.type);
+                            const isArchived = meter.isArchived;
 
                             // Dátum formázása
                             const lastReadDate = meter.lastReadingDate
@@ -143,7 +150,8 @@ export default function MetersClient() {
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.95 }}
-                                    className="bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-2xl flex flex-col gap-5 relative overflow-hidden group"
+                                    // Ha archivált, halványítjuk a kártyát
+                                    className={`bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-2xl flex flex-col gap-5 relative overflow-hidden group transition-all ${isArchived ? 'grayscale-[30%]' : ''}`}
                                 >
                                     <div className="flex justify-between items-start">
                                         <div className="flex items-center gap-4">
@@ -151,7 +159,11 @@ export default function MetersClient() {
                                                 {visual.icon}
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="text-white font-black text-xl tracking-tight leading-none italic">{meter.name}</span>
+                                                <div className="flex items-center gap-3">
+                                                    <span className="text-white font-black text-xl tracking-tight leading-none italic">{meter.name}</span>
+                                                    {/* Archivált plecsni */}
+
+                                                </div>
                                                 <span className="text-text-secondary text-[11px] font-bold uppercase tracking-wider mt-2 opacity-50">{lastReadDate}</span>
                                             </div>
                                         </div>
@@ -175,21 +187,30 @@ export default function MetersClient() {
                                             </div>
                                         </div>
 
-                                        <div className="flex flex-col items-end gap-2">
-                                            {meter.stats.isOverLimit ? (
-                                                <div className="flex items-center gap-2 text-red-500 bg-red-500/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-red-500/20">
-                                                    <AlertCircle className="w-3.5 h-3.5" />
-                                                </div>
-                                            ) : meter.stats.consumption > (meter.tierLimit || 999999) * 0.8 ? (
-                                                <div className="flex items-center gap-2 text-orange-500 bg-orange-500/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-orange-500/20">
-                                                    <AlertCircle className="w-3.5 h-3.5" />
-                                                </div>
-                                            ) : (
-                                                <div className="text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-500/20">
-                                                    <Check className="w-3.5 h-3.5" />
-                                                </div>
-                                            )}
-                                        </div>
+                                        {!isArchived && (
+                                            <div className="flex flex-col items-end gap-2">
+                                                {meter.stats.isOverLimit ? (
+                                                    <div className="flex items-center gap-2 text-red-500 bg-red-500/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-red-500/20">
+                                                        <AlertCircle className="w-3.5 h-3.5" />
+                                                    </div>
+                                                ) : meter.stats.consumption > (meter.tierLimit || 999999) * 0.8 ? (
+                                                    <div className="flex items-center gap-2 text-orange-500 bg-orange-500/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-orange-500/20">
+                                                        <AlertCircle className="w-3.5 h-3.5" />
+                                                    </div>
+                                                ) : (
+                                                    <div className="text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-500/20">
+                                                        <Check className="w-3.5 h-3.5" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {isArchived && (
+                                            <div className="flex items-center gap-1 bg-white/10 px-2.5 py-1 rounded-full text-white/50 border border-white/5">
+                                                <Archive className="w-3 h-3" />
+                                                <span className="text-[8px] font-black uppercase tracking-widest">Archivált</span>
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="h-px w-full bg-white/5"></div>

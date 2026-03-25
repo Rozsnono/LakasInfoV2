@@ -119,10 +119,11 @@ export const MeterService = {
         return { success: true };
     },
 
-    async getDashboardData(houseId: string): Promise<MeterWithStats[]> {
+    async getDashboardData(houseId: string, allMeters?: boolean): Promise<MeterWithStats[]> {
         await dbConnect();
         const houseObjectId = new mongoose.Types.ObjectId(houseId);
-        const meters = await Meter.find({ houseId: houseObjectId }).lean<IMeterBase[]>().exec();
+        const query = { houseId: houseObjectId, ...(allMeters ? {} : { isArchived: { $ne: true } }) };
+        const meters = await Meter.find(query).lean<IMeterBase[]>().exec();
 
         const results = await Promise.all(meters.map(async (meter) => {
             const readings = await Reading.find({ meterId: meter._id })
@@ -150,7 +151,7 @@ export const MeterService = {
         await dbConnect();
         const houseObjectId = new mongoose.Types.ObjectId(houseId);
         const house = await HouseService.getHouseById(houseId);
-        const meters = await Meter.find({ houseId: houseObjectId }).lean<IMeterBase[]>().exec();
+        const meters = await Meter.find({ houseId: houseObjectId, isArchived: { $ne: true } }).lean<IMeterBase[]>().exec();
         const results = await Promise.all(meters.map(async (meter) => {
             const readings = await Reading.find({ meterId: meter._id })
                 .sort({ date: -1 })

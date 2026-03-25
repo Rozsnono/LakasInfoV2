@@ -66,7 +66,7 @@ export const StatsService = {
             meterQuery.type = { $in: types };
         }
 
-        const meters = await Meter.find(meterQuery).lean() as unknown as (IMeter & { _id: mongoose.Types.ObjectId })[];
+        const meters = await Meter.find({ ...meterQuery, isArchived: { $ne: true } }).lean() as unknown as (IMeter & { _id: mongoose.Types.ObjectId })[];
         const mIds = meters.map(m => m._id);
 
         const currentPeriodReadings = await Reading.find({

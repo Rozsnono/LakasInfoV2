@@ -102,7 +102,7 @@ export const ReadingService = {
         try {
             await dbConnect();
 
-            const meters = await Meter.find({ houseId: new mongoose.Types.ObjectId(houseId) }).lean().exec();
+            const meters = await Meter.find({ houseId: new mongoose.Types.ObjectId(houseId), isArchived: { $ne: true } }).lean().exec();
 
             const readings = await Reading.find({ meterId: { $in: meters.map(m => m._id) } }).sort({ date: -1 }).populate('meterId').lean().exec() as IReading[];
             const readingsWithMeterInfo = readings.map(r => ({
@@ -154,7 +154,7 @@ export const ReadingService = {
     async getAvailableReportMonths(houseId: string) {
         await dbConnect();
 
-        const meters = await Meter.find({ houseId: new mongoose.Types.ObjectId(houseId) }).lean().exec();
+        const meters = await Meter.find({ houseId: new mongoose.Types.ObjectId(houseId), isArchived: { $ne: true } }).lean().exec();
 
         const readings = await Reading.find({ meterId: { $in: meters.map(m => m._id) } }).sort({ date: -1 }).select('date').lean().exec() as IReading[];
 

@@ -70,6 +70,7 @@ export async function updateMeterAction(meterId: string, data: any) {
             basePrice: data.isTiered ? Number(data.priceTier1) : undefined,
             marketPrice: data.isTiered ? Number(data.priceTier2) : undefined,
             flatPrice: !data.isTiered ? Number(data.priceTier1) : undefined,
+            isArchived: data.isArchived || false
         };
 
         await MeterService.updateMeter(meterId, updateData);
@@ -130,7 +131,7 @@ export async function getMetersAndLastReadingForHouseAction(houseId: string) {
     try {
         const userId = await getUserIdFromToken();
         if (!userId) return { success: false, error: "Nincs auth!" };
-        const meters = await MeterService.getDashboardData(houseId);
+        const meters = await MeterService.getDashboardData(houseId, true);
         const simplified = meters.map(m => {
             return {
                 ...m,

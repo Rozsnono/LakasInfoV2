@@ -46,9 +46,9 @@ export const DetailedStatsService = {
             meterQuery.type = filter;
         }
 
-        const filteredMeters = await Meter.find(meterQuery).lean() as unknown as (IMeter & { _id: mongoose.Types.ObjectId })[];
+        const filteredMeters = await Meter.find({ ...meterQuery, isArchived: { $ne: true } }).lean() as unknown as (IMeter & { _id: mongoose.Types.ObjectId })[];
 
-        const types = await Meter.distinct("type", { houseId: new mongoose.Types.ObjectId(houseId) }) as string[];
+        const types = await Meter.distinct("type", { houseId: new mongoose.Types.ObjectId(houseId), isArchived: { $ne: true } }) as string[];
 
         const mIds = filteredMeters.map(m => m._id);
 

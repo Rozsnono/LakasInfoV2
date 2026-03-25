@@ -111,7 +111,7 @@ export default function DashboardClient({
     }, [isNotificationsOpen]);
 
     const totalMonthlyCost = useMemo(() => {
-        return initialMeters.reduce((acc, meter) => acc + meter.stats.totalCost, 0);
+        return initialMeters.reduce((acc, meter) => acc + (meter.lastReadingIsPaid ? 0 : meter.stats.totalCost), 0);
     }, [initialMeters]);
 
     const filteredMeters = useMemo(() => {
@@ -177,7 +177,7 @@ export default function DashboardClient({
                     variants={balanceVariants}
                     className="flex flex-col items-center text-center mt-2"
                 >
-                    <span className="text-text-secondary text-sm font-medium mb-1 opacity-60 uppercase tracking-widest flex items-center justify-center gap-1">E havi várható költség 
+                    <span className="text-text-secondary text-sm font-medium mb-1 opacity-60 uppercase tracking-widest flex items-center justify-center gap-1">E havi várható költség
                         <PremiumBadge className="h-3 w-3 relative text-yellow-400" /></span>
                     <h2 className="text-6xl font-black tracking-tighter text-text-primary italic">
                         {user?.subscriptionPlan == 'pro' ? totalMonthlyCost.toLocaleString('hu-HU', { maximumFractionDigits: 0 }) : '---'} <span className="text-2xl text-primary not-italic">Ft</span>
@@ -197,7 +197,7 @@ export default function DashboardClient({
                         onClick={() => setIsNewReadingOpen(true)}
                     />
                     <Link href="/dashboard/calculator" className="relative">
-                        <PremiumBadge className="top-1 right-2 w-4 h-4"/>
+                        <PremiumBadge className="top-1 right-2 w-4 h-4" />
                         <ActionButton icon={<Calculator className="w-6 h-6" />} label="Kalkulátor" />
                     </Link>
                     <Link href="/dashboard/meters">

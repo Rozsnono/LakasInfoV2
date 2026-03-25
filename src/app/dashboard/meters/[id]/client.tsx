@@ -111,7 +111,7 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
     return (
         <motion.div initial="hidden" animate="visible" variants={containerVariants} className="relative flex min-h-full flex-col gap-6 px-4 pb-24 pt-12">
             <motion.header variants={itemVariants} className="relative z-10 flex items-center justify-between text-white">
-                <Link href="/dashboard" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/5 bg-surface-elevated shadow-lg transition-transform active:scale-90">
+                <Link href="/dashboard/meters" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/5 bg-surface-elevated shadow-lg transition-transform active:scale-90">
                     <ArrowLeft className="h-5 w-5" />
                 </Link>
                 <h1 className="truncate px-4 text-xl font-black uppercase italic tracking-tight">{meter.name}</h1>

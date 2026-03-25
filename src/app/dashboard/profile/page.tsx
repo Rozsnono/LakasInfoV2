@@ -176,15 +176,18 @@ export default function ProfilePage() {
                     </motion.div>
                 </Link>
 
-                <motion.div variants={itemVariants} onClick={handleCopy} className="bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-xl flex flex-col justify-between aspect-square cursor-pointer active:scale-95 transition-transform">
-                    <div className="w-12 h-12 bg-surface-elevated rounded-2xl flex items-center justify-center border border-white/5">
-                        <UserPlus className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                        <h3 className="text-white font-black text-[15px] leading-tight">Lakótárs</h3>
-                        <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest mt-1 block">{copied ? "Másolva!" : "Meghívás"}</span>
-                    </div>
-                </motion.div>
+                <Link href="/dashboard/roommates">
+                    <motion.div whileTap={{ scale: 0.95 }} variants={itemVariants} className="bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-xl flex flex-col justify-between aspect-square cursor-pointer active:scale-95 transition-transform">
+                        <div className="w-12 h-12 bg-surface-elevated rounded-2xl flex items-center justify-center border border-white/5">
+                            <UserPlus className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                            <h3 className="text-white font-black text-[15px] leading-tight">Lakótárs</h3>
+                            <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest mt-1 block">{copied ? "Másolva!" : "Meghívás"}</span>
+                        </div>
+                    </motion.div>
+                </Link>
+
             </div>
 
             {/* MENÜ LISTA */}
