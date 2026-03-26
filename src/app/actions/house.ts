@@ -67,7 +67,10 @@ export async function joinHouseAction(inviteCode: string) {
         const userId = await getUserIdFromToken();
         if (!userId) return { success: false, message: "Nem vagy bejelentkezve!" };
 
-        const result = await HouseService.joinHouse(inviteCode, userId);
+        let result = await HouseService.joinHouse(inviteCode, userId);
+        if(!result.success) {
+            result = await HouseService.joinHouseAsGuest(inviteCode, userId);
+        }
 
         if (result.success) {
             revalidatePath("/dashboard");
