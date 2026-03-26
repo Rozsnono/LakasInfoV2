@@ -4,6 +4,7 @@ import React from "react";
 import { motion, Variants } from "framer-motion";
 import { HousePlus, LogIn, ChevronRight, Sparkles, ArrowLeft } from "lucide-react";
 import Link from "@/contexts/router.context";
+import { useUser } from "@/contexts/user.context";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -29,6 +30,9 @@ const itemVariants: Variants = {
 };
 
 export default function OnboardingClient() {
+
+    const { logout } = useUser();
+
     return (
         <motion.div
             initial="hidden"
@@ -38,12 +42,9 @@ export default function OnboardingClient() {
         >
 
             <motion.header variants={itemVariants} className="pt-12 mb-12">
-                <Link
-                    href="/"
-                    className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/5 shadow-xl active:scale-90 transition-transform"
-                >
+                <button onClick={logout} className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/5 shadow-xl active:scale-90 transition-transform">
                     <ArrowLeft className="w-6 h-6 text-white" />
-                </Link>
+                </button>
             </motion.header>
 
             <div className="relative z-10 w-full max-w-sm mx-auto flex flex-col gap-12">
