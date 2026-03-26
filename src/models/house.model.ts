@@ -3,9 +3,10 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 export interface IHouse extends Document {
     name: string;
     address?: string;
-    inviteCode: string;
+    inviteCodes: Map<string, number>;
     ownerId: mongoose.Types.ObjectId;
     members: mongoose.Types.ObjectId[];
+    membersRoles: Map<string, 'owner' | 'member' | 'guest'>;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -22,8 +23,13 @@ const HouseSchema: Schema<IHouse> = new Schema(
             trim: true,
             default: null,
         },
-        inviteCode: {
-            type: String,
+        inviteCodes: {
+            type: Map,
+            of: {
+                type: Number,
+                default: 0,
+            },
+            default: {},
             required: true,
             unique: true,
             index: true,
@@ -39,6 +45,14 @@ const HouseSchema: Schema<IHouse> = new Schema(
                 ref: "User",
             },
         ],
+        membersRoles: {
+            type: Map,
+            of: {
+                type: String,
+                enum: ['owner', 'member', 'guest'],
+            },
+            default: {},
+        },
     },
     {
         timestamps: true,

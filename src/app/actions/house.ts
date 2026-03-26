@@ -198,23 +198,26 @@ export async function getRoommatesAction() {
         }
 
         const houseData = JSON.parse(JSON.stringify(houseRes.house));
+        console.log("House Data:", houseData);
+        const members = houseData.members.map((m: IUser) => ({
+            id: m._id,
+            name: m.name,
+            email: m.email,
+            image: m.image,
+            role: houseData.membersRoles[m._id.toString()] || 'guest',
+            isMe: m._id.toString() === userId,
+            init: m.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)
+        }));
 
         return {
             success: true,
             house: houseData,
             currentUserId: userId,
-            members: houseData.members.map((m: IUser) => ({
-                id: m._id,
-                name: m.name,
-                email: m.email,
-                image: m.image,
-                role: m._id === houseData.ownerId ? "Tulajdonos" : "Lakótárs",
-                isMe: m._id.toString() === userId,
-                init: m.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)
-            }))
+            members: members || []
         };
     } catch (error) {
-        return { success: false, error: "Hiba a szinkronizáció során." };
+        console.log("GetRoommatesAction Error:", error);
+        return { success: false, error: error instanceof Error ? error.message : "Hiba történt." };
     }
 }
 

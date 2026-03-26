@@ -6,6 +6,7 @@ export interface IUser extends Document {
     password: string;
     image?: string;
     houses: mongoose.Types.ObjectId[];
+    houseRole?: 'owner' | 'member' | 'guest' | null;
     colorCode: string;
     createdAt: Date;
     updatedAt: Date;

@@ -60,6 +60,7 @@ export const StartupService = {
                 subscriptionPlan: data.subscription.plan,
                 subscriptionExpiresAt: data.subscription.expiresAt!.toISOString(),
                 houseId: data.house._id.toString(),
+                houseRole: data.house.membersRoles.get(data.user._id.toString()) || 'guest'
             })
                 .setProtectedHeader({ alg: "HS256" })
                 .setIssuedAt()

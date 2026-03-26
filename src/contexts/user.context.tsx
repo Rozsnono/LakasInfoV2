@@ -8,7 +8,7 @@ import { Loader2 } from "lucide-react";
 
 export interface HouseData {
     _id: string;
-    joinCode?: string;
+    joinCodes?: Map<string, number>;
     name?: string;
 }
 
@@ -22,6 +22,7 @@ export interface ProfileData {
     colorCode?: string;
     firstName?: string;
     householdCode?: string;
+    houseRole?: string;
     subscriptionPlan?: "free" | "pro" | "enterprise";
     subscriptionExpiresAt?: string | null;
 }

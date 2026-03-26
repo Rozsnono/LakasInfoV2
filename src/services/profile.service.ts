@@ -1,4 +1,5 @@
 import dbConnect from "@/lib/dbConnect"; // Feltételezve, hogy itt van az adatbázis csatlakozásod
+import House from "@/models/house.model";
 import User from "@/models/user.model"; // A User modelled helye
 import { ObjectId } from "mongodb";
 

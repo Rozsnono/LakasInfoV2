@@ -4,6 +4,7 @@ import { AppearanceProvider } from "@/contexts/appearance.context";
 import "./globals.css";
 import { ProfileProvider } from "@/contexts/user.context";
 import { StartupProvider } from "@/contexts/startup.context";
+import NativeBackButton from "@/components/NativeBackButton";
 
 export const metadata: Metadata = {
   title: "LakasInfo",
@@ -52,6 +53,7 @@ export default async function RootLayout({
               <main className="flex-1 w-full max-w-md mx-auto relative flex flex-col shadow-2xl shadow-black/50  border-x border-white/5">
                 {children}
               </main>
+              <NativeBackButton />
             </ProfileProvider>
           </AppearanceProvider>
         </StartupProvider>

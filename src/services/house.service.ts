@@ -50,7 +50,7 @@ export const HouseService = {
 
         while (!isUnique) {
             code = Math.floor(100000 + Math.random() * 900000).toString();
-            const existing = await House.findOne({ inviteCode: code });
+            const existing = await House.findOne({ $or: [{ "inviteCodes.members": parseInt(code) }, { "inviteCodes.guests": parseInt(code) }] }).lean().exec();
             if (!existing) isUnique = true;
         }
 
@@ -69,7 +69,7 @@ export const HouseService = {
         try {
             await dbConnect();
 
-            const inviteCode = await this.generateUniqueInviteCode();
+            const inviteCodes = [await this.generateUniqueInviteCode(), await this.generateUniqueInviteCode()];
             const ownerObjectId = new mongoose.Types.ObjectId(ownerId);
 
             const isPro = await SubscriptionService.userHasProSubscription(ownerId);
@@ -85,9 +85,13 @@ export const HouseService = {
             const newHouse = await House.create({
                 name,
                 address: address || undefined,
-                inviteCode,
+                inviteCodes: {
+                    'members': parseInt(inviteCodes[0]),
+                    'guests': parseInt(inviteCodes[1])
+                },
                 ownerId: ownerObjectId,
                 members: [ownerObjectId],
+                membersRoles: { [ownerObjectId.toString()]: 'owner' }
             });
 
             await User.findByIdAndUpdate(ownerObjectId, {
@@ -112,7 +116,7 @@ export const HouseService = {
             await dbConnect();
             const userObjectId = new mongoose.Types.ObjectId(userId);
 
-            const house = await House.findOne({ inviteCode });
+            const house = await House.findOne({ "inviteCodes.members": parseInt(inviteCode) });
 
             if (!house) {
                 return { success: false, message: "Érvénytelen vagy lejárt meghívó kód." };
@@ -136,6 +140,56 @@ export const HouseService = {
 
             await House.findByIdAndUpdate(house._id, {
                 $push: { members: userObjectId },
+                $set: { [`membersRoles.${userObjectId.toString()}`]: 'member' }
+            });
+
+            await User.findByIdAndUpdate(userObjectId, {
+                $push: { houses: house._id },
+                $set: { selectedHouse: house._id }
+            });
+
+            return {
+                success: true,
+                message: "Sikeresen csatlakoztál a háztartáshoz.",
+                house: house,
+                newToken: await this.getNewUserToken(userId, house._id.toString()),
+            };
+        } catch (error) {
+            console.error("JoinHouse Error:", error);
+            return { success: false, message: "Hiba történt a csatlakozás során." };
+        }
+    },
+
+    async joinHouseAsGuest(inviteCode: string, userId: string): Promise<HouseServiceResponse> {
+        try {
+            await dbConnect();
+            const userObjectId = new mongoose.Types.ObjectId(userId);
+
+            const house = await House.findOne({ "inviteCodes.guests": parseInt(inviteCode) });
+
+            if (!house) {
+                return { success: false, message: "Érvénytelen vagy lejárt meghívó kód." };
+            }
+            const isMember = house.members.some((id: mongoose.Types.ObjectId) =>
+                id.equals(userObjectId)
+            );
+
+            if (isMember) {
+                return { success: false, message: "Már tagja vagy ennek a háztartásnak." };
+            }
+
+            const isPro = await SubscriptionService.userHasProSubscription(house?.ownerId.toString() || "");
+
+            if (!isPro && house?.members.length >= 2) {
+                return {
+                    success: false,
+                    message: "A háztartáshoz való csatlakozáshoz Pro előfizetés szükséges. Kattints a bővebb információért!",
+                };
+            }
+
+            await House.findByIdAndUpdate(house._id, {
+                $push: { members: userObjectId },
+                $set: { [`membersRoles.${userObjectId.toString()}`]: 'guest' }
             });
 
             await User.findByIdAndUpdate(userObjectId, {

@@ -42,6 +42,10 @@ export function useAction<T, Args extends unknown[]>(
                 // Itt mindig a ref-ből olvassuk ki a függvényt
                 const result = await actionFnRef.current(...args);
                 setData(result);
+                if (result && !(result as unknown as { success: boolean }).success) {
+                    onErrorRef.current?.(new Error((result as unknown as { message: string }).message || "Ismeretlen hiba"));
+                    return result;
+                }
                 onSuccessRef.current?.(result);
                 return result;
             } catch (e: unknown) {

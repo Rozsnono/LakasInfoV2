@@ -22,6 +22,7 @@ import { MeterWithStats } from "@/services/meter.service";
 import { useAction } from "@/providers/action.provider";
 import { useHouse } from "@/contexts/house.context";
 import { getMetersAndLastReadingForHouseAction } from "@/app/actions/meter";
+import { useUser } from "@/contexts/user.context";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -48,6 +49,7 @@ export default function MetersClient() {
     const [meters, setMeters] = useState<MeterWithStats[]>([]);
     const [selectedMeter, setSelectedMeter] = useState<{ id: string; name: string } | null>(null);
     const { house } = useHouse();
+    const { user } = useUser();
 
     const { isPending, error, execute } = useAction(getMetersAndLastReadingForHouseAction, {
         immediate: true,
@@ -84,12 +86,16 @@ export default function MetersClient() {
                         </p>
                     </div>
                 </div>
-                <button
-                    onClick={() => setIsAddOpen(true)}
-                    className="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center shadow-2xl active:scale-90 transition-transform"
-                >
-                    <Plus className="w-6 h-6" strokeWidth={3} />
-                </button>
+                {
+                    (user?.houseRole === "owner" || user?.houseRole === "member") && (
+                        <button
+                            onClick={() => setIsAddOpen(true)}
+                            className="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center shadow-2xl active:scale-90 transition-transform"
+                        >
+                            <Plus className="w-6 h-6" strokeWidth={3} />
+                        </button>
+                    )
+                }
             </motion.header>
 
             <div className="relative z-10 flex flex-col gap-4 mt-2 min-h-[200px]">
@@ -167,15 +173,19 @@ export default function MetersClient() {
                                                 <span className="text-text-secondary text-[11px] font-bold uppercase tracking-wider mt-2 opacity-50">{lastReadDate}</span>
                                             </div>
                                         </div>
-                                        <button
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                setSelectedMeter({ id: meter._id.toString(), name: meter.name });
-                                            }}
-                                            className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-full text-white/20 active:bg-white/10 active:text-white transition-all"
-                                        >
-                                            <MoreVertical className="w-5 h-5" />
-                                        </button>
+                                        {
+                                            (user?.houseRole === "owner" || user?.houseRole === "member") && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setSelectedMeter({ id: meter._id.toString(), name: meter.name });
+                                                    }}
+                                                    className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-full text-white/20 active:bg-white/10 active:text-white transition-all"
+                                                >
+                                                    <MoreVertical className="w-5 h-5" />
+                                                </button>
+                                            )
+                                        }
                                     </div>
 
                                     <div className="flex items-end justify-between">
