@@ -116,7 +116,7 @@ export const HouseService = {
             await dbConnect();
             const userObjectId = new mongoose.Types.ObjectId(userId);
 
-            const house = await House.findOne({ "inviteCodes.members": parseInt(inviteCode) });
+            const house = await House.findOne({ "inviteCodes.members": inviteCode });
 
             if (!house) {
                 return { success: false, message: "Érvénytelen vagy lejárt meghívó kód." };
@@ -165,7 +165,7 @@ export const HouseService = {
             await dbConnect();
             const userObjectId = new mongoose.Types.ObjectId(userId);
 
-            const house = await House.findOne({ "inviteCodes.guests": parseInt(inviteCode) });
+            const house = await House.findOne({ "inviteCodes.guests": inviteCode });
 
             if (!house) {
                 return { success: false, message: "Érvénytelen vagy lejárt meghívó kód." };

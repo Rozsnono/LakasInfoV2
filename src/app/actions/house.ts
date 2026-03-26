@@ -68,7 +68,7 @@ export async function joinHouseAction(inviteCode: string) {
         if (!userId) return { success: false, message: "Nem vagy bejelentkezve!" };
 
         let result = await HouseService.joinHouse(inviteCode, userId);
-        if(!result.success) {
+        if (!result.success) {
             result = await HouseService.joinHouseAsGuest(inviteCode, userId);
         }
 
@@ -201,7 +201,6 @@ export async function getRoommatesAction() {
         }
 
         const houseData = JSON.parse(JSON.stringify(houseRes.house));
-        console.log("House Data:", houseData);
         const members = houseData.members.map((m: IUser) => ({
             id: m._id,
             name: m.name,
@@ -219,7 +218,6 @@ export async function getRoommatesAction() {
             members: members || []
         };
     } catch (error) {
-        console.log("GetRoommatesAction Error:", error);
         return { success: false, error: error instanceof Error ? error.message : "Hiba történt." };
     }
 }
