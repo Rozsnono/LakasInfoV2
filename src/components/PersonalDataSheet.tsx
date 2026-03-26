@@ -74,7 +74,7 @@ export default function PersonalDataSheet({ isOpen, onClose }: Props) {
         <AnimatePresence>
             {isOpen && (
                 <>
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="fixed inset-0 bg-black/80 backdrop-blur-md z-[150]" />
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="fixed inset-0 bg-surface/80 backdrop-blur-md z-[150]" />
 
                     <motion.div
                         initial={{ y: "100%" }}
@@ -113,7 +113,7 @@ export default function PersonalDataSheet({ isOpen, onClose }: Props) {
                                     <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">Profil szín</label>
                                     <div className="bg-white/5 rounded-[2.5rem] p-6 border border-white/5 space-y-6">
                                         <div className="flex items-center justify-between">
-                                            <div className="flex bg-black/40 p-1 rounded-full border border-white/5">
+                                            <div className="flex bg-surface/40 p-1 rounded-full border border-white/5">
                                                 <button onClick={() => setMode("solid")} className={`px-4 py-1.5 rounded-full text-[10px] font-black transition-all ${mode === "solid" ? "bg-white text-black" : "text-text-primary/40"}`}>SOLID</button>
                                                 <button onClick={() => setMode("gradient")} className={`px-4 py-1.5 rounded-full text-[10px] font-black transition-all ${mode === "gradient" ? "bg-white text-black" : "text-text-primary/40"}`}>GRADIENT</button>
                                             </div>
@@ -127,7 +127,7 @@ export default function PersonalDataSheet({ isOpen, onClose }: Props) {
                                                     className="w-24 h-24 rounded-[2.5rem] shadow-2xl relative overflow-hidden group"
                                                     style={{ background: finalColorCode }}
                                                 >
-                                                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <div className="absolute inset-0 bg-surface/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                                         <MousePointer2 className="w-6 h-6 text-text-primary shadow-xl" />
                                                     </div>
                                                 </motion.button>
@@ -142,7 +142,7 @@ export default function PersonalDataSheet({ isOpen, onClose }: Props) {
                                                     <motion.button
                                                         whileTap={{ scale: 0.98 }}
                                                         onClick={() => solidInputRef.current?.click()}
-                                                        className="bg-black/20 p-4 rounded-2xl border border-white/5 flex flex-col items-center gap-2"
+                                                        className="bg-surface/20 p-4 rounded-2xl border border-white/5 flex flex-col items-center gap-2"
                                                     >
                                                         <span className="text-[8px] font-black text-text-primary/20 uppercase tracking-widest">Szín</span>
                                                         <div className="w-10 h-10 rounded-full border-2 border-white/10" style={{ backgroundColor: solidColor }} />
@@ -152,7 +152,7 @@ export default function PersonalDataSheet({ isOpen, onClose }: Props) {
                                                         <motion.button
                                                             whileTap={{ scale: 0.98 }}
                                                             onClick={() => gradStartRef.current?.click()}
-                                                            className="bg-black/20 p-4 rounded-2xl border border-white/5 flex flex-col items-center gap-2"
+                                                            className="bg-surface/20 p-4 rounded-2xl border border-white/5 flex flex-col items-center gap-2"
                                                         >
                                                             <span className="text-[8px] font-black text-text-primary/20 uppercase tracking-widest">Kezdő</span>
                                                             <div className="w-10 h-10 rounded-full border-2 border-white/10" style={{ backgroundColor: gradStart }} />
@@ -160,7 +160,7 @@ export default function PersonalDataSheet({ isOpen, onClose }: Props) {
                                                         <motion.button
                                                             whileTap={{ scale: 0.98 }}
                                                             onClick={() => gradEndRef.current?.click()}
-                                                            className="bg-black/20 p-4 rounded-2xl border border-white/5 flex flex-col items-center gap-2"
+                                                            className="bg-surface/20 p-4 rounded-2xl border border-white/5 flex flex-col items-center gap-2"
                                                         >
                                                             <span className="text-[8px] font-black text-text-primary/20 uppercase tracking-widest">Végpont</span>
                                                             <div className="w-10 h-10 rounded-full border-2 border-white/10" style={{ backgroundColor: gradEnd }} />

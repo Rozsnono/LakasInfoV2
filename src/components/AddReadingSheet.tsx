@@ -182,7 +182,7 @@ export default function AddReadingSheet({ isOpen, onClose }: AddReadingSheetProp
         <AnimatePresence>
             {isOpen && (
                 <>
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={resetAndClose} className="fixed inset-0 bg-black/80 backdrop-blur-md z-[150]" />
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={resetAndClose} className="fixed inset-0 bg-surface/80 backdrop-blur-md z-[150]" />
                     <motion.div
                         variants={sheetVariants}
                         initial="hidden"

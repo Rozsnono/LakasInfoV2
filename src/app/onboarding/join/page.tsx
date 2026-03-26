@@ -243,7 +243,7 @@ function QRScannerOverlay({ onClose, onSuccess }: ScannerProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[300] flex flex-col bg-black"
+            className="fixed inset-0 z-[300] flex flex-col bg-surface"
         >
             <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between bg-gradient-to-b from-black/80 to-transparent p-6 pt-12">
                 <button
@@ -293,7 +293,7 @@ function QRScannerOverlay({ onClose, onSuccess }: ScannerProps) {
                                 <div className="absolute -bottom-1 -left-1 h-12 w-12 rounded-bl-3xl border-b-4 border-l-4 border-primary" />
                                 <div className="absolute -bottom-1 -right-1 h-12 w-12 rounded-br-3xl border-b-4 border-r-4 border-primary" />
                             </div>
-                            <div className="flex flex-col items-center gap-2 bg-black/40 px-6 py-3 rounded-full backdrop-blur-md">
+                            <div className="flex flex-col items-center gap-2 bg-surface/40 px-6 py-3 rounded-full backdrop-blur-md">
                                 <ScanLine className="w-6 h-6 text-primary animate-pulse" />
                                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/80">Illeszd a kódot a keretbe</p>
                             </div>

@@ -21,7 +21,7 @@ export default function QrCodeSheet({ isOpen, onClose, code }: Props) {
         <AnimatePresence>
             {isOpen && (
                 <>
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="fixed inset-0 bg-black/95 backdrop-blur-xl z-[200]" />
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="fixed inset-0 bg-surface/95 backdrop-blur-xl z-[200]" />
                     <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="fixed inset-0 m-auto w-[90%] max-w-sm h-fit bg-surface-elevated rounded-[3rem] p-10 flex flex-col items-center border border-white/10 shadow-2xl z-[201]">
                         <button onClick={onClose} className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform"><X className="w-5 h-5" /></button>
                         <div className="w-full aspect-square bg-white rounded-[2.5rem] p-8 mb-8 flex items-center justify-center shadow-inner"><QrCode className="w-full h-full text-black" strokeWidth={1.5} /></div>

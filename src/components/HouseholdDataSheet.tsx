@@ -19,7 +19,7 @@ export default function HouseholdDataSheet({ isOpen, onClose }: Props) {
         <AnimatePresence>
             {isOpen && (
                 <>
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="fixed inset-0 bg-black/80 backdrop-blur-md z-[150]" />
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="fixed inset-0 bg-surface/80 backdrop-blur-md z-[150]" />
                     <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} transition={{ type: "spring", damping: 25, stiffness: 200 }} className="fixed bottom-0 left-0 right-0 bg-surface border-t border-white/10 rounded-t-[3rem] z-[151] px-6 pt-4 pb-12 shadow-2xl">
                         <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mb-8" />
                         <div className="flex items-center justify-between mb-8 px-2">

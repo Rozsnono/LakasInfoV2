@@ -39,14 +39,14 @@ export default function WallpaperSheet({ isOpen, onClose }: Props) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/90 backdrop-blur-xl z-[150]"
+                        className="fixed inset-0 bg-surface/90 backdrop-blur-xl z-[150]"
                     />
                     <motion.div
                         initial={{ y: "100%" }}
                         animate={{ y: 0 }}
                         exit={{ y: "100%" }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="fixed bottom-0 left-0 right-0 bg-[#121212] border-t border-white/10 rounded-t-[3.5rem] z-[151] px-6 pt-4 pb-10 shadow-2xl max-h-[92vh] flex flex-col"
+                        className="fixed bottom-0 left-0 right-0 bg-surface border-t border-white/10 rounded-t-[3.5rem] z-[151] px-6 pt-4 pb-10 shadow-2xl max-h-[92vh] flex flex-col"
                     >
                         {/* Húzóka */}
                         <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mb-6 shrink-0" />
@@ -102,14 +102,14 @@ export default function WallpaperSheet({ isOpen, onClose }: Props) {
                                     >
                                         {/* ANIMÁCIÓ JELZŐ IKON */}
                                         {wp.animated && (
-                                            <div className="absolute bottom-3 right-3 w-6 h-6 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center">
+                                            <div className="absolute bottom-3 right-3 w-6 h-6 rounded-full bg-surface/40 backdrop-blur-md border border-white/10 flex items-center justify-center">
                                                 <Play className="w-3 h-3 text-text-primary ml-0.5" fill="currentColor" />
                                             </div>
                                         )}
 
                                         {
                                             isActiveCatPro && !(user?.subscriptionPlan === 'pro') && (
-                                                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                                <div className="absolute inset-0 bg-surface/50 flex items-center justify-center">
                                                     <span className="text-yellow-400 text-sm font-bold"><Gem /></span>
                                                 </div>
                                             )
@@ -117,7 +117,7 @@ export default function WallpaperSheet({ isOpen, onClose }: Props) {
 
                                         {/* KIVÁLASZTOTT ÁLLAPOT */}
                                         {currentWallpaper === wp.id && (
-                                            <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px] flex items-center justify-center">
+                                            <div className="absolute inset-0 bg-surface/10 backdrop-blur-[2px] flex items-center justify-center">
                                                 <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-2xl">
                                                     <Check className="text-black w-6 h-6" strokeWidth={4} />
                                                 </div>

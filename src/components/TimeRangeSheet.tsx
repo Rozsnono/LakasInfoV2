@@ -42,7 +42,7 @@ export default function TimeRangeSheet({ isOpen, onClose, selectedFrequency, onS
         <AnimatePresence>
             {isOpen && (
                 <>
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="fixed inset-0 bg-black/80 backdrop-blur-md z-[150]" />
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="fixed inset-0 bg-surface/80 backdrop-blur-md z-[150]" />
                     <motion.div
                         initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}

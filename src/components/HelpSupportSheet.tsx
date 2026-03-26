@@ -19,7 +19,7 @@ export default function HelpSupportSheet({ isOpen, onClose }: Props) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/80 backdrop-blur-md z-[150]"
+                        className="fixed inset-0 bg-surface/80 backdrop-blur-md z-[150]"
                     />
                     <motion.div
                         initial={{ y: "100%" }}

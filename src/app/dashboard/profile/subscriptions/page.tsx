@@ -73,7 +73,7 @@ export default function SubscriptionPageClient() {
                         className={`flex-1 relative z-10 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-colors flex justify-center items-center gap-2 ${billingCycle === "yearly" ? "text-black" : "text-text-primary/40 hover:text-text-primary"}`}
                     >
                         Éves
-                        <span className={`text-[9px] px-2 py-0.5 rounded-full ${billingCycle === "yearly" ? "bg-black/20 text-black" : "bg-primary/20 text-primary"}`}>-16%</span>
+                        <span className={`text-[9px] px-2 py-0.5 rounded-full ${billingCycle === "yearly" ? "bg-surface/20 text-black" : "bg-primary/20 text-primary"}`}>-16%</span>
                     </button>
 
                     <div

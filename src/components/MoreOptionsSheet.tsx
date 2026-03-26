@@ -57,7 +57,7 @@ export default function MoreOptionsSheet({ isOpen, onClose }: MoreOptionsSheetPr
                         animate="visible"
                         exit="exit"
                         onClick={!isExporting ? onClose : undefined}
-                        className="fixed inset-0 bg-black/80 backdrop-blur-md z-[150]"
+                        className="fixed inset-0 bg-surface/80 backdrop-blur-md z-[150]"
                     />
                     <motion.div
                         variants={sheetVariants}

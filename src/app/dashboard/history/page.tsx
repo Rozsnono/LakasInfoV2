@@ -195,10 +195,10 @@ export default function AllReadingsClient() {
             <AnimatePresence>
                 {selectedPhoto && (
                     <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedPhoto(null)} className="absolute inset-0 bg-black/95 backdrop-blur-xl cursor-pointer" />
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedPhoto(null)} className="absolute inset-0 bg-surface/95 backdrop-blur-xl cursor-pointer" />
                         <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }} className="relative w-full max-w-lg aspect-[3/4] bg-surface-elevated rounded-[3rem] overflow-hidden shadow-2xl border border-white/10">
                             <div className="absolute top-6 left-6 right-6 flex justify-between z-10">
-                                <button onClick={() => setSelectedPhoto(null)} className="w-12 h-12 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-text-primary active:scale-90 transition-transform"><X className="w-6 h-6" /></button>
+                                <button onClick={() => setSelectedPhoto(null)} className="w-12 h-12 rounded-full bg-surface/40 backdrop-blur-md flex items-center justify-center text-text-primary active:scale-90 transition-transform"><X className="w-6 h-6" /></button>
                                 <button onClick={() => handleShare(selectedPhoto!)} className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-text-primary shadow-lg active:scale-90 transition-transform"><Share2 className="w-5 h-5" /></button>
                             </div>
                             <Image src={selectedPhoto} alt="Mérőóra fotó" className="w-full h-full object-cover" width={600} height={800} priority unoptimized />

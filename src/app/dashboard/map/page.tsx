@@ -47,13 +47,13 @@ export default function MapPageClient() {
     };
 
     return (
-        <div className="relative min-h-screen bg-black overflow-hidden flex flex-col">
+        <div className="relative min-h-screen bg-surface overflow-hidden flex flex-col">
 
             {/* Vissza gomb a térkép felett lebegve */}
             <div className="absolute top-12 left-4 z-50">
                 <Link
                     href="/dashboard"
-                    className="w-12 h-12 rounded-full bg-black/80 backdrop-blur-md flex items-center justify-center border border-white/10 shadow-2xl active:scale-90 transition-transform"
+                    className="w-12 h-12 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center border border-white/10 shadow-2xl active:scale-90 transition-transform"
                 >
                     <ArrowLeft className="w-6 h-6 text-text-primary" />
                 </Link>
@@ -63,7 +63,7 @@ export default function MapPageClient() {
             <div className="absolute top-32 right-4 z-50">
                 <button
                     onClick={handleLocateMe}
-                    className="w-14 h-14 rounded-full bg-black/90 backdrop-blur-md flex items-center justify-center border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.8)] active:scale-90 transition-transform"
+                    className="w-14 h-14 rounded-full bg-surface/90 backdrop-blur-md flex items-center justify-center border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.8)] active:scale-90 transition-transform"
                 >
                     <Navigation className="w-6 h-6 text-text-primary" fill="white" />
                 </button>
@@ -104,7 +104,7 @@ export default function MapPageClient() {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
-                                    className="absolute inset-0 z-10 bg-black/10"
+                                    className="absolute inset-0 z-10 bg-surface/10"
                                     onClick={() => setIsSheetOpen(false)}
                                 />
                             )}

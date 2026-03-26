@@ -48,7 +48,7 @@ export default function InviteCodeSheet({ isOpen, onClose, inviteCode, copied, o
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/90 backdrop-blur-xl z-[150]"
+                        className="fixed inset-0 bg-surface/90 backdrop-blur-xl z-[150]"
                     />
                     <motion.div
                         initial={{ y: "100%" }}

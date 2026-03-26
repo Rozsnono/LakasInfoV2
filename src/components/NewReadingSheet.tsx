@@ -172,7 +172,7 @@ export default function NewReadingSheet({ isOpen, onClose }: NewReadingSheetProp
                         animate="visible"
                         exit="exit"
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/80 backdrop-blur-md z-[150]"
+                        className="fixed inset-0 bg-surface/80 backdrop-blur-md z-[150]"
                     />
                     <motion.div
                         key="reading-sheet-container"

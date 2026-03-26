@@ -67,7 +67,8 @@ export default async function MeterDetailPage({
                 difference: r.difference,
                 cost: r.cost || 0,
                 isPaid: r.isPaid || false,
-                photoUrl: r.photoUrl
+                photoUrl: r.photoUrl,
+                tierLimit: meterDetails.tierLimit || null,
             }))
         };
 

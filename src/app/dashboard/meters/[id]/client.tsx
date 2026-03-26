@@ -20,6 +20,7 @@ interface Reading {
     difference: number;
     cost: number;
     photoUrl?: string | null;
+    tierLimit?: number | null;
     isPaid?: boolean;
 }
 
@@ -220,7 +221,7 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
                                             `${item.cost.toLocaleString()} Ft`
                                         }
                                     </span>
-                                    <span className={`rounded-lg border border-white/5 bg-white/5 px-2 py-1 text-[11px] font-black uppercase tracking-widest ${item.difference > 0 ? "text-text-primary" : "text-emerald-400"}`}>
+                                    <span className={`rounded-lg border border-white/5 bg-white/5 px-2 py-1 text-[11px] font-black uppercase tracking-widest ${item.difference > (item.tierLimit || 0) ? "text-text-primary" : "text-emerald-400"}`}>
                                         {item.difference > 0 ? "+" : ""}{item.difference.toFixed(2)} {meter.unit}
                                     </span>
                                 </div>
@@ -244,10 +245,10 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
             <AnimatePresence>
                 {selectedPhoto && (
                     <Fragment key="photo-modal">
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedPhoto(null)} className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-2xl" />
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedPhoto(null)} className="fixed inset-0 z-[200] bg-surface/95 backdrop-blur-2xl" />
                         <motion.div initial={{ scale: 0.9, opacity: 0, y: 30 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 30 }} className="pointer-events-none fixed inset-0 z-[201] flex items-center justify-center p-4">
                             <div className="pointer-events-auto relative aspect-[3/4] w-full max-w-lg overflow-hidden rounded-[3rem] border border-white/10 bg-surface-elevated shadow-2xl">
-                                <button onClick={() => setSelectedPhoto(null)} className="absolute left-6 top-6 z-10 flex h-12 w-12 items-center justify-center rounded-2xl bg-black/50 text-text-primary backdrop-blur-md transition-transform active:scale-90">
+                                <button onClick={() => setSelectedPhoto(null)} className="absolute left-6 top-6 z-10 flex h-12 w-12 items-center justify-center rounded-2xl bg-surface/50 text-text-primary backdrop-blur-md transition-transform active:scale-90">
                                     <X size={24} />
                                 </button>
                                 <button

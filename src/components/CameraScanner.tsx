@@ -76,7 +76,7 @@ export default function WebCameraScanner({ onCapture, onClose }: Props) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[300] flex flex-col bg-black"
+            className="fixed inset-0 z-[300] flex flex-col bg-surface"
         >
             <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between bg-gradient-to-b from-black/70 to-transparent p-6">
                 <button
@@ -125,7 +125,7 @@ export default function WebCameraScanner({ onCapture, onClose }: Props) {
             </div>
 
             {!error && (
-                <div className="flex flex-col items-center gap-6 bg-black p-12">
+                <div className="flex flex-col items-center gap-6 bg-surface p-12">
                     <canvas ref={canvasRef} className="hidden" />
                     <motion.button
                         whileTap={{ scale: 0.85 }}
