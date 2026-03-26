@@ -148,7 +148,7 @@ export function AppearanceProvider({ children, initialValues }: {
     children: React.ReactNode;
     initialValues: { theme: string | undefined; accent: string | undefined; animations: string | undefined; wallpaper: string | undefined; widgets: { [houseId: string]: string[] } | undefined }
 }) {
-    const [theme, setThemeState] = useState<"dark" | "light" | "system">(initialValues.theme as "dark" | "light" | "system" || "dark");
+    const [theme, setThemeState] = useState<"dark" | "light" | "system">((initialValues.theme as "dark" | "light" | "system") || "dark");
     const [accent, setAccentState] = useState(initialValues.accent || "#ff3b30");
     const [animations, setAnimationsState] = useState(initialValues.animations !== "false");
     const [wallpaper, setWallpaperState] = useState(initialValues.wallpaper || "v1");
@@ -184,7 +184,6 @@ export function AppearanceProvider({ children, initialValues }: {
         updateSettingsAction({ theme, accent, animations, wallpaper, widgets: w });
     }
 
-
     const saveCookie = (name: string, value: string) => {
         if (typeof document !== "undefined") {
             document.cookie = `${name}=${value}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
@@ -212,6 +211,29 @@ export function AppearanceProvider({ children, initialValues }: {
 
     useEffect(() => {
         const root = document.documentElement;
+        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+        const handleThemeChange = () => {
+            const isDark = theme === "dark" || (theme === "system" && mediaQuery.matches);
+
+            if (isDark) {
+                root.classList.add("dark");
+                root.classList.remove("light");
+                root.style.colorScheme = "dark";
+            } else {
+                root.classList.add("light");
+                root.classList.remove("dark");
+                root.style.colorScheme = "light";
+            }
+        };
+
+        handleThemeChange();
+        mediaQuery.addEventListener("change", handleThemeChange);
+        return () => mediaQuery.removeEventListener("change", handleThemeChange);
+    }, [theme]);
+
+    useEffect(() => {
+        const root = document.documentElement;
         root.style.setProperty("--brand-primary", accent);
         root.style.setProperty("--brand-accent-red", `${accent}33`);
 
@@ -225,9 +247,7 @@ export function AppearanceProvider({ children, initialValues }: {
 
         if (!animations) root.classList.add("no-animations");
         else root.classList.remove("no-animations");
-
-        root.classList.toggle("dark", theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches));
-    }, [theme, accent, animations, wallpaper]);
+    }, [accent, animations, wallpaper]);
 
     return (
         <AppearanceContext.Provider value={{
@@ -246,6 +266,8 @@ export function AppearanceProvider({ children, initialValues }: {
                     66% { background-position: 100% 100%; }
                     100% { background-position: 0% 100%; }
                 }
+                :root.light { --app-wallpaper-overlay: rgba(255, 255, 255, 0.85); }
+                :root.dark { --app-wallpaper-overlay: transparent; }
             `}} />
             {children}
         </AppearanceContext.Provider>

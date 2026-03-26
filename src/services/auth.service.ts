@@ -5,6 +5,7 @@ import { signToken } from "@/lib/jwt";
 import { RegisterInput, LoginInput, AuthResponse } from "@/types/auth";
 import { SubscriptionService } from "./subscription.service";
 import House from "@/models/house.model";
+import { SettingsService } from "./settings.service";
 
 export const AuthService = {
 
@@ -27,6 +28,7 @@ export const AuthService = {
             });
 
             await SubscriptionService.createSubscription(newUser._id.toString());
+            await SettingsService.createSettings(newUser._id.toString());
             const token = signToken({ userId: newUser._id.toString(), email: newUser.email, name: newUser.name, colorCode: newUser.colorCode, subscriptionPlan: "free", subscriptionExpiresAt: null, houseRole: null });
 
             return {

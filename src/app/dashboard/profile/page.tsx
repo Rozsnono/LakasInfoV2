@@ -91,7 +91,6 @@ export default function ProfilePage() {
         { id: "help", icon: <HelpCircle className="w-5 h-5 text-blue-400" />, label: "Súgó és Támogatás" },
         { id: "personal", icon: <User className="w-5 h-5 text-zinc-400" />, label: "Személyes adatok" },
         { id: "appearance", icon: <PenTool className="w-5 h-5 text-primary" />, label: "Megjelenés" },
-        { id: "household", icon: <Home className="w-5 h-5 text-emerald-400" />, label: "Háztartás adatai" },
         { id: "reports", icon: <FileText className="w-5 h-5 text-orange-400" />, label: "Rezsi jelentések" },
         { id: "energy", icon: <Lightbulb className="w-5 h-5 text-yellow-400" />, label: "Energiatakarékosság" },
         { id: "notifications", icon: <Bell className="w-5 h-5 text-primary" />, label: "Értesítések", badge: unreadCount, isLoading: isNotifPending },

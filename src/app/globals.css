@@ -19,6 +19,27 @@
   --color-text-secondary: #8e8e93;
 }
 
+:root.light {
+
+  --color-background: #f2f2f7;
+  --color-surface: rgba(255, 255, 255, 0.75);
+  /* Kicsit átlátszó, hogy átüssön a háttér */
+  --color-surface-elevated: #ffffff;
+
+  --color-text-primary: #000000;
+  --color-text-secondary: #8e8e93;
+}
+
+:root.dark {
+  --color-background: #000000;
+  --color-surface: rgba(28, 28, 30, 0.75);
+  /* Kicsit átlátszó sötét felszín */
+  --color-surface-elevated: #2c2c2e;
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #8e8e93;
+}
+
 body {
   background-color: var(--color-background);
   color: var(--color-text-primary);

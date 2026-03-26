@@ -96,7 +96,7 @@ export default function RoommatesClient() {
             </motion.header>
 
             {/* MEGHÍVÓ GOMBOK */}
-            {isOwner && !isPending && (
+            {!isPending && (
                 <motion.div variants={itemVariants} className="relative z-10 flex items-center gap-4">
                     {
                         user?.houseRole === 'owner' && (
