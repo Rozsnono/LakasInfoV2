@@ -57,10 +57,10 @@ export default function WallpaperSheet({ isOpen, onClose }: Props) {
                                 onClick={onClose}
                                 className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform"
                             >
-                                <X className="w-6 h-6 text-white" />
+                                <X className="w-6 h-6 text-text-primary" />
                             </button>
 
-                            <h3 className="text-2xl font-black tracking-tighter text-white uppercase italic text-center">
+                            <h3 className="text-2xl font-black tracking-tighter text-text-primary uppercase italic text-center">
                                 Hát<span className="text-primary">tér</span>
                             </h3>
                             <div className="w-10"></div>
@@ -74,7 +74,7 @@ export default function WallpaperSheet({ isOpen, onClose }: Props) {
                                     onClick={() => handleCategoryChange(cat.id)}
                                     className={`px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all relative whitespace-nowrap ${activeCat === cat.id
                                         ? "bg-white text-black shadow-xl"
-                                        : "bg-white/5 text-white/30"
+                                        : "bg-white/5 text-text-primary/30"
                                         }`}
                                 >
                                     {cat.name}
@@ -103,7 +103,7 @@ export default function WallpaperSheet({ isOpen, onClose }: Props) {
                                         {/* ANIMÁCIÓ JELZŐ IKON */}
                                         {wp.animated && (
                                             <div className="absolute bottom-3 right-3 w-6 h-6 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center">
-                                                <Play className="w-3 h-3 text-white ml-0.5" fill="currentColor" />
+                                                <Play className="w-3 h-3 text-text-primary ml-0.5" fill="currentColor" />
                                             </div>
                                         )}
 

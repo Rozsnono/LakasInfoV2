@@ -81,11 +81,11 @@ export default function WebCameraScanner({ onCapture, onClose }: Props) {
             <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between bg-gradient-to-b from-black/70 to-transparent p-6">
                 <button
                     onClick={onClose}
-                    className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-xl"
+                    className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-text-primary backdrop-blur-xl"
                 >
                     <X size={24} />
                 </button>
-                <span className="text-[10px] font-black uppercase italic tracking-[0.3em] text-white">Scanner Mode</span>
+                <span className="text-[10px] font-black uppercase italic tracking-[0.3em] text-text-primary">Scanner Mode</span>
                 <div className="w-12" />
             </div>
 
@@ -93,7 +93,7 @@ export default function WebCameraScanner({ onCapture, onClose }: Props) {
                 {error ? (
                     <div className="flex flex-col items-center gap-4 px-10 text-center">
                         <AlertCircle className="h-12 w-12 text-red-500" />
-                        <p className="max-w-xs text-xs font-bold uppercase leading-relaxed tracking-widest text-white">
+                        <p className="max-w-xs text-xs font-bold uppercase leading-relaxed tracking-widest text-text-primary">
                             {error}
                         </p>
                         <button
@@ -134,7 +134,7 @@ export default function WebCameraScanner({ onCapture, onClose }: Props) {
                     >
                         <div className="h-full w-full rounded-full bg-white shadow-lg" />
                     </motion.button>
-                    <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">Készíts fotót az óráról</p>
+                    <p className="text-[9px] font-black uppercase tracking-[0.3em] text-text-primary/30">Készíts fotót az óráról</p>
                 </div>
             )}
         </motion.div>

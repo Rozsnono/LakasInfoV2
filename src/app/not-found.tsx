@@ -30,17 +30,17 @@ export default function NotFound() {
                         404
                     </h1>
                     {/* Neon Badge */}
-                    <div className="absolute -bottom-2 bg-primary text-white text-[10px] font-black uppercase tracking-[0.4em] px-5 py-2 rounded-full border border-primary/50 whitespace-nowrap shadow-[0_0_20px_rgba(255,59,48,0.5)]">
+                    <div className="absolute -bottom-2 bg-primary text-text-primary text-[10px] font-black uppercase tracking-[0.4em] px-5 py-2 rounded-full border border-primary/50 whitespace-nowrap shadow-[0_0_20px_rgba(255,59,48,0.5)]">
                         Rendszerhiba
                     </div>
                 </motion.div>
 
                 {/* Szöveges üzenet */}
                 <div className="space-y-4 mt-6">
-                    <h2 className="text-4xl font-black italic tracking-tighter uppercase text-white leading-none">
+                    <h2 className="text-4xl font-black italic tracking-tighter uppercase text-text-primary leading-none">
                         Vakvágányra <span className="text-primary text-outline">Futtál</span>
                     </h2>
-                    <p className="text-white/40 text-[11px] font-bold uppercase tracking-widest leading-relaxed px-4">
+                    <p className="text-text-primary/40 text-[11px] font-bold uppercase tracking-widest leading-relaxed px-4">
                         Az általad keresett oldal nem található az ökoszisztémában, vagy időközben törlésre került.
                     </p>
                 </div>
@@ -50,7 +50,7 @@ export default function NotFound() {
                     <motion.button
                         whileTap={{ scale: 0.96 }}
                         onClick={() => router.back()}
-                        className="w-full py-6 bg-white/5 border border-white/10 text-white rounded-[2rem] font-black uppercase tracking-widest flex items-center justify-center gap-3 active:bg-white/10 transition-all shadow-xl"
+                        className="w-full py-6 bg-white/5 border border-white/10 text-text-primary rounded-[2rem] font-black uppercase tracking-widest flex items-center justify-center gap-3 active:bg-white/10 transition-all shadow-xl"
                     >
                         <ArrowLeft className="w-5 h-5" />
                         Vissza az előzőre
@@ -59,7 +59,7 @@ export default function NotFound() {
                     <Link href="/dashboard" className="w-full">
                         <motion.button
                             whileTap={{ scale: 0.96 }}
-                            className="w-full py-6 bg-primary text-white rounded-[2rem] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all shadow-[0_0_30px_rgba(255,59,48,0.3)]"
+                            className="w-full py-6 bg-primary text-text-primary rounded-[2rem] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all shadow-[0_0_30px_rgba(255,59,48,0.3)]"
                         >
                             <Home className="w-5 h-5" />
                             Főoldal
@@ -73,7 +73,7 @@ export default function NotFound() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="absolute bottom-8 text-white/10 text-[10px] font-bold uppercase tracking-[0.5em]"
+                className="absolute bottom-8 text-text-primary/10 text-[10px] font-bold uppercase tracking-[0.5em]"
             >
                 LakasInfo Ecosystem
             </motion.p>

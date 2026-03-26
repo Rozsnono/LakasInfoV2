@@ -69,7 +69,7 @@ export default function RegisterPage() {
 
             <motion.header variants={itemVariants} className="relative z-10 flex items-center mb-12">
                 <Link href="/" className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/5 shadow-xl active:scale-90 transition-transform">
-                    <ArrowLeft className="w-6 h-6 text-white" />
+                    <ArrowLeft className="w-6 h-6 text-text-primary" />
                 </Link>
             </motion.header>
 
@@ -78,10 +78,10 @@ export default function RegisterPage() {
                     <div className="w-12 h-12 bg-primary/10 rounded-2xl border border-primary/20 flex items-center justify-center mb-4">
                         <Sparkles className="w-6 h-6 text-primary" />
                     </div>
-                    <h1 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none">
+                    <h1 className="text-4xl font-black text-text-primary tracking-tighter uppercase italic leading-none">
                         Új <span className="text-primary">Fiók</span>
                     </h1>
-                    <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em]">Start your smart journey</p>
+                    <p className="text-text-primary/40 text-[10px] font-black uppercase tracking-[0.3em]">Start your smart journey</p>
                 </motion.div>
 
                 {/* Hibaüzenet megjelenítése */}
@@ -97,39 +97,39 @@ export default function RegisterPage() {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <motion.div variants={itemVariants} className="flex flex-col gap-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Teljes név</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">Teljes név</label>
                         <div className="relative">
-                            <User className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
+                            <User className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
                             <input
                                 type="text"
                                 required
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 placeholder="Minta Márton"
-                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-white/5"
+                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-text-primary/5"
                             />
                         </div>
                     </motion.div>
 
                     <motion.div variants={itemVariants} className="flex flex-col gap-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">E-mail cím</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">E-mail cím</label>
                         <div className="relative">
-                            <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
+                            <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
                             <input
                                 type="email"
                                 required
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 placeholder="pelda@email.hu"
-                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-white/5"
+                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-text-primary/5"
                             />
                         </div>
                     </motion.div>
 
                     <motion.div variants={itemVariants} className="flex flex-col gap-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Jelszó</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">Jelszó</label>
                         <div className="relative">
-                            <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
+                            <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
                             <input
                                 type="password"
                                 required
@@ -137,7 +137,7 @@ export default function RegisterPage() {
                                 value={formData.password}
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                 placeholder="Minimum 8 karakter"
-                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-white/5"
+                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-text-primary/5"
                             />
                         </div>
                     </motion.div>
@@ -146,7 +146,7 @@ export default function RegisterPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-6 bg-primary text-white rounded-[2rem] font-black uppercase tracking-[0.2em] text-sm shadow-[0_0_40px_rgba(255,59,48,0.2)] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                            className="w-full py-6 bg-primary text-text-primary rounded-[2rem] font-black uppercase tracking-[0.2em] text-sm shadow-[0_0_40px_rgba(255,59,48,0.2)] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                         >
                             {loading ? (
                                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -162,8 +162,8 @@ export default function RegisterPage() {
 
                 <motion.div variants={itemVariants} className="text-center">
                     <Link href="/login" className="group">
-                        <span className="text-white/20 text-xs font-bold uppercase tracking-widest transition-colors group-active:text-primary">
-                            Van már fiókod? <span className="text-white/60 group-hover:text-white">Bejelentkezés</span>
+                        <span className="text-text-primary/20 text-xs font-bold uppercase tracking-widest transition-colors group-active:text-primary">
+                            Van már fiókod? <span className="text-text-primary/60 group-hover:text-text-primary">Bejelentkezés</span>
                         </span>
                     </Link>
                 </motion.div>

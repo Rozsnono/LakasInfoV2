@@ -57,13 +57,13 @@ export default function HelpSupportSheet({ isOpen, onClose }: Props) {
                                 <Info className="w-6 h-6 text-blue-400 shrink-0" />
                                 <div className="flex flex-col gap-1">
                                     <span className="font-bold text-sm">Gyakori kérdések</span>
-                                    <p className="text-xs text-white/40 leading-relaxed">Válaszok a rezsicsökkentéssel és a sávos árazással kapcsolatban.</p>
+                                    <p className="text-xs text-text-primary/40 leading-relaxed">Válaszok a rezsicsökkentéssel és a sávos árazással kapcsolatban.</p>
                                 </div>
                             </div>
 
                             <button className="w-full flex items-center justify-between p-6 bg-white/5 rounded-3xl border border-white/5 active:bg-white/10 transition-colors">
-                                <span className="font-bold text-sm text-white/80">Felhasználási feltételek</span>
-                                <ExternalLink className="w-4 h-4 text-white/20" />
+                                <span className="font-bold text-sm text-text-primary/80">Felhasználási feltételek</span>
+                                <ExternalLink className="w-4 h-4 text-text-primary/20" />
                             </button>
                         </div>
                     </motion.div>

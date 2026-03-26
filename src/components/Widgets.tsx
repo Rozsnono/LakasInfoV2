@@ -52,7 +52,7 @@ function WidgetContainer({ children, className = "", onClick, isSelectionMode, i
             {/* Jobb felső extra ikonok (Kiválasztás Pipa / Plusz) */}
             {isSelectable && isSelectionMode && (
                 <div className={`w-6 h-6 absolute top-6 right-6 rounded-full flex items-center justify-center ${isSelected ? "bg-primary" : "bg-white/10"} z-50`}>
-                    {isSelected ? <Check className="w-3.5 h-3.5 text-white" strokeWidth={4} /> : <Plus className="w-3.5 h-3.5 text-white/40" />}
+                    {isSelected ? <Check className="w-3.5 h-3.5 text-text-primary" strokeWidth={4} /> : <Plus className="w-3.5 h-3.5 text-text-primary/40" />}
                 </div>
             )}
 
@@ -163,7 +163,7 @@ export default function Widgets() {
         return (
             <div className="col-span-2 flex flex-col items-center justify-center py-16 gap-4 opacity-70">
                 <Loader2 className="w-8 h-8 text-primary animate-spin" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-white/60">
+                <span className="text-[10px] font-black uppercase tracking-widest text-text-primary/60">
                     Widgetek töltése...
                 </span>
             </div>
@@ -176,11 +176,11 @@ export default function Widgets() {
         return (
             <div className="col-span-2 flex flex-col items-center justify-center py-12 px-6 mt-2 bg-white/[0.02] border border-dashed border-white/10 rounded-[2.5rem] gap-4">
                 <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center shadow-inner">
-                    <LayoutGrid className="w-6 h-6 text-white/30" />
+                    <LayoutGrid className="w-6 h-6 text-text-primary/30" />
                 </div>
                 <div className="text-center space-y-1">
-                    <span className="block text-white/60 text-sm font-black uppercase tracking-widest">Nincs aktív widget</span>
-                    <span className="block text-white/30 text-[10px] font-bold uppercase tracking-wider leading-relaxed">
+                    <span className="block text-text-primary/60 text-sm font-black uppercase tracking-widest">Nincs aktív widget</span>
+                    <span className="block text-text-primary/30 text-[10px] font-bold uppercase tracking-wider leading-relaxed">
                         Kattints a fenti + gombra,<br />hogy személyre szabd a kezdőképernyőd!
                     </span>
                 </div>
@@ -289,8 +289,8 @@ export function HouseMapWidget({ address, isSelection, isSelected, isProWidget, 
     if (!address) {
         return (
             <WidgetContainer className="p-6 flex flex-col items-center justify-center gap-3 h-48">
-                <Map className="w-8 h-8 text-white/20" />
-                <span className="text-white/40 text-xs font-bold uppercase tracking-widest text-center">Nincs cím megadva a térképhez</span>
+                <Map className="w-8 h-8 text-text-primary/20" />
+                <span className="text-text-primary/40 text-xs font-bold uppercase tracking-widest text-center">Nincs cím megadva a térképhez</span>
             </WidgetContainer>
         );
     }
@@ -315,8 +315,8 @@ export function HouseMapWidget({ address, isSelection, isSelected, isProWidget, 
                             <MapPin className="text-primary w-5 h-5" />
                         </div>
                         <div className="flex flex-col overflow-hidden">
-                            <span className="text-white font-black text-sm tracking-tight truncate">Címünk</span>
-                            <span className="text-white/60 text-[10px] font-bold uppercase tracking-widest mt-0.5 line-clamp-2">{address}</span>
+                            <span className="text-text-primary font-black text-sm tracking-tight truncate">Címünk</span>
+                            <span className="text-text-primary/60 text-[10px] font-bold uppercase tracking-widest mt-0.5 line-clamp-2">{address}</span>
                         </div>
                     </div>
                 </div>
@@ -390,7 +390,7 @@ function RoommateAvatar({ name, init, color, isOwner }: { name: string; init: st
 
     return (
         <div className="flex flex-col items-center gap-2">
-            <div className={`w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg relative border`} style={{ background: color, borderColor: getAdaptiveGray(color) }}>
+            <div className={`w-14 h-14 rounded-full flex items-center justify-center text-text-primary font-bold text-lg shadow-lg relative border`} style={{ background: color, borderColor: getAdaptiveGray(color) }}>
                 <span style={{ color: getAdaptiveGray(color) }}>{init}</span>
                 {isOwner && (
                     <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 w-5 h-5 rounded-full text-yellow-400 flex items-center justify-center">
@@ -398,7 +398,7 @@ function RoommateAvatar({ name, init, color, isOwner }: { name: string; init: st
                     </div>
                 )}
             </div>
-            <span className="text-[10px] font-bold text-white/60 text-center">{name}</span>
+            <span className="text-[10px] font-bold text-text-primary/60 text-center">{name}</span>
         </div>
     );
 }

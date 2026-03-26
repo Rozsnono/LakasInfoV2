@@ -43,16 +43,16 @@ export default function OnboardingClient() {
 
             <motion.header variants={itemVariants} className="pt-12 mb-12">
                 <button onClick={logout} className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/5 shadow-xl active:scale-90 transition-transform">
-                    <ArrowLeft className="w-6 h-6 text-white" />
+                    <ArrowLeft className="w-6 h-6 text-text-primary" />
                 </button>
             </motion.header>
 
             <div className="relative z-10 w-full max-w-sm mx-auto flex flex-col gap-12">
                 <motion.div variants={itemVariants} className="space-y-4">
-                    <h1 className="text-5xl font-black text-white tracking-tighter uppercase italic leading-none">
+                    <h1 className="text-5xl font-black text-text-primary tracking-tighter uppercase italic leading-none">
                         Hogyan <span className="text-primary">Tovább?</span>
                     </h1>
-                    <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.4em]">Válassz egy opciót</p>
+                    <p className="text-text-primary/40 text-[10px] font-black uppercase tracking-[0.4em]">Válassz egy opciót</p>
                 </motion.div>
 
                 <div className="flex flex-col gap-4">
@@ -64,15 +64,15 @@ export default function OnboardingClient() {
                             >
                                 <div className="flex items-center gap-6">
                                     <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-[0_0_20px_rgba(255,59,48,0.4)]">
-                                        <HousePlus className="w-8 h-8 text-white" strokeWidth={2.5} />
+                                        <HousePlus className="w-8 h-8 text-text-primary" strokeWidth={2.5} />
                                     </div>
                                     <div className="flex flex-col text-left">
-                                        <span className="text-white font-black text-2xl tracking-tight leading-none">Új Ház</span>
+                                        <span className="text-text-primary font-black text-2xl tracking-tight leading-none">Új Ház</span>
                                         <span className="text-primary text-[11px] font-black uppercase tracking-[0.2em] mt-2">Létrehozása</span>
                                     </div>
                                 </div>
                                 <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-active:translate-x-1 transition-transform">
-                                    <ChevronRight className="w-5 h-5 text-white/20" />
+                                    <ChevronRight className="w-5 h-5 text-text-primary/20" />
                                 </div>
                             </motion.button>
                         </Link>
@@ -87,15 +87,15 @@ export default function OnboardingClient() {
                             >
                                 <div className="flex items-center gap-6">
                                     <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 shadow-inner">
-                                        <LogIn className="w-8 h-8 text-white/60" strokeWidth={2.5} />
+                                        <LogIn className="w-8 h-8 text-text-primary/60" strokeWidth={2.5} />
                                     </div>
                                     <div className="flex flex-col text-left">
-                                        <span className="text-white font-black text-2xl tracking-tight leading-none">Csatlakozás</span>
-                                        <span className="text-white/20 text-[11px] font-black uppercase tracking-[0.2em] mt-2">Meghívó kóddal</span>
+                                        <span className="text-text-primary font-black text-2xl tracking-tight leading-none">Csatlakozás</span>
+                                        <span className="text-text-primary/20 text-[11px] font-black uppercase tracking-[0.2em] mt-2">Meghívó kóddal</span>
                                     </div>
                                 </div>
                                 <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-active:translate-x-1 transition-transform">
-                                    <ChevronRight className="w-5 h-5 text-white/20" />
+                                    <ChevronRight className="w-5 h-5 text-text-primary/20" />
                                 </div>
                             </motion.button>
                         </Link>
@@ -114,7 +114,7 @@ export default function OnboardingClient() {
             {/* Footer Branding */}
             <motion.p
                 variants={itemVariants}
-                className="mt-auto mb-8 text-center text-white/10 text-[10px] font-bold uppercase tracking-[0.5em]"
+                className="mt-auto mb-8 text-center text-text-primary/10 text-[10px] font-bold uppercase tracking-[0.5em]"
             >
                 LakasInfo Ecosystem
             </motion.p>

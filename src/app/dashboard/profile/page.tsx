@@ -107,7 +107,7 @@ export default function ProfilePage() {
             {/* HEADER */}
             <motion.header variants={itemVariants} className="flex items-center justify-between">
                 <Link href="/dashboard" className="w-12 h-12 rounded-full bg-surface-elevated flex items-center justify-center border border-white/5 shadow-xl active:scale-90 transition-transform">
-                    <X className="w-5 h-5 text-white" />
+                    <X className="w-5 h-5 text-text-primary" />
                 </Link>
                 <button
                     onClick={() => setIsPro(!isPro)}
@@ -115,10 +115,10 @@ export default function ProfilePage() {
                 >
                     {
                         isPro ?
-                            <Gem className="w-4 h-4 text-white" /> :
+                            <Gem className="w-4 h-4 text-text-primary" /> :
                             <ShieldCheck className="w-4 h-4 text-primary" />
                     }
-                    <span className={`text-[10px] font-black uppercase tracking-widest text-white`}>
+                    <span className={`text-[10px] font-black uppercase tracking-widest text-text-primary`}>
                         LakasInfo {getSubscriptionStatusTitle(profile?.subscriptionPlan || "free")}
                     </span>
                 </button>
@@ -129,14 +129,14 @@ export default function ProfilePage() {
                 <div onClick={() => setActiveSheet("qr")} className="relative cursor-pointer group">
                     <div className="w-28 h-28 rounded-full p-1" style={{ background: profile?.colorCode }}>
                         <div className="w-full h-full rounded-full bg-surface flex items-center justify-center border-[3px] border-background">
-                            <span className="text-4xl font-black text-white tracking-tighter">{initials}</span>
+                            <span className="text-4xl font-black text-text-primary tracking-tighter">{initials}</span>
                         </div>
                     </div>
                     <div className="absolute bottom-1 right-1 w-9 h-9 bg-surface-elevated border border-white/10 rounded-full flex items-center justify-center shadow-lg group-active:scale-90 transition-transform">
                         <QrCode className="w-4 h-4 text-primary" />
                     </div>
                 </div>
-                <h1 className="text-4xl font-black text-white mt-6 tracking-tight">{displayName}</h1>
+                <h1 className="text-4xl font-black text-text-primary mt-6 tracking-tight">{displayName}</h1>
             </motion.div>
 
             {/* GYORS KÁRTYÁK */}
@@ -145,8 +145,8 @@ export default function ProfilePage() {
                     <motion.div whileTap={{ scale: 0.95 }} variants={itemVariants} className={`bg-surface rounded-[2.5rem] p-6 ${isPro ? "border-2 border-primary" : "border border-white/5"} shadow-xl flex flex-col justify-between aspect-square relative`}>
                         <div className="w-12 h-8 rounded-xl" style={{ background: profile?.colorCode }} />
                         <div>
-                            <h3 className="text-white font-black text-xl leading-none">{getSubscriptionStatusTitle(profile?.subscriptionPlan || "free")}</h3>
-                            <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest mt-2 block">Csomag</span>
+                            <h3 className="text-text-primary font-black text-xl leading-none">{getSubscriptionStatusTitle(profile?.subscriptionPlan || "free")}</h3>
+                            <span className="text-text-primary/40 text-[10px] font-bold uppercase tracking-widest mt-2 block">Csomag</span>
                         </div>
                         {
                             isPro && (
@@ -168,7 +168,7 @@ export default function ProfilePage() {
                                     }}
                                     className="absolute top-4 right-4 w-6 h-6 bg-primary rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(var(--primary),0.6)]"
                                 >
-                                    <Gem className="w-3 h-3 text-white" />
+                                    <Gem className="w-3 h-3 text-text-primary" />
                                 </motion.div>
                             )
                         }
@@ -178,11 +178,11 @@ export default function ProfilePage() {
                 <Link href="/dashboard/roommates">
                     <motion.div whileTap={{ scale: 0.95 }} variants={itemVariants} className="bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-xl flex flex-col justify-between aspect-square cursor-pointer active:scale-95 transition-transform">
                         <div className="w-12 h-12 bg-surface-elevated rounded-2xl flex items-center justify-center border border-white/5">
-                            <UserPlus className="w-6 h-6 text-white" />
+                            <UserPlus className="w-6 h-6 text-text-primary" />
                         </div>
                         <div>
-                            <h3 className="text-white font-black text-[15px] leading-tight">Lakótárs</h3>
-                            <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest mt-1 block">{copied ? "Másolva!" : "Meghívás"}</span>
+                            <h3 className="text-text-primary font-black text-[15px] leading-tight">Lakótárs</h3>
+                            <span className="text-text-primary/40 text-[10px] font-bold uppercase tracking-widest mt-1 block">{copied ? "Másolva!" : "Meghívás"}</span>
                         </div>
                     </motion.div>
                 </Link>
@@ -199,7 +199,7 @@ export default function ProfilePage() {
                     >
                         <div className="flex items-center gap-5">
                             <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">{item.icon}</div>
-                            <span className="text-white font-bold text-[17px] tracking-tight">{item.label}</span>
+                            <span className="text-text-primary font-bold text-[17px] tracking-tight">{item.label}</span>
                         </div>
 
                         {/* Töltés állapot vagy értesítés badge */}
@@ -208,7 +208,7 @@ export default function ProfilePage() {
                                 <Loader2 className="w-4 h-4 text-primary animate-spin" />
                             </div>
                         ) : item.badge && item.badge > 0 ? (
-                            <div className="px-2.5 py-1 rounded-full bg-primary text-white font-black text-[10px] shadow-[0_0_15px_rgba(255,59,48,0.4)]">
+                            <div className="px-2.5 py-1 rounded-full bg-primary text-text-primary font-black text-[10px] shadow-[0_0_15px_rgba(255,59,48,0.4)]">
                                 {item.badge}
                             </div>
                         ) : null}

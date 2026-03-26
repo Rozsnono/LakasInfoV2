@@ -106,14 +106,14 @@ export default function JoinHousePage() {
                 >
                     <ArrowLeft className="w-5 h-5 text-text-primary" />
                 </Link>
-                <h1 className="text-3xl font-black text-white tracking-tight uppercase italic">
+                <h1 className="text-3xl font-black text-text-primary tracking-tight uppercase italic">
                     Csatla<span className="text-primary">kozás</span>
                 </h1>
             </motion.header>
 
             <div className="relative z-10 w-full max-w-sm mx-auto flex flex-col gap-10 flex-1">
                 <motion.div variants={itemVariants} className="space-y-4">
-                    <h2 className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-2">Meghívó kód</h2>
+                    <h2 className="text-[10px] font-black text-text-primary/40 uppercase tracking-[0.2em] ml-2">Meghívó kód</h2>
 
                     {/* Hibaüzenet */}
                     <AnimatePresence mode="wait">
@@ -159,7 +159,7 @@ export default function JoinHousePage() {
                                             value={digit}
                                             onChange={(e) => handleChange(index, e)}
                                             onKeyDown={(e) => handleKeyDown(index, e)}
-                                            className={`w-12 h-16 bg-white/5 border ${error ? 'border-red-500/50' : 'border-white/5'} rounded-2xl text-center text-white text-2xl font-black focus:outline-none focus:border-primary/50 transition-all shadow-xl disabled:opacity-50`}
+                                            className={`w-12 h-16 bg-white/5 border ${error ? 'border-red-500/50' : 'border-white/5'} rounded-2xl text-center text-text-primary text-2xl font-black focus:outline-none focus:border-primary/50 transition-all shadow-xl disabled:opacity-50`}
                                         />
                                     ))}
                                 </motion.div>
@@ -175,7 +175,7 @@ export default function JoinHousePage() {
                                 {/* Elválasztó */}
                                 <div className="flex items-center gap-4 my-2">
                                     <div className="h-px bg-white/5 flex-1" />
-                                    <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em]">Műveletek</span>
+                                    <span className="text-[10px] font-black text-text-primary/20 uppercase tracking-[0.3em]">Műveletek</span>
                                     <div className="h-px bg-white/5 flex-1" />
                                 </div>
 
@@ -183,7 +183,7 @@ export default function JoinHousePage() {
                                 <button
                                     type="button"
                                     onClick={() => setIsScanning(true)}
-                                    className="w-full py-5 bg-surface rounded-[2.5rem] border border-white/5 text-white/60 font-black uppercase tracking-[0.2em] text-[10px] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 hover:text-white"
+                                    className="w-full py-5 bg-surface rounded-[2.5rem] border border-white/5 text-text-primary/60 font-black uppercase tracking-[0.2em] text-[10px] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 hover:text-text-primary"
                                 >
                                     <QrCode className="w-5 h-5 text-primary/80" />
                                     Beolvasás QR Kóddal
@@ -223,9 +223,9 @@ export default function JoinHousePage() {
                                 <button
                                     type="button"
                                     onClick={() => setIsScanning(false)}
-                                    className="w-full py-6 mt-4 bg-white/5 text-white rounded-[2.5rem] font-black uppercase tracking-[0.2em] text-xs shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 border border-white/10"
+                                    className="w-full py-6 mt-4 bg-white/5 text-text-primary rounded-[2.5rem] font-black uppercase tracking-[0.2em] text-xs shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 border border-white/10"
                                 >
-                                    <X className="w-5 h-5 text-white/50" />
+                                    <X className="w-5 h-5 text-text-primary/50" />
                                     Mégsem, kézi bevitel
                                 </button>
                             </motion.div>
@@ -237,7 +237,7 @@ export default function JoinHousePage() {
             {/* Footer Branding */}
             <motion.p
                 variants={itemVariants}
-                className="mt-auto pt-12 text-center text-white/10 text-[10px] font-bold uppercase tracking-[0.5em]"
+                className="mt-auto pt-12 text-center text-text-primary/10 text-[10px] font-bold uppercase tracking-[0.5em]"
             >
                 LakasInfo Ecosystem
             </motion.p>
@@ -317,11 +317,11 @@ function QRScannerOverlay({ onClose, onSuccess }: ScannerProps) {
             <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between bg-gradient-to-b from-black/80 to-transparent p-6 pt-12">
                 <button
                     onClick={onClose}
-                    className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-xl active:scale-90 transition-transform"
+                    className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-text-primary backdrop-blur-xl active:scale-90 transition-transform"
                 >
                     <X size={24} />
                 </button>
-                <span className="text-[10px] font-black uppercase italic tracking-[0.3em] text-white">Kód beolvasása</span>
+                <span className="text-[10px] font-black uppercase italic tracking-[0.3em] text-text-primary">Kód beolvasása</span>
                 <div className="w-12" />
             </div>
 
@@ -329,12 +329,12 @@ function QRScannerOverlay({ onClose, onSuccess }: ScannerProps) {
                 {error ? (
                     <div className="flex flex-col items-center gap-4 px-10 text-center z-20">
                         <AlertCircle className="h-12 w-12 text-red-500" />
-                        <p className="text-xs font-bold uppercase leading-relaxed tracking-widest text-white/60">
+                        <p className="text-xs font-bold uppercase leading-relaxed tracking-widest text-text-primary/60">
                             {error}
                         </p>
                         <button
                             onClick={onClose}
-                            className="mt-4 rounded-2xl bg-white/10 border border-white/20 px-8 py-4 text-[10px] font-black uppercase tracking-widest text-white active:bg-white/20 transition-colors"
+                            className="mt-4 rounded-2xl bg-white/10 border border-white/20 px-8 py-4 text-[10px] font-black uppercase tracking-widest text-text-primary active:bg-white/20 transition-colors"
                         >
                             Vissza a kézi bevitelhez
                         </button>
@@ -364,7 +364,7 @@ function QRScannerOverlay({ onClose, onSuccess }: ScannerProps) {
                             </div>
                             <div className="flex flex-col items-center gap-2 bg-black/40 px-6 py-3 rounded-full backdrop-blur-md">
                                 <ScanLine className="w-6 h-6 text-primary animate-pulse" />
-                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/80">Illeszd a kódot a keretbe</p>
+                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/80">Illeszd a kódot a keretbe</p>
                             </div>
                         </div>
                     </>

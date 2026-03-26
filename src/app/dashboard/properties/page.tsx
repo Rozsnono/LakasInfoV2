@@ -70,7 +70,7 @@ export default function HouseManagerClient() {
                 >
                     <ArrowLeft className="w-5 h-5 text-text-primary" />
                 </Link>
-                <h1 className="text-3xl font-black text-white tracking-tight uppercase italic">
+                <h1 className="text-3xl font-black text-text-primary tracking-tight uppercase italic">
                     Otthon<span className="text-primary">aim</span>
                 </h1>
             </motion.header>
@@ -79,7 +79,7 @@ export default function HouseManagerClient() {
 
                 {/* Meglévő Otthonok Listája */}
                 <motion.div variants={itemVariants} className="space-y-4">
-                    <h2 className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-2">
+                    <h2 className="text-[10px] font-black text-text-primary/40 uppercase tracking-[0.2em] ml-2">
                         {isPending ? "Betöltés..." : "Saját háztartások"}
                     </h2>
 
@@ -95,7 +95,7 @@ export default function HouseManagerClient() {
                                     className="flex flex-col items-center justify-center py-6 gap-3"
                                 >
                                     <Loader2 className="w-6 h-6 text-primary animate-spin" />
-                                    <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest">Háztartások keresése</p>
+                                    <p className="text-text-primary/30 text-[10px] font-bold uppercase tracking-widest">Háztartások keresése</p>
                                 </motion.div>
                             ) : error ? (
                                 /* HIBA ÁLLAPOT */
@@ -128,16 +128,16 @@ export default function HouseManagerClient() {
                                                 : "bg-surface border-white/5 shadow-lg active:bg-white/5"
                                                 }`}
                                         >
-                                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-inner ${_house._id === house?._id ? "bg-primary text-white" : "bg-white/5 text-white/40"
+                                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-inner ${_house._id === house?._id ? "bg-primary text-text-primary" : "bg-white/5 text-text-primary/40"
                                                 }`}>
                                                 <Home className="w-6 h-6" strokeWidth={_house._id === house?._id ? 2.5 : 2} />
                                             </div>
 
                                             <div className="flex flex-col flex-1 overflow-hidden">
-                                                <span className="text-white font-black text-lg tracking-tight truncate">
+                                                <span className="text-text-primary font-black text-lg tracking-tight truncate">
                                                     {_house.name}
                                                 </span>
-                                                <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 mt-0.5 truncate">
+                                                <span className="text-text-primary/40 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 mt-0.5 truncate">
                                                     <MapPin className="w-3 h-3 shrink-0" />
                                                     {_house.address || "Nincs megadva cím"}
                                                 </span>
@@ -145,10 +145,10 @@ export default function HouseManagerClient() {
 
                                             <div className="shrink-0">
                                                 {_house._id === house?._id ? (
-                                                    <CheckCircle2 className="w-6 h-6 text-white" strokeWidth={3} />
+                                                    <CheckCircle2 className="w-6 h-6 text-text-primary" strokeWidth={3} />
                                                 ) : (
                                                     <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-active:translate-x-1 transition-transform">
-                                                        <ChevronRight className="w-4 h-4 text-white/30" />
+                                                        <ChevronRight className="w-4 h-4 text-text-primary/30" />
                                                     </div>
                                                 )}
                                             </div>
@@ -164,7 +164,7 @@ export default function HouseManagerClient() {
                                     exit={{ opacity: 0 }}
                                     className="text-center p-8 border border-dashed border-white/10 rounded-[2rem]"
                                 >
-                                    <span className="text-white/30 text-xs font-bold uppercase tracking-widest">Még nincs háztartásod</span>
+                                    <span className="text-text-primary/30 text-xs font-bold uppercase tracking-widest">Még nincs háztartásod</span>
                                 </motion.div>
                             )}
                         </AnimatePresence>
@@ -174,7 +174,7 @@ export default function HouseManagerClient() {
                 {/* Elválasztó */}
                 <motion.div variants={itemVariants} className="flex items-center gap-4">
                     <div className="h-px bg-white/5 flex-1" />
-                    <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em]">Műveletek</span>
+                    <span className="text-[10px] font-black text-text-primary/20 uppercase tracking-[0.3em]">Műveletek</span>
                     <div className="h-px bg-white/5 flex-1" />
                 </motion.div>
 
@@ -188,15 +188,15 @@ export default function HouseManagerClient() {
                             >
                                 <div className="flex items-center gap-5 relative z-10">
                                     <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center shadow-[0_0_20px_rgba(255,59,48,0.4)]">
-                                        <HousePlus className="w-7 h-7 text-white" strokeWidth={2.5} />
+                                        <HousePlus className="w-7 h-7 text-text-primary" strokeWidth={2.5} />
                                     </div>
                                     <div className="flex flex-col text-left">
-                                        <span className="text-white font-black text-xl tracking-tight leading-none">Új Ház</span>
+                                        <span className="text-text-primary font-black text-xl tracking-tight leading-none">Új Ház</span>
                                         <span className="text-primary text-[10px] font-black uppercase tracking-[0.2em] mt-1.5">Létrehozása</span>
                                     </div>
                                 </div>
                                 <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-active:translate-x-1 transition-transform relative z-10">
-                                    <ChevronRight className="w-5 h-5 text-white/20" />
+                                    <ChevronRight className="w-5 h-5 text-text-primary/20" />
                                 </div>
                             </motion.button>
                         </Link>
@@ -210,15 +210,15 @@ export default function HouseManagerClient() {
                             >
                                 <div className="flex items-center gap-5">
                                     <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 shadow-inner">
-                                        <LogIn className="w-7 h-7 text-white/60" strokeWidth={2.5} />
+                                        <LogIn className="w-7 h-7 text-text-primary/60" strokeWidth={2.5} />
                                     </div>
                                     <div className="flex flex-col text-left">
-                                        <span className="text-white font-black text-xl tracking-tight leading-none">Csatlakozás</span>
-                                        <span className="text-white/20 text-[10px] font-black uppercase tracking-[0.2em] mt-1.5">Meghívó kóddal</span>
+                                        <span className="text-text-primary font-black text-xl tracking-tight leading-none">Csatlakozás</span>
+                                        <span className="text-text-primary/20 text-[10px] font-black uppercase tracking-[0.2em] mt-1.5">Meghívó kóddal</span>
                                     </div>
                                 </div>
                                 <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-active:translate-x-1 transition-transform">
-                                    <ChevronRight className="w-5 h-5 text-white/20" />
+                                    <ChevronRight className="w-5 h-5 text-text-primary/20" />
                                 </div>
                             </motion.button>
                         </Link>
@@ -228,7 +228,7 @@ export default function HouseManagerClient() {
 
             <motion.p
                 variants={itemVariants}
-                className="mt-auto pt-12 text-center text-white/10 text-[10px] font-bold uppercase tracking-[0.5em]"
+                className="mt-auto pt-12 text-center text-text-primary/10 text-[10px] font-bold uppercase tracking-[0.5em]"
             >
                 LakasInfo Ecosystem
             </motion.p>

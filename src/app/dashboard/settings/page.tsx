@@ -115,7 +115,7 @@ export default function HouseSettingsClient() {
                             className="flex flex-col items-center justify-center py-10 gap-4"
                         >
                             <Loader2 className="w-8 h-8 text-primary animate-spin" />
-                            <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Adatok betöltése...</p>
+                            <p className="text-text-primary/40 text-xs font-bold uppercase tracking-widest">Adatok betöltése...</p>
                         </motion.div>
                     ) : error ? (
                         /* HIBA ÁLLAPOT */
@@ -139,28 +139,28 @@ export default function HouseSettingsClient() {
                             className="space-y-6"
                         >
                             <div className="flex flex-col gap-2">
-                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-4">Háztartás neve</label>
+                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/40 ml-4">Háztartás neve</label>
                                 <div className="relative">
-                                    <Home className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
+                                    <Home className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
                                     <input
                                         type="text"
                                         value={houseName}
                                         onChange={(e) => setHouseName(e.target.value)}
-                                        className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50 transition-colors"
+                                        className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50 transition-colors"
                                         placeholder="Pl. Otthon"
                                     />
                                 </div>
                             </div>
 
                             <div className="flex flex-col gap-2">
-                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-4">Pontos cím</label>
+                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/40 ml-4">Pontos cím</label>
                                 <div className="relative">
-                                    <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
+                                    <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
                                     <input
                                         type="text"
                                         value={address}
                                         onChange={(e) => setAddress(e.target.value)}
-                                        className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50 transition-colors"
+                                        className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50 transition-colors"
                                         placeholder="Város, utca, házszám"
                                     />
                                 </div>
@@ -203,10 +203,10 @@ export default function HouseSettingsClient() {
                         <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center border border-red-500/10">
                             <Trash2 className="w-6 h-6 text-red-500" />
                         </div>
-                        <h3 className="text-white font-black text-lg tracking-tight uppercase italic">Veszélyes <span className="text-primary">zóna</span></h3>
+                        <h3 className="text-text-primary font-black text-lg tracking-tight uppercase italic">Veszélyes <span className="text-primary">zóna</span></h3>
                     </div>
 
-                    <p className="text-white/40 text-xs font-bold leading-relaxed">
+                    <p className="text-text-primary/40 text-xs font-bold leading-relaxed">
                         A háztartás törlésével az összes lakótárs hozzáférése megszűnik, és minden rögzített mérési adat véglegesen törlődik. Ez a művelet nem vonható vissza.
                     </p>
 
@@ -234,7 +234,7 @@ export default function HouseSettingsClient() {
                                 <button
                                     onClick={() => setIsConfirmingDelete(false)}
                                     disabled={isDeleting}
-                                    className="flex-1 py-5 bg-white/5 text-white/60 rounded-2xl font-black uppercase tracking-widest text-[10px] border border-white/5 active:bg-white/10 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                    className="flex-1 py-5 bg-white/5 text-text-primary/60 rounded-2xl font-black uppercase tracking-widest text-[10px] border border-white/5 active:bg-white/10 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                                 >
                                     <X className="w-4 h-4" />
                                     Mégsem
@@ -242,7 +242,7 @@ export default function HouseSettingsClient() {
                                 <button
                                     onClick={handleConfirmDelete}
                                     disabled={isDeleting}
-                                    className="flex-1 py-5 bg-red-500 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-[0_0_20px_rgba(239,68,68,0.3)] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                                    className="flex-1 py-5 bg-red-500 text-text-primary rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-[0_0_20px_rgba(239,68,68,0.3)] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                                 >
                                     {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                                     Biztosan!

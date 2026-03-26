@@ -123,11 +123,11 @@ export default function NotificationsSheet({ isOpen, onClose }: NotificationsShe
                                 onClick={onClose}
                                 className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform"
                             >
-                                <ChevronLeft className="w-6 h-6 text-white" />
+                                <ChevronLeft className="w-6 h-6 text-text-primary" />
                             </button>
 
                             <div className="flex items-center gap-2">
-                                <h3 className="text-xl font-black tracking-tight text-white uppercase italic">Értesít<span className="text-primary">ések</span></h3>
+                                <h3 className="text-xl font-black tracking-tight text-text-primary uppercase italic">Értesít<span className="text-primary">ések</span></h3>
                             </div>
 
                             <button
@@ -143,7 +143,7 @@ export default function NotificationsSheet({ isOpen, onClose }: NotificationsShe
                             {isLoading ? (
                                 <div className="flex flex-col items-center justify-center py-20 gap-4">
                                     <Loader2 className="w-8 h-8 text-primary animate-spin" />
-                                    <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">Betöltés...</span>
+                                    <span className="text-[10px] font-black text-text-primary/20 uppercase tracking-[0.2em]">Betöltés...</span>
                                 </div>
                             ) : notifications.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center py-20 text-center opacity-30">
@@ -203,10 +203,10 @@ function NotificationItem({ icon, title, desc, time, isUnread, onClick }: Notifi
             </div>
 
             <div className="flex flex-col gap-1 pr-4">
-                <span className={`font-black text-[17px] tracking-tight leading-tight ${isUnread ? "text-white" : "text-white/70"
+                <span className={`font-black text-[17px] tracking-tight leading-tight ${isUnread ? "text-text-primary" : "text-text-primary/70"
                     }`}>{title}</span>
-                <p className="text-white/40 text-sm font-semibold leading-snug">{desc}</p>
-                <span className="text-[10px] font-black uppercase tracking-widest text-white/20 mt-2">{time}</span>
+                <p className="text-text-primary/40 text-sm font-semibold leading-snug">{desc}</p>
+                <span className="text-[10px] font-black uppercase tracking-widest text-text-primary/20 mt-2">{time}</span>
             </div>
         </motion.button>
     );

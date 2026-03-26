@@ -53,8 +53,8 @@ export default function SubscriptionPageClient() {
                 <div className="w-16 h-16 rounded-3xl bg-primary/10 flex items-center justify-center border border-primary/20 mb-4 shadow-[0_0_30px_rgba(var(--primary),0.15)]">
                     <Sparkles className="w-8 h-8 text-primary" />
                 </div>
-                <h2 className="text-2xl font-black text-white italic tracking-tight mb-2">Hozd ki a maximumot!</h2>
-                <p className="text-white/40 text-xs font-bold leading-relaxed">
+                <h2 className="text-2xl font-black text-text-primary italic tracking-tight mb-2">Hozd ki a maximumot!</h2>
+                <p className="text-text-primary/40 text-xs font-bold leading-relaxed">
                     Válaszd a Pro modellt a korlátlan lehetőségekért, fotós rögzítésért és a részletes jelentésekért.
                 </p>
             </motion.div>
@@ -64,13 +64,13 @@ export default function SubscriptionPageClient() {
                 <div className="bg-surface border border-white/5 p-1.5 rounded-full flex relative w-full">
                     <button
                         onClick={() => setBillingCycle("monthly")}
-                        className={`flex-1 relative z-10 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-colors flex justify-center items-center ${billingCycle === "monthly" ? "text-black" : "text-white/40 hover:text-white"}`}
+                        className={`flex-1 relative z-10 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-colors flex justify-center items-center ${billingCycle === "monthly" ? "text-black" : "text-text-primary/40 hover:text-text-primary"}`}
                     >
                         Havi
                     </button>
                     <button
                         onClick={() => setBillingCycle("yearly")}
-                        className={`flex-1 relative z-10 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-colors flex justify-center items-center gap-2 ${billingCycle === "yearly" ? "text-black" : "text-white/40 hover:text-white"}`}
+                        className={`flex-1 relative z-10 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-colors flex justify-center items-center gap-2 ${billingCycle === "yearly" ? "text-black" : "text-text-primary/40 hover:text-text-primary"}`}
                     >
                         Éves
                         <span className={`text-[9px] px-2 py-0.5 rounded-full ${billingCycle === "yearly" ? "bg-black/20 text-black" : "bg-primary/20 text-primary"}`}>-16%</span>
@@ -114,27 +114,27 @@ export default function SubscriptionPageClient() {
                                 <div className="flex flex-col gap-1">
                                     <div className="flex items-center gap-3">
                                         {plan.icon}
-                                        <h3 className="text-xl font-black text-white italic tracking-tight">{plan.name}</h3>
+                                        <h3 className="text-xl font-black text-text-primary italic tracking-tight">{plan.name}</h3>
                                     </div>
-                                    <p className="text-white/40 text-xs font-medium mt-1 pr-4">{plan.description}</p>
+                                    <p className="text-text-primary/40 text-xs font-medium mt-1 pr-4">{plan.description}</p>
                                 </div>
                                 <div className={`px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest shrink-0 
                                     ${isCurrentPlan
                                         ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/20"
                                         : isPro
                                             ? "bg-primary/20 text-primary border border-primary/20"
-                                            : "bg-white/10 text-white/60"
+                                            : "bg-white/10 text-text-primary/60"
                                     }`}>
                                     {typeof plan.badge === 'function' ? plan.badge(isCurrentPlan) : (isCurrentPlan ? "Aktív" : plan.badge)}
                                 </div>
                             </div>
 
                             <div className="flex items-baseline gap-2 relative z-10">
-                                <span className="text-5xl font-black text-white tracking-tighter">
+                                <span className="text-5xl font-black text-text-primary tracking-tighter">
                                     {price === 0 ? "Ingyenes" : price.toLocaleString("hu-HU")}
                                 </span>
                                 {price !== 0 && (
-                                    <span className="text-white/40 text-sm font-bold uppercase tracking-widest">
+                                    <span className="text-text-primary/40 text-sm font-bold uppercase tracking-widest">
                                         Ft / {billingCycle === "monthly" ? "hó" : "év"}
                                     </span>
                                 )}
@@ -148,9 +148,9 @@ export default function SubscriptionPageClient() {
                                         <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 
                                             ${isCurrentPlan ? "bg-emerald-500/20" : isPro ? "bg-primary/20" : "bg-white/5"}
                                         `}>
-                                            <Check className={`w-3 h-3 ${isCurrentPlan ? "text-emerald-400" : isPro ? "text-primary" : "text-white/40"}`} />
+                                            <Check className={`w-3 h-3 ${isCurrentPlan ? "text-emerald-400" : isPro ? "text-primary" : "text-text-primary/40"}`} />
                                         </div>
-                                        <span className={`text-sm font-medium ${isCurrentPlan || isPro ? "text-white/90" : "text-white/60"}`}>
+                                        <span className={`text-sm font-medium ${isCurrentPlan || isPro ? "text-text-primary/90" : "text-text-primary/60"}`}>
                                             {feature}
                                         </span>
                                     </div>
@@ -174,8 +174,8 @@ export default function SubscriptionPageClient() {
                                     ${isCurrentPlan
                                         ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 cursor-default"
                                         : isPro
-                                            ? "bg-primary text-white shadow-lg shadow-primary/20 active:scale-95 cursor-pointer"
-                                            : "bg-white/10 text-white hover:bg-white/20 active:scale-95 cursor-pointer"
+                                            ? "bg-primary text-text-primary shadow-lg shadow-primary/20 active:scale-95 cursor-pointer"
+                                            : "bg-white/10 text-text-primary hover:bg-white/20 active:scale-95 cursor-pointer"
                                     }`}
                             >
                                 {isLoading && !isCurrentPlan ? (
@@ -192,7 +192,7 @@ export default function SubscriptionPageClient() {
                 })}
             </div>
 
-            <motion.p variants={itemVariants} className="text-center text-white/20 text-[10px] font-bold uppercase tracking-widest mt-4">
+            <motion.p variants={itemVariants} className="text-center text-text-primary/20 text-[10px] font-bold uppercase tracking-widest mt-4">
                 A fizetés biztonságos kapcsolaton keresztül történik. Bármikor lemondható.
             </motion.p>
         </motion.div>

@@ -93,7 +93,7 @@ export default function ReadingReportsSheet({ isOpen, onClose }: Props) {
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
-              <h3 className="text-xl font-black tracking-tight uppercase italic text-white">
+              <h3 className="text-xl font-black tracking-tight uppercase italic text-text-primary">
                 Rezsi <span className="text-primary">jelentések</span>
               </h3>
               <div className="w-10" />
@@ -123,17 +123,17 @@ export default function ReadingReportsSheet({ isOpen, onClose }: Props) {
                         {isExporting ? (
                           <Loader2 className="w-5 h-5 animate-spin text-primary" />
                         ) : (
-                          <FileDown className="w-6 h-6 text-white/40 group-hover:text-primary transition-colors" />
+                          <FileDown className="w-6 h-6 text-text-primary/40 group-hover:text-primary transition-colors" />
                         )}
                       </div>
                       <div className="flex flex-col text-left">
-                        <span className="font-black text-base text-white capitalize">{report.month}</span>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-white/20">
+                        <span className="font-black text-base text-text-primary capitalize">{report.month}</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-text-primary/20">
                           {report.year} • PDF LETÖLTÉSE
                         </span>
                       </div>
                     </div>
-                    <ChevronRight className="w-5 h-5 text-white/10" />
+                    <ChevronRight className="w-5 h-5 text-text-primary/10" />
                   </button>
                 ))
               )}

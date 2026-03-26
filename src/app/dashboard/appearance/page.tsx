@@ -38,7 +38,7 @@ export default function AppearancePage() {
 
             {/* HÁTTÉRKÉP SZEKCIÓ */}
             <motion.div variants={itemVariants} className="relative z-10 space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-4">Alkalmazás háttere</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/40 ml-4">Alkalmazás háttere</label>
                 <button
                     onClick={() => setIsWallpaperOpen(true)}
                     className="w-full bg-surface rounded-[2.5rem] p-4 border border-white/5 shadow-2xl flex items-center justify-between group active:scale-[0.98] transition-all"
@@ -49,17 +49,17 @@ export default function AppearancePage() {
                             <div className="w-full h-full opacity-80" style={{ background: `var(--app-wallpaper) center/cover no-repeat` }} />
                         </div>
                         <div className="flex flex-col text-left">
-                            <span className="text-white font-bold text-base">Háttér kiválasztása</span>
-                            <span className="text-white/30 text-[10px] font-black uppercase tracking-widest">Átmenetek és színek</span>
+                            <span className="text-text-primary font-bold text-base">Háttér kiválasztása</span>
+                            <span className="text-text-primary/30 text-[10px] font-black uppercase tracking-widest">Átmenetek és színek</span>
                         </div>
                     </div>
-                    <ChevronRight className="w-5 h-5 text-white/20 group-hover:text-white transition-colors" />
+                    <ChevronRight className="w-5 h-5 text-text-primary/20 group-hover:text-text-primary transition-colors" />
                 </button>
             </motion.div>
 
             {/* VIZUÁLIS TÉMA */}
             <motion.div variants={itemVariants} className="relative z-10 space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-4">Vizuális téma</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/40 ml-4">Vizuális téma</label>
                 <div className="grid grid-cols-3 gap-3">
                     <ThemeButton active={theme === "system"} onClick={() => setTheme("system")} icon={<Monitor className="w-5 h-5" />} label="Rendszer" accent={accent} />
                     <ThemeButton active={theme === "dark"} onClick={() => setTheme("dark")} icon={<Moon className="w-5 h-5" />} label="Sötét" accent={accent} />
@@ -69,7 +69,7 @@ export default function AppearancePage() {
 
             {/* KIEMELŐ SZÍN */}
             <motion.div variants={itemVariants} className="relative z-10 space-y-4">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-4">Kiemelő szín</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/40 ml-4">Kiemelő szín</label>
                 <div className="bg-surface rounded-[2.5rem] p-6 border border-white/5 shadow-2xl flex items-center justify-between">
                     {COLORS.map((color) => (
                         <button
@@ -78,7 +78,7 @@ export default function AppearancePage() {
                             className="w-12 h-12 rounded-full flex items-center justify-center transition-all active:scale-75 relative"
                             style={{ backgroundColor: color.hex }}
                         >
-                            {accent === color.hex && <Check className="w-6 h-6 text-white" strokeWidth={4} />}
+                            {accent === color.hex && <Check className="w-6 h-6 text-text-primary" strokeWidth={4} />}
                         </button>
                     ))}
                 </div>
@@ -86,11 +86,11 @@ export default function AppearancePage() {
 
             {/* INTERAKCIÓK */}
             <motion.div variants={itemVariants} className="relative z-10 space-y-4">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-4">Interakciók</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/40 ml-4">Interakciók</label>
                 <div className="bg-surface rounded-[2.5rem] p-7 border border-white/5 shadow-2xl flex items-center justify-between">
                     <div className="flex items-center gap-5">
                         <Sparkles className="w-6 h-6" style={{ color: accent }} />
-                        <span className="text-white font-bold text-[17px]">Animációk</span>
+                        <span className="text-text-primary font-bold text-[17px]">Animációk</span>
                     </div>
                     <button
                         onClick={() => setAnimations(!animations)}
@@ -125,7 +125,7 @@ function ThemeButton({ active, onClick, icon, label, accent }: Readonly<{
             style={{ borderColor: active ? accent : "" }}
         >
             <div style={{ color: active ? accent : "white" }}>{icon}</div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-white">{label}</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-text-primary">{label}</span>
         </button>
     );
 }

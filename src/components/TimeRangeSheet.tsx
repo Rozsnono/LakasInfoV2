@@ -55,9 +55,9 @@ export default function TimeRangeSheet({ isOpen, onClose, selectedFrequency, onS
                                 onClick={showCustom ? () => setShowCustom(false) : onClose}
                                 className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform"
                             >
-                                {showCustom ? <ChevronLeft className="w-6 h-6 text-white" /> : <X className="w-5 h-5 text-white" />}
+                                {showCustom ? <ChevronLeft className="w-6 h-6 text-text-primary" /> : <X className="w-5 h-5 text-text-primary" />}
                             </button>
-                            <h3 className="text-xl font-black tracking-tight text-white uppercase">Időszak</h3>
+                            <h3 className="text-xl font-black tracking-tight text-text-primary uppercase">Időszak</h3>
                             <div className="w-10" />
                         </div>
 
@@ -73,13 +73,13 @@ export default function TimeRangeSheet({ isOpen, onClose, selectedFrequency, onS
                                                 }`}
                                         >
                                             <div className="flex items-center gap-5">
-                                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border border-white/5 shadow-inner ${selectedFrequency === opt.id ? "bg-primary text-white" : "bg-surface-elevated text-white/40"
+                                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border border-white/5 shadow-inner ${selectedFrequency === opt.id ? "bg-primary text-text-primary" : "bg-surface-elevated text-text-primary/40"
                                                     }`}>
                                                     <Calendar className="w-6 h-6" />
                                                 </div>
                                                 <div className="flex flex-col text-left">
-                                                    <span className="text-white font-black text-[17px] tracking-tight">{opt.label}</span>
-                                                    <span className="text-white/30 text-[11px] font-bold uppercase tracking-wider mt-1">{opt.sub}</span>
+                                                    <span className="text-text-primary font-black text-[17px] tracking-tight">{opt.label}</span>
+                                                    <span className="text-text-primary/30 text-[11px] font-bold uppercase tracking-wider mt-1">{opt.sub}</span>
                                                 </div>
                                             </div>
                                             {selectedFrequency === opt.id && <Check className="w-5 h-5 text-primary" />}
@@ -93,34 +93,34 @@ export default function TimeRangeSheet({ isOpen, onClose, selectedFrequency, onS
                                             }`}
                                     >
                                         <div className="flex items-center gap-5">
-                                            <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center shrink-0 border border-white/5 text-white/40">
+                                            <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center shrink-0 border border-white/5 text-text-primary/40">
                                                 <Calendar className="w-6 h-6" />
                                             </div>
                                             <div className="flex flex-col text-left">
-                                                <span className="text-white font-black text-[17px] tracking-tight">Egyedi intervallum</span>
-                                                <span className="text-white/30 text-[11px] font-bold uppercase tracking-wider mt-1">Saját dátum választása</span>
+                                                <span className="text-text-primary font-black text-[17px] tracking-tight">Egyedi intervallum</span>
+                                                <span className="text-text-primary/30 text-[11px] font-bold uppercase tracking-wider mt-1">Saját dátum választása</span>
                                             </div>
                                         </div>
-                                        <ChevronRight className="w-5 h-5 text-white/20" />
+                                        <ChevronRight className="w-5 h-5 text-text-primary/20" />
                                     </motion.button>
                                 </div>
                             ) : (
                                 <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
                                     <div className="flex bg-white/5 p-1 rounded-2xl self-center max-w-[240px] mx-auto">
-                                        <button onClick={() => setCurrentStep("start")} className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${currentStep === "start" ? "bg-white text-black" : "text-white/40"}`}>Ettől</button>
-                                        <button onClick={() => setCurrentStep("end")} className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${currentStep === "end" ? "bg-white text-black" : "text-white/40"}`}>Eddig</button>
+                                        <button onClick={() => setCurrentStep("start")} className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${currentStep === "start" ? "bg-white text-black" : "text-text-primary/40"}`}>Ettől</button>
+                                        <button onClick={() => setCurrentStep("end")} className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${currentStep === "end" ? "bg-white text-black" : "text-text-primary/40"}`}>Eddig</button>
                                     </div>
 
                                     <div className="flex items-center justify-between px-4">
                                         <button onClick={() => {
                                             if (currentStep === "start") setStartData(p => ({ ...p, year: p.year - 1 }));
                                             else setEndData(p => ({ ...p, year: p.year - 1 }));
-                                        }} className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center active:scale-90"><ChevronLeft className="w-6 h-6 text-white" /></button>
-                                        <span className="text-4xl font-black text-white tracking-tighter">{currentStep === "start" ? startData.year : endData.year}</span>
+                                        }} className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center active:scale-90"><ChevronLeft className="w-6 h-6 text-text-primary" /></button>
+                                        <span className="text-4xl font-black text-text-primary tracking-tighter">{currentStep === "start" ? startData.year : endData.year}</span>
                                         <button onClick={() => {
                                             if (currentStep === "start") setStartData(p => ({ ...p, year: p.year + 1 }));
                                             else setEndData(p => ({ ...p, year: p.year + 1 }));
-                                        }} className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center active:scale-90"><ChevronRight className="w-6 h-6 text-white" /></button>
+                                        }} className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center active:scale-90"><ChevronRight className="w-6 h-6 text-text-primary" /></button>
                                     </div>
 
                                     <div className="grid grid-cols-3 gap-3 px-2">
@@ -135,7 +135,7 @@ export default function TimeRangeSheet({ isOpen, onClose, selectedFrequency, onS
                                                 <button key={m} onClick={() => {
                                                     if (currentStep === "start") { setStartData(p => ({ ...p, month: i })); setCurrentStep("end"); }
                                                     else { setEndData(p => ({ ...p, month: i })); }
-                                                }} className={`py-6 rounded-3xl font-black text-sm transition-all ${isStart || isEnd ? "bg-primary text-white shadow-xl shadow-primary/20" : isInRange ? "bg-primary/20 text-primary border border-primary/10" : "bg-white/5 text-white/40"
+                                                }} className={`py-6 rounded-3xl font-black text-sm transition-all ${isStart || isEnd ? "bg-primary text-text-primary shadow-xl shadow-primary/20" : isInRange ? "bg-primary/20 text-primary border border-primary/10" : "bg-white/5 text-text-primary/40"
                                                     }`}>{m}</button>
                                             );
                                         })}

@@ -101,9 +101,9 @@ export default function ReadingDetailSheet({ isOpen, onClose, onShowPhoto, readi
 
                         <div className="flex items-center justify-between mb-8">
                             <button onClick={onClose} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform">
-                                <ChevronLeft className="w-6 h-6 text-white" />
+                                <ChevronLeft className="w-6 h-6 text-text-primary" />
                             </button>
-                            <h3 className="text-xl font-black tracking-tight text-white uppercase italic text-center flex-1 pr-10">Mérés <span className="text-primary">részletei</span></h3>
+                            <h3 className="text-xl font-black tracking-tight text-text-primary uppercase italic text-center flex-1 pr-10">Mérés <span className="text-primary">részletei</span></h3>
                         </div>
 
                         <div className="space-y-6">
@@ -119,12 +119,12 @@ export default function ReadingDetailSheet({ isOpen, onClose, onShowPhoto, readi
                             {/* ALAP ADATOK */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-white/5 p-5 rounded-3xl border border-white/5 flex flex-col gap-1">
-                                    <div className="flex items-center gap-2 text-white/30"><Calendar size={12} /><span className="text-[9px] font-black uppercase tracking-widest">Dátum</span></div>
-                                    <p className="text-white font-bold text-sm">{reading.date.toLocaleDateString('hu-HU', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
+                                    <div className="flex items-center gap-2 text-text-primary/30"><Calendar size={12} /><span className="text-[9px] font-black uppercase tracking-widest">Dátum</span></div>
+                                    <p className="text-text-primary font-bold text-sm">{reading.date.toLocaleDateString('hu-HU', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
                                 </div>
                                 <div className="bg-white/5 p-5 rounded-3xl border border-white/5 flex flex-col gap-1">
-                                    <div className="flex items-center gap-2 text-white/30"><Gauge size={12} /><span className="text-[9px] font-black uppercase tracking-widest">Állás</span></div>
-                                    <p className="text-white font-bold">{reading.value.toLocaleString()} {reading.unit}</p>
+                                    <div className="flex items-center gap-2 text-text-primary/30"><Gauge size={12} /><span className="text-[9px] font-black uppercase tracking-widest">Állás</span></div>
+                                    <p className="text-text-primary font-bold">{reading.value.toLocaleString()} {reading.unit}</p>
                                 </div>
                             </div>
 
@@ -132,11 +132,11 @@ export default function ReadingDetailSheet({ isOpen, onClose, onShowPhoto, readi
                             <div className="bg-primary/10 p-6 rounded-[2rem] border border-primary/20 flex justify-between items-center relative">
                                 <div>
                                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60 italic">Fogyasztás</span>
-                                    <p className="text-3xl font-black text-white italic">{reading.difference >= 0 ? '+' : ''}{reading.difference.toFixed(2)} <span className="text-sm font-bold opacity-40">{reading.unit}</span></p>
+                                    <p className="text-3xl font-black text-text-primary italic">{reading.difference >= 0 ? '+' : ''}{reading.difference.toFixed(2)} <span className="text-sm font-bold opacity-40">{reading.unit}</span></p>
                                 </div>
                                 {reading.photoUrl && (
                                     <button onClick={() => onShowPhoto(reading.photoUrl!)} className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center shadow-lg active:scale-90 transition-transform">
-                                        <Eye className="text-white" />
+                                        <Eye className="text-text-primary" />
                                     </button>
                                 )}
                             </div>
@@ -146,11 +146,11 @@ export default function ReadingDetailSheet({ isOpen, onClose, onShowPhoto, readi
                                 <div className="flex justify-between items-center">
                                     <div className="flex items-center gap-4">
                                         <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${isPaid ? 'bg-emerald-500/20' : 'bg-white/10'}`}>
-                                            <Wallet className={`w-6 h-6 ${isPaid ? 'text-emerald-400' : 'text-white/40'}`} />
+                                            <Wallet className={`w-6 h-6 ${isPaid ? 'text-emerald-400' : 'text-text-primary/40'}`} />
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className="text-white font-bold text-[15px] tracking-tight">Kifizetve</span>
-                                            <span className="text-white/40 text-[10px] font-black uppercase tracking-widest mt-0.5 italic">Számla státusza</span>
+                                            <span className="text-text-primary font-bold text-[15px] tracking-tight">Kifizetve</span>
+                                            <span className="text-text-primary/40 text-[10px] font-black uppercase tracking-widest mt-0.5 italic">Számla státusza</span>
                                         </div>
 
                                     </div>
@@ -200,7 +200,7 @@ export default function ReadingDetailSheet({ isOpen, onClose, onShowPhoto, readi
                                             key="del-btn"
                                             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 0.9 }}
                                             onClick={() => setShowConfirm(true)}
-                                            className="w-full py-5 bg-white/5 border border-white/10 text-white/30 rounded-3xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:bg-white/10 transition-colors"
+                                            className="w-full py-5 bg-white/5 border border-white/10 text-text-primary/30 rounded-3xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:bg-white/10 transition-colors"
                                         >
                                             <Trash2 size={16} /> Leolvasás törlése
                                         </motion.button>
@@ -215,8 +215,8 @@ export default function ReadingDetailSheet({ isOpen, onClose, onShowPhoto, readi
                                                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">Biztosan törlöd?</span>
                                             </div>
                                             <div className="flex gap-3 w-full">
-                                                <button onClick={() => setShowConfirm(false)} className="flex-1 py-4 bg-white/10 text-white rounded-2xl font-black uppercase tracking-widest text-[9px] active:scale-95 transition-transform">Mégsem</button>
-                                                <button onClick={handleDelete} disabled={isDeleting} className="flex-[1.5] py-4 bg-red-500 text-white rounded-2xl font-black uppercase tracking-widest text-[9px] flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-[0_0_20px_rgba(239,68,68,0.2)] disabled:opacity-50">
+                                                <button onClick={() => setShowConfirm(false)} className="flex-1 py-4 bg-white/10 text-text-primary rounded-2xl font-black uppercase tracking-widest text-[9px] active:scale-95 transition-transform">Mégsem</button>
+                                                <button onClick={handleDelete} disabled={isDeleting} className="flex-[1.5] py-4 bg-red-500 text-text-primary rounded-2xl font-black uppercase tracking-widest text-[9px] flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-[0_0_20px_rgba(239,68,68,0.2)] disabled:opacity-50">
                                                     {isDeleting ? <Loader2 className="animate-spin" size={14} /> : "Igen, töröld"}
                                                 </button>
                                             </div>

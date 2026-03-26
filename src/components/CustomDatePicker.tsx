@@ -71,9 +71,9 @@ export default function CustomDatePicker({ value, onChange, disabled }: CustomDa
                     key={`day-${i}`}
                     onClick={(e) => { e.preventDefault(); handleDateSelect(i); }}
                     className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all
-                        ${isSelected ? 'bg-primary text-white shadow-[0_0_15px_rgba(255,59,48,0.4)] scale-110' :
+                        ${isSelected ? 'bg-primary text-text-primary shadow-[0_0_15px_rgba(255,59,48,0.4)] scale-110' :
                             isToday ? 'border border-primary/50 text-primary' :
-                                'text-white/60 hover:bg-white/10 hover:text-white active:scale-90'}`}
+                                'text-text-primary/60 hover:bg-white/10 hover:text-text-primary active:scale-90'}`}
                 >
                     {i}
                 </button>
@@ -88,13 +88,13 @@ export default function CustomDatePicker({ value, onChange, disabled }: CustomDa
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
                 disabled={disabled}
-                className="w-full flex items-center justify-between bg-white/5 border border-white/5 rounded-2xl py-4 px-5 text-white font-bold transition-all active:scale-[0.98] disabled:opacity-50"
+                className="w-full flex items-center justify-between bg-white/5 border border-white/5 rounded-2xl py-4 px-5 text-text-primary font-bold transition-all active:scale-[0.98] disabled:opacity-50"
             >
                 <div className="flex items-center gap-3">
-                    <CalendarIcon className="w-5 h-5 text-white/40" />
+                    <CalendarIcon className="w-5 h-5 text-text-primary/40" />
                     <span className="text-sm">{formattedDate}</span>
                 </div>
-                <ChevronDown className={`w-4 h-4 text-white/20 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+                <ChevronDown className={`w-4 h-4 text-text-primary/20 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
             </button>
 
             <AnimatePresence>
@@ -109,20 +109,20 @@ export default function CustomDatePicker({ value, onChange, disabled }: CustomDa
                             {/* Naptár Fejléc */}
                             <div className="flex items-center justify-between">
                                 <button onClick={handlePrevMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
-                                    <ChevronLeft className="w-4 h-4 text-white" />
+                                    <ChevronLeft className="w-4 h-4 text-text-primary" />
                                 </button>
-                                <span className="text-sm font-black uppercase tracking-widest text-white">
+                                <span className="text-sm font-black uppercase tracking-widest text-text-primary">
                                     {viewDate.getFullYear()} {MONTHS[viewDate.getMonth()]}
                                 </span>
                                 <button onClick={handleNextMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
-                                    <ChevronRight className="w-4 h-4 text-white" />
+                                    <ChevronRight className="w-4 h-4 text-text-primary" />
                                 </button>
                             </div>
 
                             {/* Naptár Napok Fejléc */}
                             <div className="grid grid-cols-7 gap-1 text-center mb-1">
                                 {DAYS.map(day => (
-                                    <span key={day} className="text-[10px] font-black uppercase text-white/30">{day}</span>
+                                    <span key={day} className="text-[10px] font-black uppercase text-text-primary/30">{day}</span>
                                 ))}
                             </div>
 

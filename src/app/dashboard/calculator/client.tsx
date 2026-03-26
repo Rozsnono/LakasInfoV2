@@ -47,8 +47,8 @@ export default function CalculatorClient({ initialMeters }: { initialMeters: IMe
         return (
             <div className="min-h-screen  flex flex-col items-center justify-center p-8 text-center">
                 <Info className="w-12 h-12 text-primary mb-4 opacity-20" />
-                <h2 className="text-white font-black uppercase italic mb-2">Nincs beállított ár</h2>
-                <p className="text-white/40 text-xs font-bold leading-relaxed mb-8">
+                <h2 className="text-text-primary font-black uppercase italic mb-2">Nincs beállított ár</h2>
+                <p className="text-text-primary/40 text-xs font-bold leading-relaxed mb-8">
                     A kalkulátor használatához előbb állíts be árakat a mérőóráid szerkesztésénél!
                 </p>
                 <Link href="/dashboard/meters" className="px-8 py-4 bg-white text-black rounded-full font-black uppercase text-[10px] tracking-widest">
@@ -71,17 +71,17 @@ export default function CalculatorClient({ initialMeters }: { initialMeters: IMe
             <motion.div variants={itemVariants} className="relative flex flex-col gap-6">
                 {/* EGYEDI SELECTOR */}
                 <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-4">Választott mérőóra</label>
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/40 ml-4">Választott mérőóra</label>
                     <div className="relative">
                         <button
                             onClick={() => setIsSelectOpen(!isSelectOpen)}
-                            className="w-full flex items-center justify-between bg-surface border border-white/5 rounded-[1.5rem] py-5 px-6 text-white font-bold shadow-2xl transition-all active:scale-[0.98]"
+                            className="w-full flex items-center justify-between bg-surface border border-white/5 rounded-[1.5rem] py-5 px-6 text-text-primary font-bold shadow-2xl transition-all active:scale-[0.98]"
                         >
                             <div className="flex items-center gap-3">
                                 {selectedMeter && getIcon(selectedMeter.type)}
                                 <span className="italic">{selectedMeter?.name}</span>
                             </div>
-                            <ChevronDown className={`w-4 h-4 text-white/20 transition-transform ${isSelectOpen ? 'rotate-180' : ''}`} />
+                            <ChevronDown className={`w-4 h-4 text-text-primary/20 transition-transform ${isSelectOpen ? 'rotate-180' : ''}`} />
                         </button>
 
                         <AnimatePresence>
@@ -100,7 +100,7 @@ export default function CalculatorClient({ initialMeters }: { initialMeters: IMe
                                         >
                                             <div className="flex items-center gap-3">
                                                 {getIcon(m.type)}
-                                                <span className={`text-sm font-bold ${selectedMeterId === m._id.toString() ? 'text-white' : 'text-white/40'}`}>{m.name}</span>
+                                                <span className={`text-sm font-bold ${selectedMeterId === m._id.toString() ? 'text-text-primary' : 'text-text-primary/40'}`}>{m.name}</span>
                                             </div>
                                             {selectedMeterId === m._id.toString() && <Check className="w-4 h-4 text-primary" />}
                                         </button>
@@ -112,16 +112,16 @@ export default function CalculatorClient({ initialMeters }: { initialMeters: IMe
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-4">Havi várható fogyasztás</label>
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/40 ml-4">Havi várható fogyasztás</label>
                     <div className="relative">
                         <input
                             type="number"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
                             placeholder="0"
-                            className="w-full bg-white/5 border border-white/5 rounded-[2rem] py-6 px-8 text-white font-black text-3xl focus:outline-none focus:border-primary/50 transition-colors"
+                            className="w-full bg-white/5 border border-white/5 rounded-[2rem] py-6 px-8 text-text-primary font-black text-3xl focus:outline-none focus:border-primary/50 transition-colors"
                         />
-                        <span className="absolute right-8 top-1/2 -translate-y-1/2 text-white/20 font-black text-lg uppercase tracking-widest pointer-events-none">
+                        <span className="absolute right-8 top-1/2 -translate-y-1/2 text-text-primary/20 font-black text-lg uppercase tracking-widest pointer-events-none">
                             {selectedMeter?.unit}
                         </span>
                     </div>
@@ -132,23 +132,23 @@ export default function CalculatorClient({ initialMeters }: { initialMeters: IMe
                         <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
                             <Calculator className="w-5 h-5 text-primary" />
                         </div>
-                        <span className="text-white/40 font-black uppercase tracking-widest text-[10px]">Számított havi költség</span>
+                        <span className="text-text-primary/40 font-black uppercase tracking-widest text-[10px]">Számított havi költség</span>
                     </div>
 
-                    <h2 className="text-6xl font-black tracking-tighter text-white italic">
+                    <h2 className="text-6xl font-black tracking-tighter text-text-primary italic">
                         {estimatedCost.toLocaleString("hu-HU")}
-                        <span className="text-2xl ml-2 text-white/20 font-black uppercase">Ft</span>
+                        <span className="text-2xl ml-2 text-text-primary/20 font-black uppercase">Ft</span>
                     </h2>
 
                     <div className="h-px w-full bg-white/5" />
 
                     <div className="grid grid-cols-2 gap-3">
                         <div className="flex flex-col gap-1 bg-white/5 p-4 rounded-2xl border border-white/5">
-                            <span className="text-white/20 text-[9px] font-black uppercase tracking-widest text-outline">Rezsiár</span>
+                            <span className="text-text-primary/20 text-[9px] font-black uppercase tracking-widest text-outline">Rezsiár</span>
                             <span className="text-emerald-400 font-black text-sm">{selectedMeter?.basePrice} Ft / {selectedMeter?.unit}</span>
                         </div>
                         <div className="flex flex-col gap-1 bg-white/5 p-4 rounded-2xl border border-white/5 text-right">
-                            <span className="text-white/20 text-[9px] font-black uppercase tracking-widest text-outline">Piaci ár</span>
+                            <span className="text-text-primary/20 text-[9px] font-black uppercase tracking-widest text-outline">Piaci ár</span>
                             <span className="text-primary font-black text-sm">{selectedMeter?.marketPrice} Ft / {selectedMeter?.unit}</span>
                         </div>
                     </div>

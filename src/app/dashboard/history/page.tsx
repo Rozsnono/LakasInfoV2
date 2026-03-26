@@ -87,7 +87,7 @@ export default function AllReadingsClient() {
                     <div className="flex items-center gap-4">
                         <Link
                             href="/dashboard"
-                            className="w-10 h-10 rounded-full bg-surface flex items-center justify-center active:scale-95 transition-transform border border-white/5 shadow-xl text-white"
+                            className="w-10 h-10 rounded-full bg-surface flex items-center justify-center active:scale-95 transition-transform border border-white/5 shadow-xl text-text-primary"
                         >
                             <ArrowLeft className="w-5 h-5" />
                         </Link>
@@ -113,7 +113,7 @@ export default function AllReadingsClient() {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Keresés mérések között..."
-                        className="w-full bg-surface/50 backdrop-blur-md border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold text-white focus:outline-none focus:border-primary/30 transition-all placeholder:text-text-secondary/40"
+                        className="w-full bg-surface/50 backdrop-blur-md border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold text-text-primary focus:outline-none focus:border-primary/30 transition-all placeholder:text-text-secondary/40"
                     />
                 </div>
             </motion.header>
@@ -131,7 +131,7 @@ export default function AllReadingsClient() {
                                 className="flex flex-col items-center justify-center py-20 gap-4"
                             >
                                 <Loader2 className="w-8 h-8 text-primary animate-spin" />
-                                <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Adatok szinkronizálása...</p>
+                                <p className="text-text-primary/40 text-xs font-bold uppercase tracking-widest">Adatok szinkronizálása...</p>
                             </motion.div>
                         ) : error ? (
                             /* HIBA ÁLLAPOT */
@@ -142,7 +142,7 @@ export default function AllReadingsClient() {
                         ) : filteredReadings.length === 0 ? (
                             /* ÜRES ÁLLAPOT */
                             <motion.div key="empty" variants={itemVariants} className="text-center py-20">
-                                <p className="text-white/20 text-sm font-bold uppercase tracking-widest italic">Nincs rögzített adat ebben a listában.</p>
+                                <p className="text-text-primary/20 text-sm font-bold uppercase tracking-widest italic">Nincs rögzített adat ebben a listában.</p>
                             </motion.div>
                         ) : (
                             /* ADATOK MEGJELENÍTÉSE */
@@ -172,7 +172,7 @@ export default function AllReadingsClient() {
                                                 {item.photoUrl && <Camera className="w-3.5 h-3.5 text-primary opacity-80 absolute bottom-0 right-0" />}
                                             </div>
                                             <div className="flex flex-col text-left">
-                                                <span className="font-bold text-[17px] tracking-tight text-white">{item.name}</span>
+                                                <span className="font-bold text-[17px] tracking-tight text-text-primary">{item.name}</span>
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-[14px] font-semibold text-text-secondary opacity-70">{item.value}</span>
                                                 </div>
@@ -198,8 +198,8 @@ export default function AllReadingsClient() {
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedPhoto(null)} className="absolute inset-0 bg-black/95 backdrop-blur-xl cursor-pointer" />
                         <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }} className="relative w-full max-w-lg aspect-[3/4] bg-surface-elevated rounded-[3rem] overflow-hidden shadow-2xl border border-white/10">
                             <div className="absolute top-6 left-6 right-6 flex justify-between z-10">
-                                <button onClick={() => setSelectedPhoto(null)} className="w-12 h-12 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white active:scale-90 transition-transform"><X className="w-6 h-6" /></button>
-                                <button onClick={() => handleShare(selectedPhoto!)} className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white shadow-lg active:scale-90 transition-transform"><Share2 className="w-5 h-5" /></button>
+                                <button onClick={() => setSelectedPhoto(null)} className="w-12 h-12 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-text-primary active:scale-90 transition-transform"><X className="w-6 h-6" /></button>
+                                <button onClick={() => handleShare(selectedPhoto!)} className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-text-primary shadow-lg active:scale-90 transition-transform"><Share2 className="w-5 h-5" /></button>
                             </div>
                             <Image src={selectedPhoto} alt="Mérőóra fotó" className="w-full h-full object-cover" width={600} height={800} priority unoptimized />
                         </motion.div>

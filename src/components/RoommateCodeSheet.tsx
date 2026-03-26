@@ -61,13 +61,13 @@ export default function InviteCodeSheet({ isOpen, onClose, inviteCode, copied, o
 
                         <div className="flex items-center justify-between px-2 shrink-0">
                             <button onClick={onClose} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform">
-                                <ChevronLeft className="w-6 h-6 text-white" />
+                                <ChevronLeft className="w-6 h-6 text-text-primary" />
                             </button>
-                            <h3 className="text-xl font-black tracking-tight uppercase italic text-white">
+                            <h3 className="text-xl font-black tracking-tight uppercase italic text-text-primary">
                                 Meghí<span className="text-primary">vás</span>
                             </h3>
                             <button onClick={handleShare} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
-                                <Share2 className="w-5 h-5 text-white/40" />
+                                <Share2 className="w-5 h-5 text-text-primary/40" />
                             </button>
                         </div>
 
@@ -94,14 +94,14 @@ export default function InviteCodeSheet({ isOpen, onClose, inviteCode, copied, o
                             </div>
 
                             <div className="w-full bg-white/5 rounded-[2.5rem] p-8 border border-white/5 flex flex-col items-center text-center gap-4 relative">
-                                <span className="text-white/40 font-black text-[10px] uppercase tracking-[0.2em]">Személyes kódod</span>
+                                <span className="text-text-primary/40 font-black text-[10px] uppercase tracking-[0.2em]">Személyes kódod</span>
                                 <div className="flex items-center gap-4">
                                     <span className="text-5xl font-black text-primary tracking-[0.15em]">{inviteCode}</span>
                                     <button
                                         onClick={onCopy}
                                         className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center active:scale-90 transition-all border border-white/10"
                                     >
-                                        {copied ? <Check className="w-5 h-5 text-emerald-400" /> : <Copy className="w-5 h-5 text-white/40" />}
+                                        {copied ? <Check className="w-5 h-5 text-emerald-400" /> : <Copy className="w-5 h-5 text-text-primary/40" />}
                                     </button>
                                 </div>
                             </div>

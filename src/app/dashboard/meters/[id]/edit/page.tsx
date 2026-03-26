@@ -133,36 +133,36 @@ export default function EditMeterPage() {
                     <ArrowLeft className="w-5 h-5 text-text-primary" />
                 </Link>
                 <div className="flex flex-col">
-                    <h1 className="text-xl font-black tracking-tight text-white uppercase italic">Beállít<span className="text-primary">ások</span></h1>
-                    <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">{meterName}</span>
+                    <h1 className="text-xl font-black tracking-tight text-text-primary uppercase italic">Beállít<span className="text-primary">ások</span></h1>
+                    <span className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest">{meterName}</span>
                 </div>
             </motion.header>
 
             {/* NÉV */}
             <motion.div variants={itemVariants} className="relative z-10 flex flex-col gap-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4 italic">Mérőóra neve</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4 italic">Mérőóra neve</label>
                 <div className="relative">
-                    <Gauge className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
-                    <input type="text" value={meterName} onChange={(e) => setMeterName(e.target.value)} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50" />
+                    <Gauge className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
+                    <input type="text" value={meterName} onChange={(e) => setMeterName(e.target.value)} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50" />
                 </div>
             </motion.div>
 
             {/* TÍPUS */}
             <motion.div variants={itemVariants} className="relative z-[60] flex flex-col gap-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4 italic">Típus</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4 italic">Típus</label>
                 <div className="relative">
-                    <button onClick={() => setIsSelectOpen(!isSelectOpen)} className="w-full flex items-center justify-between bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white font-bold transition-all active:scale-[0.98]">
+                    <button onClick={() => setIsSelectOpen(!isSelectOpen)} className="w-full flex items-center justify-between bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-text-primary font-bold transition-all active:scale-[0.98]">
                         <div className="flex items-center gap-3">
                             <selectedType.icon className={`w-4 h-4 ${selectedType.color}`} />
                             <span>{selectedType.label}</span>
                         </div>
-                        <ChevronDown className={`w-4 h-4 text-white/20 transition-transform duration-300 ${isSelectOpen ? "rotate-180" : ""}`} />
+                        <ChevronDown className={`w-4 h-4 text-text-primary/20 transition-transform duration-300 ${isSelectOpen ? "rotate-180" : ""}`} />
                     </button>
                     <AnimatePresence>
                         {isSelectOpen && (
                             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 4 }} exit={{ opacity: 0, y: 10 }} className="absolute top-full left-0 right-0 bg-surface-elevated border border-white/10 rounded-2xl overflow-hidden shadow-2xl z-[70] backdrop-blur-xl">
                                 {METER_TYPES.map((type) => (
-                                    <button key={type.id} onClick={() => { setMeterType(type.id as unknown as string); setIsSelectOpen(false); }} className={`w-full flex items-center justify-between p-5 transition-colors ${meterType === type.id ? "bg-white/10" : "hover:bg-white/5"}`}><div className="flex items-center gap-4"><div className={`w-10 h-10 rounded-xl ${type.bg} flex items-center justify-center`}><type.icon className={`w-5 h-5 ${type.color}`} /></div><span className="text-sm font-bold text-white">{type.label}</span></div>{meterType === type.id && <Check className="w-4 h-4 text-primary" />}</button>
+                                    <button key={type.id} onClick={() => { setMeterType(type.id as unknown as string); setIsSelectOpen(false); }} className={`w-full flex items-center justify-between p-5 transition-colors ${meterType === type.id ? "bg-white/10" : "hover:bg-white/5"}`}><div className="flex items-center gap-4"><div className={`w-10 h-10 rounded-xl ${type.bg} flex items-center justify-center`}><type.icon className={`w-5 h-5 ${type.color}`} /></div><span className="text-sm font-bold text-text-primary">{type.label}</span></div>{meterType === type.id && <Check className="w-4 h-4 text-primary" />}</button>
                                 ))}
                             </motion.div>
                         )}
@@ -175,8 +175,8 @@ export default function EditMeterPage() {
                 <div className="flex items-center justify-between p-6 bg-white/5 rounded-[2.5rem] border border-white/5 shadow-lg relative">
                     <PremiumBadge className="w-4 h-4 top-4 right-4" />
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center border border-white/5"><Layers className="w-6 h-6 text-white" /></div>
-                        <div className="flex flex-col"><span className="text-white font-bold text-[15px] tracking-tight">Sávos árazás</span><span className="text-white/40 text-[10px] font-black uppercase tracking-widest mt-0.5 italic">Rezsicsökkentett keret</span></div>
+                        <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center border border-white/5"><Layers className="w-6 h-6 text-text-primary" /></div>
+                        <div className="flex flex-col"><span className="text-text-primary font-bold text-[15px] tracking-tight">Sávos árazás</span><span className="text-text-primary/40 text-[10px] font-black uppercase tracking-widest mt-0.5 italic">Rezsicsökkentett keret</span></div>
                     </div>
                     <button onClick={user?.subscriptionPlan == 'pro' ? () => setIsTiered(!isTiered) : undefined} className={`w-12 h-7 rounded-full transition-colors relative ${isTiered ? 'bg-primary' : 'bg-white/10'}`}><motion.div animate={{ x: isTiered ? 24 : 4 }} className="absolute top-1 w-5 h-5 bg-white rounded-full shadow-lg" /></button>
                 </div>
@@ -190,8 +190,8 @@ export default function EditMeterPage() {
                                     Kedvezményes keret <Info size={10} />
                                 </label>
                                 <div className="relative">
-                                    <input type="number" value={tierLimit} onChange={(e) => setTierLimit(e.target.value)} placeholder="pl. 210" className="w-full bg-primary/5 border border-primary/20 rounded-2xl py-4 px-6 text-white font-black text-xl focus:outline-none focus:border-primary/50" />
-                                    <span className="absolute right-6 top-1/2 -translate-y-1/2 text-xs font-black text-white/20 uppercase tracking-widest">{unit} / hó</span>
+                                    <input type="number" value={tierLimit} onChange={(e) => setTierLimit(e.target.value)} placeholder="pl. 210" className="w-full bg-primary/5 border border-primary/20 rounded-2xl py-4 px-6 text-text-primary font-black text-xl focus:outline-none focus:border-primary/50" />
+                                    <span className="absolute right-6 top-1/2 -translate-y-1/2 text-xs font-black text-text-primary/20 uppercase tracking-widest">{unit} / hó</span>
                                 </div>
                             </motion.div>
                         )}
@@ -222,18 +222,18 @@ export default function EditMeterPage() {
             <motion.div variants={itemVariants} ref={alertSectionRef} className={`flex flex-col gap-4 p-1 rounded-[2.5rem] transition-all duration-1000 ${highlightAlert ? 'bg-orange-500/10 ring-2 ring-orange-500/20' : 'bg-transparent'}`}>
                 <div className="flex items-center justify-between p-6 bg-white/5 rounded-[2.5rem] border border-white/5 shadow-lg">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center border border-white/5"><BellRing className="w-6 h-6 text-white" /></div>
-                        <div className="flex flex-col text-left"><span className="text-white font-bold text-[15px] tracking-tight">Riasztás</span><span className="text-white/40 text-[10px] font-black uppercase tracking-widest mt-0.5 italic">Figyelmeztetés limitnél</span></div>
+                        <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center border border-white/5"><BellRing className="w-6 h-6 text-text-primary" /></div>
+                        <div className="flex flex-col text-left"><span className="text-text-primary font-bold text-[15px] tracking-tight">Riasztás</span><span className="text-text-primary/40 text-[10px] font-black uppercase tracking-widest mt-0.5 italic">Figyelmeztetés limitnél</span></div>
                     </div>
                     <button onClick={() => setHasAlert(!hasAlert)} className={`w-12 h-7 rounded-full transition-colors relative ${hasAlert ? 'bg-primary' : 'bg-white/10'}`}><motion.div animate={{ x: hasAlert ? 24 : 4 }} className="absolute top-1 w-5 h-5 bg-white rounded-full shadow-lg" /></button>
                 </div>
                 <AnimatePresence>
                     {hasAlert && (
                         <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="space-y-2 overflow-hidden px-1">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4 italic">Riasztási küszöb</label>
+                            <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4 italic">Riasztási küszöb</label>
                             <div className="relative">
                                 <input type="number" value={alertLimit} onChange={(e) => setAlertLimit(e.target.value)} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-primary font-black text-xl focus:outline-none" />
-                                <span className="absolute right-6 top-1/2 -translate-y-1/2 text-xs font-black text-white/20 uppercase tracking-widest">{unit} / hó</span>
+                                <span className="absolute right-6 top-1/2 -translate-y-1/2 text-xs font-black text-text-primary/20 uppercase tracking-widest">{unit} / hó</span>
                             </div>
                         </motion.div>
                     )}
@@ -245,11 +245,11 @@ export default function EditMeterPage() {
                 <div className="flex items-center justify-between p-6 bg-white/5 rounded-[2.5rem] border border-white/5 shadow-lg">
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center border border-white/5">
-                            <Archive className="w-6 h-6 text-white/40" />
+                            <Archive className="w-6 h-6 text-text-primary/40" />
                         </div>
                         <div className="flex flex-col text-left">
-                            <span className="text-white font-bold text-[15px] tracking-tight">Archiválás</span>
-                            <span className="text-white/40 text-[10px] font-black uppercase tracking-widest mt-0.5 italic">Inaktív, nem használt óra</span>
+                            <span className="text-text-primary font-bold text-[15px] tracking-tight">Archiválás</span>
+                            <span className="text-text-primary/40 text-[10px] font-black uppercase tracking-widest mt-0.5 italic">Inaktív, nem használt óra</span>
                         </div>
                     </div>
                     {/* Ha be van kapcsolva, akkor narancssárgás/pirosas színt is adhatunk neki, de a primary is tökéletes */}

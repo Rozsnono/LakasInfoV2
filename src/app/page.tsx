@@ -44,10 +44,10 @@ export default function OnboardingPage() {
           <div className="w-20 h-20 bg-white/5 rounded-[2rem] border border-white/10 flex items-center justify-center mb-8 shadow-2xl">
             <Sparkles className="w-10 h-10 text-primary" strokeWidth={2.5} />
           </div>
-          <h1 className="text-6xl font-black mb-4 tracking-tighter text-white uppercase italic">
+          <h1 className="text-6xl font-black mb-4 tracking-tighter text-text-primary uppercase italic">
             Lakas<span className="text-primary">Info</span>
           </h1>
-          <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.4em]">
+          <p className="text-text-primary/40 text-[10px] font-black uppercase tracking-[0.4em]">
             Egy intelligens Otthonért
           </p>
         </motion.div>
@@ -63,15 +63,15 @@ export default function OnboardingPage() {
               >
                 <div className="flex items-center gap-5">
                   <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center shadow-[0_0_20px_rgba(255,59,48,0.4)]">
-                    <UserPlus className="w-7 h-7 text-white" strokeWidth={2.5} />
+                    <UserPlus className="w-7 h-7 text-text-primary" strokeWidth={2.5} />
                   </div>
                   <div className="flex flex-col text-left">
-                    <span className="text-white font-black text-xl tracking-tight leading-none">Felhasználó</span>
+                    <span className="text-text-primary font-black text-xl tracking-tight leading-none">Felhasználó</span>
                     <span className="text-primary text-[10px] font-black uppercase tracking-[0.2em] mt-2">Létrehozása</span>
                   </div>
                 </div>
                 <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-active:translate-x-1 transition-transform">
-                  <ChevronRight className="w-5 h-5 text-white/20" />
+                  <ChevronRight className="w-5 h-5 text-text-primary/20" />
                 </div>
               </motion.button>
             </Link>
@@ -86,15 +86,15 @@ export default function OnboardingPage() {
               >
                 <div className="flex items-center gap-5">
                   <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
-                    <LogIn className="w-7 h-7 text-white/60" />
+                    <LogIn className="w-7 h-7 text-text-primary/60" />
                   </div>
                   <div className="flex flex-col text-left">
-                    <span className="text-white font-black text-xl tracking-tight leading-none">Bejelentkezés</span>
-                    <span className="text-white/20 text-[10px] font-black uppercase tracking-[0.2em] mt-2">Már van fiókom</span>
+                    <span className="text-text-primary font-black text-xl tracking-tight leading-none">Bejelentkezés</span>
+                    <span className="text-text-primary/20 text-[10px] font-black uppercase tracking-[0.2em] mt-2">Már van fiókom</span>
                   </div>
                 </div>
                 <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-active:translate-x-1 transition-transform">
-                  <ChevronRight className="w-5 h-5 text-white/20" />
+                  <ChevronRight className="w-5 h-5 text-text-primary/20" />
                 </div>
               </motion.button>
             </Link>
@@ -103,7 +103,7 @@ export default function OnboardingPage() {
 
         {/* Footer */}
         <motion.div variants={itemVariants} className="flex flex-col items-center gap-2 mt-4">
-          <p className="text-white/20 text-[10px] font-bold uppercase tracking-[0.2em]">
+          <p className="text-text-primary/20 text-[10px] font-bold uppercase tracking-[0.2em]">
             © 2026 LakasInfo • Minden jog fenntartva
           </p>
         </motion.div>

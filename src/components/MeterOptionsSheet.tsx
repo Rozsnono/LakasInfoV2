@@ -67,24 +67,24 @@ export default function MeterOptionsSheet({ isOpen, onClose, meterId, meterName 
                                 onClick={onClose}
                                 className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform"
                             >
-                                <ChevronLeft className="w-6 h-6 text-white" />
+                                <ChevronLeft className="w-6 h-6 text-text-primary" />
                             </button>
                             <div className="flex flex-col items-center text-center">
-                                <h3 className="text-xl font-black tracking-tight text-white uppercase italic">Beállít<span className="text-primary">ások</span></h3>
-                                <span className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-0.5">{meterName}</span>
+                                <h3 className="text-xl font-black tracking-tight text-text-primary uppercase italic">Beállít<span className="text-primary">ások</span></h3>
+                                <span className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest mt-0.5">{meterName}</span>
                             </div>
                             <div className="w-10" />
                         </div>
 
                         <div className="flex-1 overflow-y-auto space-y-3 px-2 scrollbar-hide">
                             <OptionItem
-                                icon={<Edit2 className="w-5 h-5 text-white/60" />}
+                                icon={<Edit2 className="w-5 h-5 text-text-primary/60" />}
                                 label="Adatok szerkesztése"
                                 onClick={() => handleNavigate()}
                             />
 
                             <OptionItem
-                                icon={<Settings2 className="w-5 h-5 text-white/60" />}
+                                icon={<Settings2 className="w-5 h-5 text-text-primary/60" />}
                                 label="Határérték figyelmeztetés"
                                 onClick={() => handleNavigate("alert")}
                             />
@@ -119,7 +119,7 @@ function OptionItem({ icon, label, onClick }: { icon: React.ReactNode; label: st
             <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center shrink-0 border border-white/5 group-active:scale-90 transition-transform">
                 {icon}
             </div>
-            <span className="text-white font-bold text-[17px] tracking-tight text-left">{label}</span>
+            <span className="text-text-primary font-bold text-[17px] tracking-tight text-left">{label}</span>
         </motion.button>
     );
 }

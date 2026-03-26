@@ -40,7 +40,7 @@ export default function DashboardNav() {
     return (
         <>
             {/* Lebegő alsó navigációs sáv */}
-            <div className="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-md bg-[#131314]/90 backdrop-blur-xl border border-white/10 rounded-[2rem] px-6 py-4 flex justify-between items-center z-50 shadow-2xl">
+            <div className="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-md bg-surface/90 backdrop-blur-xl border border-white/10 rounded-[2rem] px-6 py-4 flex justify-between items-center z-50 shadow-2xl">
                 {navItems.map((item) => (
                     <Link
                         key={item.href}
@@ -49,13 +49,13 @@ export default function DashboardNav() {
                             }`}
                     >
                         <div
-                            className={`flex items-center justify-center transition-all duration-300 ${item.isActive ? "text-primary" : "text-white"
+                            className={`flex items-center justify-center transition-all duration-300 ${item.isActive ? "text-primary" : "text-text-primary"
                                 }`}
                         >
                             {item.icon}
                         </div>
                         {/* <span
-                            className={`text-[9px] font-black uppercase tracking-widest transition-colors ${item.isActive ? "text-primary" : "text-white/60"
+                            className={`text-[9px] font-black uppercase tracking-widest transition-colors ${item.isActive ? "text-primary" : "text-text-primary/60"
                                 }`}
                         >
                             {item.label}

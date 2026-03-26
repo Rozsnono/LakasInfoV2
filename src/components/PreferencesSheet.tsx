@@ -74,9 +74,9 @@ export default function PreferencesSheet({ isOpen, onClose, selectedFrequency, o
                                 onClick={showCustom ? () => setShowCustom(false) : onClose}
                                 className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform"
                             >
-                                {showCustom ? <ChevronLeft className="w-6 h-6 text-white" /> : <X className="w-5 h-5 text-white" />}
+                                {showCustom ? <ChevronLeft className="w-6 h-6 text-text-primary" /> : <X className="w-5 h-5 text-text-primary" />}
                             </button>
-                            <h3 className="text-xl font-black tracking-tight text-white uppercase">Időszak</h3>
+                            <h3 className="text-xl font-black tracking-tight text-text-primary uppercase">Időszak</h3>
                             <div className="w-10" />
                         </div>
 
@@ -95,13 +95,13 @@ export default function PreferencesSheet({ isOpen, onClose, selectedFrequency, o
                                                 }`}
                                         >
                                             <div className="flex items-center gap-5">
-                                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border border-white/5 shadow-inner ${selectedFrequency === opt.id ? "bg-primary text-white" : "bg-surface-elevated text-white/40"
+                                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border border-white/5 shadow-inner ${selectedFrequency === opt.id ? "bg-primary text-text-primary" : "bg-surface-elevated text-text-primary/40"
                                                     }`}>
                                                     <Calendar className="w-6 h-6" />
                                                 </div>
                                                 <div className="flex flex-col text-left">
-                                                    <span className="text-white font-black text-[17px] tracking-tight">{opt.label}</span>
-                                                    <span className="text-white/30 text-[11px] font-bold uppercase tracking-wider mt-1">{opt.sub}</span>
+                                                    <span className="text-text-primary font-black text-[17px] tracking-tight">{opt.label}</span>
+                                                    <span className="text-text-primary/30 text-[11px] font-bold uppercase tracking-wider mt-1">{opt.sub}</span>
                                                 </div>
                                             </div>
                                             {selectedFrequency === opt.id && <Check className="w-5 h-5 text-primary" />}
@@ -114,15 +114,15 @@ export default function PreferencesSheet({ isOpen, onClose, selectedFrequency, o
                                         className="w-full flex items-center justify-between p-6 rounded-[2.5rem] bg-white/5 border border-white/5 active:bg-white/10"
                                     >
                                         <div className="flex items-center gap-5">
-                                            <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center shrink-0 border border-white/5 text-white/40">
+                                            <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center shrink-0 border border-white/5 text-text-primary/40">
                                                 <Calendar className="w-6 h-6" />
                                             </div>
                                             <div className="flex flex-col text-left">
-                                                <span className="text-white font-black text-[17px] tracking-tight">Egyedi hónapok</span>
-                                                <span className="text-white/30 text-[11px] font-bold uppercase tracking-wider mt-1">Intervallum választás</span>
+                                                <span className="text-text-primary font-black text-[17px] tracking-tight">Egyedi hónapok</span>
+                                                <span className="text-text-primary/30 text-[11px] font-bold uppercase tracking-wider mt-1">Intervallum választás</span>
                                             </div>
                                         </div>
-                                        <ChevronRight className="w-5 h-5 text-white/20" />
+                                        <ChevronRight className="w-5 h-5 text-text-primary/20" />
                                     </motion.button>
                                 </div>
                             )}
@@ -138,14 +138,14 @@ export default function PreferencesSheet({ isOpen, onClose, selectedFrequency, o
                                         <div className="flex bg-white/5 p-1 rounded-2xl self-center max-w-[240px] mx-auto">
                                             <button
                                                 onClick={() => setCurrentStep("start")}
-                                                className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${currentStep === "start" ? "bg-white text-black" : "text-white/40"
+                                                className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${currentStep === "start" ? "bg-white text-black" : "text-text-primary/40"
                                                     }`}
                                             >
                                                 Ettől
                                             </button>
                                             <button
                                                 onClick={() => setCurrentStep("end")}
-                                                className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${currentStep === "end" ? "bg-white text-black" : "text-white/40"
+                                                className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${currentStep === "end" ? "bg-white text-black" : "text-text-primary/40"
                                                     }`}
                                             >
                                                 Eddig
@@ -160,9 +160,9 @@ export default function PreferencesSheet({ isOpen, onClose, selectedFrequency, o
                                                 }}
                                                 className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform"
                                             >
-                                                <ChevronLeft className="w-6 h-6 text-white" />
+                                                <ChevronLeft className="w-6 h-6 text-text-primary" />
                                             </button>
-                                            <span className="text-4xl font-black text-white tracking-tighter">
+                                            <span className="text-4xl font-black text-text-primary tracking-tighter">
                                                 {currentStep === "start" ? startData.year : endData.year}
                                             </span>
                                             <button
@@ -172,7 +172,7 @@ export default function PreferencesSheet({ isOpen, onClose, selectedFrequency, o
                                                 }}
                                                 className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform"
                                             >
-                                                <ChevronRight className="w-6 h-6 text-white" />
+                                                <ChevronRight className="w-6 h-6 text-text-primary" />
                                             </button>
                                         </div>
 
@@ -196,10 +196,10 @@ export default function PreferencesSheet({ isOpen, onClose, selectedFrequency, o
                                                             }
                                                         }}
                                                         className={`py-6 rounded-3xl font-black text-sm transition-all active:scale-95 ${isStart || isEnd
-                                                                ? "bg-primary text-white shadow-xl shadow-primary/20"
+                                                                ? "bg-primary text-text-primary shadow-xl shadow-primary/20"
                                                                 : isInRange
                                                                     ? "bg-primary/20 text-primary border border-primary/10"
-                                                                    : "bg-white/5 text-white/40 border border-white/5"
+                                                                    : "bg-white/5 text-text-primary/40 border border-white/5"
                                                             }`}
                                                     >
                                                         {m}

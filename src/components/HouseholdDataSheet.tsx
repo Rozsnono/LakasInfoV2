@@ -30,17 +30,17 @@ export default function HouseholdDataSheet({ isOpen, onClose }: Props) {
                         </div>
                         <div className="space-y-4">
                             <div className="flex flex-col gap-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Cím</label>
+                                <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">Cím</label>
                                 <div className="relative">
-                                    <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
-                                    <input readOnly disabled type="text" defaultValue={house?.address} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50" />
+                                    <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
+                                    <input readOnly disabled type="text" defaultValue={house?.address} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50" />
                                 </div>
                             </div>
                             <div className="flex flex-col gap-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Lakók száma</label>
+                                <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">Lakók száma</label>
                                 <div className="relative">
-                                    <Users className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
-                                    <input readOnly disabled type="number" defaultValue={house?.members.length} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50" />
+                                    <Users className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
+                                    <input readOnly disabled type="number" defaultValue={house?.members.length} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50" />
                                 </div>
                             </div>
                             <Link href="/dashboard/settings">

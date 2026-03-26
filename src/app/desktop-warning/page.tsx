@@ -31,19 +31,19 @@ export default function DesktopWarning() {
                     className="relative flex flex-col items-center"
                 >
                     <div className="relative mb-4 flex h-32 w-32 items-center justify-center rounded-full border border-white/10 bg-white/5 shadow-2xl backdrop-blur-md">
-                        <Smartphone className="h-16 w-16 text-white drop-shadow-lg" />
+                        <Smartphone className="h-16 w-16 text-text-primary drop-shadow-lg" />
                     </div>
 
-                    <div className="absolute -bottom-2 whitespace-nowrap rounded-full border border-primary/50 bg-primary px-5 py-2 text-[10px] font-black uppercase tracking-[0.4em] text-white shadow-[0_0_20px_rgba(255,59,48,0.5)]">
+                    <div className="absolute -bottom-2 whitespace-nowrap rounded-full border border-primary/50 bg-primary px-5 py-2 text-[10px] font-black uppercase tracking-[0.4em] text-text-primary shadow-[0_0_20px_rgba(255,59,48,0.5)]">
                         Mobil Exkluzív
                     </div>
                 </motion.div>
 
                 <div className="mt-6 space-y-4">
-                    <h2 className="text-4xl font-black uppercase italic leading-none tracking-tighter text-white">
+                    <h2 className="text-4xl font-black uppercase italic leading-none tracking-tighter text-text-primary">
                         Válts <span className="text-outline text-primary">Telefonra</span>
                     </h2>
-                    <p className="px-4 text-[11px] font-bold uppercase leading-relaxed tracking-widest text-white/40">
+                    <p className="px-4 text-[11px] font-bold uppercase leading-relaxed tracking-widest text-text-primary/40">
                         A LakasInfo egy natív alkalmazás, amelyet kizárólag mobileszközökre optimalizáltunk. Asztali böngészőből a hozzáférés korlátozott.
                     </p>
                 </div>
@@ -52,7 +52,7 @@ export default function DesktopWarning() {
                     <a href={`/LakasInfoV2.apk`} download className="w-full">
                         <motion.button
                             whileTap={{ scale: 0.96 }}
-                            className="flex w-full items-center justify-center gap-3 rounded-[2rem] bg-primary py-6 font-black uppercase tracking-[0.2em] text-white shadow-[0_0_30px_rgba(255,59,48,0.3)] transition-all active:scale-95"
+                            className="flex w-full items-center justify-center gap-3 rounded-[2rem] bg-primary py-6 font-black uppercase tracking-[0.2em] text-text-primary shadow-[0_0_30px_rgba(255,59,48,0.3)] transition-all active:scale-95"
                         >
                             <Download className="h-5 w-5" />
                             APK Letöltése
@@ -61,7 +61,7 @@ export default function DesktopWarning() {
 
                     <button
                         onClick={handleBypass}
-                        className="flex w-full items-center justify-center gap-2 rounded-full py-4 text-[11px] font-black uppercase tracking-widest text-white/50 transition-colors hover:text-white"
+                        className="flex w-full items-center justify-center gap-2 rounded-full py-4 text-[11px] font-black uppercase tracking-widest text-text-primary/50 transition-colors hover:text-text-primary"
                     >
                         <Globe className="h-4 w-4" />
                         Folytatás mégis böngészőből
@@ -73,7 +73,7 @@ export default function DesktopWarning() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="absolute bottom-8 text-[10px] font-bold uppercase tracking-[0.5em] text-white/10"
+                className="absolute bottom-8 text-[10px] font-bold uppercase tracking-[0.5em] text-text-primary/10"
             >
                 LakasInfo Ecosystem
             </motion.p>

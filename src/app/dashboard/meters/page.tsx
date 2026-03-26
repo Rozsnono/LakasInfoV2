@@ -75,7 +75,7 @@ export default function MetersClient() {
                 <div className="flex items-center gap-4">
                     <Link
                         href="/dashboard"
-                        className="w-10 h-10 rounded-full bg-surface flex items-center justify-center active:scale-95 transition-transform border border-white/5 shadow-xl text-white"
+                        className="w-10 h-10 rounded-full bg-surface flex items-center justify-center active:scale-95 transition-transform border border-white/5 shadow-xl text-text-primary"
                     >
                         <ArrowLeft className="w-5 h-5" />
                     </Link>
@@ -110,7 +110,7 @@ export default function MetersClient() {
                             className="flex flex-col items-center justify-center py-20 gap-4"
                         >
                             <Loader2 className="w-8 h-8 text-primary animate-spin" />
-                            <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Mérőórák betöltése...</p>
+                            <p className="text-text-primary/40 text-xs font-bold uppercase tracking-widest">Mérőórák betöltése...</p>
                         </motion.div>
                     ) : error ? (
                         /* HIBA ÁLLAPOT */
@@ -134,8 +134,8 @@ export default function MetersClient() {
                             exit={{ opacity: 0 }}
                             className="text-center py-12"
                         >
-                            <p className="text-white/40 text-sm font-bold uppercase tracking-widest">Még nincsenek mérőórák.</p>
-                            <p className="text-white/20 text-[10px] mt-2 font-black uppercase tracking-widest">Kattints a + ikonra a hozzáadáshoz.</p>
+                            <p className="text-text-primary/40 text-sm font-bold uppercase tracking-widest">Még nincsenek mérőórák.</p>
+                            <p className="text-text-primary/20 text-[10px] mt-2 font-black uppercase tracking-widest">Kattints a + ikonra a hozzáadáshoz.</p>
                         </motion.div>
                     ) : (
                         /* ADATOK MEGJELENÍTÉSE */
@@ -166,7 +166,7 @@ export default function MetersClient() {
                                             </div>
                                             <div className="flex flex-col">
                                                 <div className="flex items-center gap-3">
-                                                    <span className="text-white font-black text-xl tracking-tight leading-none italic">{meter.name}</span>
+                                                    <span className="text-text-primary font-black text-xl tracking-tight leading-none italic">{meter.name}</span>
                                                     {/* Archivált plecsni */}
 
                                                 </div>
@@ -180,7 +180,7 @@ export default function MetersClient() {
                                                         e.preventDefault();
                                                         setSelectedMeter({ id: meter._id.toString(), name: meter.name });
                                                     }}
-                                                    className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-full text-white/20 active:bg-white/10 active:text-white transition-all"
+                                                    className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-full text-text-primary/20 active:bg-white/10 active:text-text-primary transition-all"
                                                 >
                                                     <MoreVertical className="w-5 h-5" />
                                                 </button>
@@ -192,8 +192,8 @@ export default function MetersClient() {
                                         <div className="flex flex-col">
                                             <span className="text-text-secondary text-[10px] font-black uppercase tracking-[0.2em] mb-2 opacity-40">Jelenlegi állás</span>
                                             <div className="flex items-baseline gap-2">
-                                                <span className="text-4xl font-black text-white tracking-tighter">{meter.lastReadingValue.toLocaleString()}</span>
-                                                <span className="text-white/20 font-black text-sm uppercase">{meter.unit}</span>
+                                                <span className="text-4xl font-black text-text-primary tracking-tighter">{meter.lastReadingValue.toLocaleString()}</span>
+                                                <span className="text-text-primary/20 font-black text-sm uppercase">{meter.unit}</span>
                                             </div>
                                         </div>
 
@@ -216,7 +216,7 @@ export default function MetersClient() {
                                         )}
 
                                         {isArchived && (
-                                            <div className="flex items-center gap-1 bg-white/10 px-2.5 py-1 rounded-full text-white/50 border border-white/5">
+                                            <div className="flex items-center gap-1 bg-white/10 px-2.5 py-1 rounded-full text-text-primary/50 border border-white/5">
                                                 <Archive className="w-3 h-3" />
                                                 <span className="text-[8px] font-black uppercase tracking-widest">Archivált</span>
                                             </div>
@@ -231,14 +231,14 @@ export default function MetersClient() {
                                             whileTap={{ scale: 0.98 }}
                                             className="flex items-center justify-between w-full py-2 group active:opacity-70 transition-all"
                                         >
-                                            <div className="flex items-center gap-3 text-text-secondary group-hover:text-white transition-colors">
+                                            <div className="flex items-center gap-3 text-text-secondary group-hover:text-text-primary transition-colors">
                                                 <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center">
                                                     <History className="w-4 h-4 opacity-40" />
                                                 </div>
                                                 <span className="text-xs font-bold uppercase tracking-widest opacity-60">Előzmények</span>
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-white font-black text-sm tracking-tight">
+                                                <span className="text-text-primary font-black text-sm tracking-tight">
                                                     {meter.stats.consumption > 0 ? "+" : ""}{meter.stats.consumption.toFixed(2)} {meter.unit}
                                                 </span>
                                             </div>

@@ -38,11 +38,11 @@ export default function CreateHousePage() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen p-6  relative overflow-hidden text-white">
+        <div className="flex flex-col min-h-screen p-6  relative overflow-hidden text-text-primary">
 
             <header className="relative z-10 flex items-center mb-10 pt-6">
                 <Link href="/onboarding" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center active:scale-95 transition-transform border border-white/5 shadow-lg">
-                    <ArrowLeft className="w-5 h-5 text-white" />
+                    <ArrowLeft className="w-5 h-5 text-text-primary" />
                 </Link>
             </header>
 
@@ -56,7 +56,7 @@ export default function CreateHousePage() {
                     <h1 className="text-5xl font-black italic tracking-tighter uppercase leading-none">
                         Új <span className="text-primary">Ház</span>
                     </h1>
-                    <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.4em] leading-relaxed">
+                    <p className="text-text-primary/40 text-[10px] font-black uppercase tracking-[0.4em] leading-relaxed">
                         Hozz létre egy új háztartást
                     </p>
                 </div>
@@ -73,9 +73,9 @@ export default function CreateHousePage() {
 
                 <form onSubmit={handleCreate} className="flex flex-col gap-6 flex-1 max-w-sm">
                     <div className="flex flex-col gap-2">
-                        <label className="text-white/30 text-[10px] font-black uppercase tracking-widest px-4">Háztartás neve</label>
+                        <label className="text-text-primary/30 text-[10px] font-black uppercase tracking-widest px-4">Háztartás neve</label>
                         <div className="relative">
-                            <Home className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20 w-5 h-5" />
+                            <Home className="absolute left-5 top-1/2 -translate-y-1/2 text-text-primary/20 w-5 h-5" />
                             <input
                                 type="text"
                                 required
@@ -83,22 +83,22 @@ export default function CreateHousePage() {
                                 value={houseName}
                                 onChange={(e) => setHouseName(e.target.value)}
                                 placeholder="pl. Családi fészek"
-                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-white/5"
+                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-text-primary/5"
                             />
                         </div>
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <label className="text-white/30 text-[10px] font-black uppercase tracking-widest px-4">Pontos cím (opcionális)</label>
+                        <label className="text-text-primary/30 text-[10px] font-black uppercase tracking-widest px-4">Pontos cím (opcionális)</label>
                         <div className="relative">
-                            <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20 w-5 h-5" />
+                            <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 text-text-primary/20 w-5 h-5" />
                             <input
                                 type="text"
                                 disabled={loading}
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
                                 placeholder="Város, Utca, Házszám"
-                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-white/5"
+                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-text-primary/5"
                             />
                         </div>
                     </div>
@@ -106,7 +106,7 @@ export default function CreateHousePage() {
                     {/* Bento Info */}
                     <div className="mt-4 bg-white/5 p-6 rounded-[2rem] border border-white/5 flex items-start gap-4">
                         <Sparkles className="w-6 h-6 text-primary shrink-0 mt-0.5" />
-                        <p className="text-white/40 text-[10px] font-bold leading-relaxed uppercase tracking-wider">
+                        <p className="text-text-primary/40 text-[10px] font-bold leading-relaxed uppercase tracking-wider">
                             A név megadása után egyedi meghívó kódot generálunk, amivel behívhatod a lakótársaidat is.
                         </p>
                     </div>

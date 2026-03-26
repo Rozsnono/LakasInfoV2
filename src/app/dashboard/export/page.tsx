@@ -171,17 +171,17 @@ export default function ExportPageClient() {
 
                 {/* 1. EGYEDI SELECTOR A FORMÁTUMHOZ */}
                 <div className="flex flex-col gap-2 ">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-4">Választott Formátum</label>
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/40 ml-4">Választott Formátum</label>
                     <div className="relative">
                         <button
                             onClick={() => setIsFormatSelectOpen(!isFormatSelectOpen)}
-                            className="w-full flex items-center justify-between bg-surface border border-white/5 rounded-[1.5rem] py-5 px-6 text-white font-bold shadow-2xl transition-all active:scale-[0.98]"
+                            className="w-full flex items-center justify-between bg-surface border border-white/5 rounded-[1.5rem] py-5 px-6 text-text-primary font-bold shadow-2xl transition-all active:scale-[0.98]"
                         >
                             <div className="flex items-center gap-3">
                                 {format === "pdf" ? <FileText className="w-5 h-5 text-primary" /> : <FileSpreadsheet className="w-5 h-5 text-emerald-400" />}
                                 <span className="italic">{format === "pdf" ? "PDF Dokumentum" : "CSV / Excel Táblázat"}</span>
                             </div>
-                            <ChevronDown className={`w-4 h-4 text-white/20 transition-transform ${isFormatSelectOpen ? 'rotate-180' : ''}`} />
+                            <ChevronDown className={`w-4 h-4 text-text-primary/20 transition-transform ${isFormatSelectOpen ? 'rotate-180' : ''}`} />
                         </button>
 
                         <AnimatePresence>
@@ -198,7 +198,7 @@ export default function ExportPageClient() {
                                     >
                                         <div className="flex items-center gap-3">
                                             <FileText className="w-5 h-5 text-primary" />
-                                            <span className={`text-sm font-bold ${format === "pdf" ? 'text-white' : 'text-white/40'}`}>PDF Dokumentum</span>
+                                            <span className={`text-sm font-bold ${format === "pdf" ? 'text-text-primary' : 'text-text-primary/40'}`}>PDF Dokumentum</span>
                                         </div>
                                         {format === "pdf" && <Check className="w-4 h-4 text-primary" />}
                                     </button>
@@ -208,7 +208,7 @@ export default function ExportPageClient() {
                                     >
                                         <div className="flex items-center gap-3">
                                             <FileSpreadsheet className="w-5 h-5 text-emerald-400" />
-                                            <span className={`text-sm font-bold ${format === "csv" ? 'text-white' : 'text-white/40'}`}>CSV / Excel Táblázat</span>
+                                            <span className={`text-sm font-bold ${format === "csv" ? 'text-text-primary' : 'text-text-primary/40'}`}>CSV / Excel Táblázat</span>
                                         </div>
                                         {format === "csv" && <Check className="w-4 h-4 text-emerald-400" />}
                                     </button>
@@ -220,7 +220,7 @@ export default function ExportPageClient() {
 
                 {/* 2. IDŐSZAK VÁLASZTÓ */}
                 <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-4">Intervallum</label>
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/40 ml-4">Intervallum</label>
                     <button
                         onClick={() => setIsSheetOpen(true)}
                         className="w-full flex items-center justify-between bg-surface border border-white/5 rounded-[1.5rem] py-5 px-6 shadow-xl transition-all active:scale-[0.98]"
@@ -230,17 +230,17 @@ export default function ExportPageClient() {
                                 <Calendar className="w-5 h-5 text-primary" />
                             </div>
                             <div className="flex flex-col text-left">
-                                <span className="text-white font-black text-sm tracking-tight italic">Időszak beállítása</span>
-                                <span className="text-white/40 text-[10px] uppercase tracking-widest font-bold mt-0.5">{getFrequencyLabel()}</span>
+                                <span className="text-text-primary font-black text-sm tracking-tight italic">Időszak beállítása</span>
+                                <span className="text-text-primary/40 text-[10px] uppercase tracking-widest font-bold mt-0.5">{getFrequencyLabel()}</span>
                             </div>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-white/20" />
+                        <ChevronRight className="w-5 h-5 text-text-primary/20" />
                     </button>
                 </div>
 
                 {/* 3. TARTALOM KIVÁLASZTÁSA */}
                 <div className="flex flex-col gap-2 ">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-4">Exportálandó Tartalom</label>
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/40 ml-4">Exportálandó Tartalom</label>
                     <div className="bg-surface rounded-[2.5rem] p-3 border border-white/5 shadow-2xl flex flex-col gap-1 relative overflow-hidden">
                         {EXPORT_OPTIONS.map((opt) => {
                             const isSelected = selectedData.includes(opt.id);
@@ -251,12 +251,12 @@ export default function ExportPageClient() {
                                     className={`w-full p-4 rounded-2xl flex items-center justify-between transition-all active:scale-[0.98] ${isSelected ? "bg-white/5 border border-white/5" : "bg-transparent border border-transparent"
                                         }`}
                                 >
-                                    <span className={`font-bold text-sm tracking-tight flex items-center gap-1 ${isSelected ? "text-white" : "text-white/40"}`}>
+                                    <span className={`font-bold text-sm tracking-tight flex items-center gap-1 ${isSelected ? "text-text-primary" : "text-text-primary/40"}`}>
                                         {opt.label} {opt.isPro && <PremiumBadge className="relative w-4 h-4" />}
                                     </span>
                                     <div className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors ${isSelected ? "bg-primary border-primary" : "border-white/10"
                                         }`}>
-                                        {isSelected && <CheckCircle2 className="w-4 h-4 text-white" />}
+                                        {isSelected && <CheckCircle2 className="w-4 h-4 text-text-primary" />}
                                     </div>
                                 </button>
                             );
@@ -273,7 +273,7 @@ export default function ExportPageClient() {
                             exit={{ opacity: 0, height: 0, marginTop: -16 }}
                             className="flex flex-col gap-2 overflow-hidden"
                         >
-                            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-4">Melyik Mérőórák?</label>
+                            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/40 ml-4">Melyik Mérőórák?</label>
                             <div className="bg-surface rounded-[2.5rem] p-3 border border-white/5 shadow-2xl flex flex-col gap-1 relative min-h-[100px] justify-center">
                                 <AnimatePresence mode="wait">
                                     {isPending ? (
@@ -286,7 +286,7 @@ export default function ExportPageClient() {
                                             className="flex flex-col items-center justify-center py-6 gap-3"
                                         >
                                             <Loader2 className="w-6 h-6 text-primary animate-spin" />
-                                            <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest">Órák keresése...</p>
+                                            <p className="text-text-primary/30 text-[10px] font-bold uppercase tracking-widest">Órák keresése...</p>
                                         </motion.div>
                                     ) : error ? (
                                         /* HIBA ÁLLAPOT */
@@ -321,12 +321,12 @@ export default function ExportPageClient() {
                                                             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isSelected ? "bg-white/5" : "opacity-40"}`}>
                                                                 {getMeterIcon(meter.type)}
                                                             </div>
-                                                            <span className={`font-bold text-sm tracking-tight ${isSelected ? "text-white" : "text-white/40"}`}>
+                                                            <span className={`font-bold text-sm tracking-tight ${isSelected ? "text-text-primary" : "text-text-primary/40"}`}>
                                                                 {meter.name}
                                                             </span>
                                                         </div>
                                                         <div className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors ${isSelected ? "bg-primary border-primary" : "border-white/10"}`}>
-                                                            {isSelected && <CheckCircle2 className="w-4 h-4 text-white" />}
+                                                            {isSelected && <CheckCircle2 className="w-4 h-4 text-text-primary" />}
                                                         </div>
                                                     </button>
                                                 );
@@ -341,7 +341,7 @@ export default function ExportPageClient() {
                                             exit={{ opacity: 0 }}
                                             className="p-6 flex items-center justify-center"
                                         >
-                                            <span className="text-white/40 text-xs font-bold uppercase tracking-widest text-center">Nincsenek elérhető mérőórák</span>
+                                            <span className="text-text-primary/40 text-xs font-bold uppercase tracking-widest text-center">Nincsenek elérhető mérőórák</span>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>

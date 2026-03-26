@@ -146,9 +146,9 @@ export default function AddMeterSheet({ isOpen, onClose }: AddMeterSheetProps) {
                                 disabled={loading}
                                 className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform disabled:opacity-50"
                             >
-                                <ChevronLeft className="w-6 h-6 text-white" />
+                                <ChevronLeft className="w-6 h-6 text-text-primary" />
                             </button>
-                            <h3 className="text-xl font-black tracking-tight text-white uppercase italic">Új <span className="text-primary">Mérőóra</span></h3>
+                            <h3 className="text-xl font-black tracking-tight text-text-primary uppercase italic">Új <span className="text-primary">Mérőóra</span></h3>
                             <div className="w-10" />
                         </div>
 
@@ -165,31 +165,31 @@ export default function AddMeterSheet({ isOpen, onClose }: AddMeterSheetProps) {
 
                         <div className="flex-1 overflow-y-auto space-y-6 px-2 scrollbar-hide">
                             <div className="flex flex-col gap-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Mérőóra neve</label>
+                                <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">Mérőóra neve</label>
                                 <div className="relative">
-                                    <Gauge className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
+                                    <Gauge className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
                                     <input
                                         type="text"
                                         disabled={loading}
                                         value={formData.name}
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                         placeholder="pl. Nappali villanyóra"
-                                        className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50 transition-colors"
+                                        className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50 transition-colors"
                                     />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Típus</label>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">Típus</label>
                                     <div className="relative z-[60]">
                                         <button
                                             disabled={loading}
                                             onClick={() => setIsSelectOpen(!isSelectOpen)}
-                                            className="w-full h-14 flex items-center justify-between bg-white/5 border border-white/5 rounded-2xl px-6 text-white font-bold transition-all active:scale-[0.98] disabled:opacity-50"
+                                            className="w-full h-14 flex items-center justify-between bg-white/5 border border-white/5 rounded-2xl px-6 text-text-primary font-bold transition-all active:scale-[0.98] disabled:opacity-50"
                                         >
                                             <span className="truncate">{selectedType.label}</span>
-                                            <ChevronDown className={`w-4 h-4 text-white/20 transition-transform duration-300 ${isSelectOpen ? "rotate-180" : ""}`} />
+                                            <ChevronDown className={`w-4 h-4 text-text-primary/20 transition-transform duration-300 ${isSelectOpen ? "rotate-180" : ""}`} />
                                         </button>
 
                                         <AnimatePresence>
@@ -213,7 +213,7 @@ export default function AddMeterSheet({ isOpen, onClose }: AddMeterSheetProps) {
                                                                 <div className={`w-8 h-8 rounded-lg ${type.bg} flex items-center justify-center`}>
                                                                     <type.icon className={`w-4 h-4 ${type.color}`} />
                                                                 </div>
-                                                                <span className="text-sm font-bold text-white">{type.label}</span>
+                                                                <span className="text-sm font-bold text-text-primary">{type.label}</span>
                                                             </div>
                                                             {formData.type === type.id && <Check className="w-4 h-4 text-primary" />}
                                                         </button>
@@ -225,7 +225,7 @@ export default function AddMeterSheet({ isOpen, onClose }: AddMeterSheetProps) {
                                 </div>
 
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Kezdeti állás</label>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">Kezdeti állás</label>
                                     <div className="relative">
                                         <input
                                             type="number"
@@ -233,9 +233,9 @@ export default function AddMeterSheet({ isOpen, onClose }: AddMeterSheetProps) {
                                             value={formData.initialValue}
                                             onChange={(e) => setFormData({ ...formData, initialValue: e.target.value })}
                                             placeholder="0"
-                                            className="w-full h-14 bg-white/5 border border-white/5 rounded-2xl pl-6 pr-12 text-white font-bold focus:outline-none focus:border-primary/50 transition-colors"
+                                            className="w-full h-14 bg-white/5 border border-white/5 rounded-2xl pl-6 pr-12 text-text-primary font-bold focus:outline-none focus:border-primary/50 transition-colors"
                                         />
-                                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-white/20 uppercase tracking-widest pointer-events-none">
+                                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-text-primary/20 uppercase tracking-widest pointer-events-none">
                                             {unit}
                                         </span>
                                     </div>
@@ -245,11 +245,11 @@ export default function AddMeterSheet({ isOpen, onClose }: AddMeterSheetProps) {
                             <div className="flex items-center justify-between p-6 bg-white/5 rounded-[2.5rem] border border-white/5 relative">
                                 <div className="flex items-center gap-4 ">
                                     <div className="w-12 h-12 rounded-2xl bg-surface-elevated flex items-center justify-center border border-white/5 shadow-inner">
-                                        <Layers className="w-6 h-6 text-white" />
+                                        <Layers className="w-6 h-6 text-text-primary" />
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-white font-bold text-[15px] tracking-tight">Sávos árazás</span>
-                                        <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest mt-0.5">Limit feletti ár</span>
+                                        <span className="text-text-primary font-bold text-[15px] tracking-tight">Sávos árazás</span>
+                                        <span className="text-text-primary/40 text-[10px] font-bold uppercase tracking-widest mt-0.5">Limit feletti ár</span>
                                     </div>
                                     <PremiumBadge className="w-4 h-4 text-yellow-400 top-3 right-4" />
                                 </div>
@@ -274,7 +274,7 @@ export default function AddMeterSheet({ isOpen, onClose }: AddMeterSheetProps) {
                                         className="space-y-4 overflow-hidden"
                                     >
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Kedvezményes keret</label>
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">Kedvezményes keret</label>
                                             <div className="relative">
                                                 <input
                                                     type="number"
@@ -282,9 +282,9 @@ export default function AddMeterSheet({ isOpen, onClose }: AddMeterSheetProps) {
                                                     value={formData.tierLimit}
                                                     onChange={(e) => setFormData({ ...formData, tierLimit: e.target.value })}
                                                     placeholder={formData.type === "villany" ? "210" : "144"}
-                                                    className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white font-bold focus:outline-none focus:border-primary/50"
+                                                    className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-text-primary font-bold focus:outline-none focus:border-primary/50"
                                                 />
-                                                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-white/20 uppercase tracking-widest pointer-events-none">
+                                                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-text-primary/20 uppercase tracking-widest pointer-events-none">
                                                     {unit}/hó
                                                 </span>
                                             </div>

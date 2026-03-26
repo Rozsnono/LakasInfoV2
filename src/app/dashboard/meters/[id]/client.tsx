@@ -110,7 +110,7 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
 
     return (
         <motion.div initial="hidden" animate="visible" variants={containerVariants} className="relative flex min-h-full flex-col gap-6 px-4 pb-24 pt-12">
-            <motion.header variants={itemVariants} className="relative z-10 flex items-center justify-between text-white">
+            <motion.header variants={itemVariants} className="relative z-10 flex items-center justify-between text-text-primary">
                 <Link href="/dashboard/meters" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/5 bg-surface-elevated shadow-lg transition-transform active:scale-90">
                     <ArrowLeft className="h-5 w-5" />
                 </Link>
@@ -122,16 +122,16 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
                 <div className={`mb-6 flex h-24 w-24 items-center justify-center rounded-[2rem] border shadow-2xl ${visuals.bg}`}>
                     <Icon className={`h-12 w-12 ${visuals.color}`} />
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Aktuális mérőállás</span>
-                <div className="mt-2 flex items-baseline gap-2 text-white">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/50">Aktuális mérőállás</span>
+                <div className="mt-2 flex items-baseline gap-2 text-text-primary">
                     <h2 className="text-6xl font-black italic tracking-tighter">{meter.currentValue.toLocaleString()}</h2>
-                    <span className="text-xl font-black uppercase text-white/40">{meter.unit}</span>
+                    <span className="text-xl font-black uppercase text-text-primary/40">{meter.unit}</span>
                 </div>
             </motion.div>
 
             <motion.div variants={itemVariants} className="relative z-10 flex flex-col gap-6 overflow-visible rounded-[2.5rem] border border-white/5 bg-surface p-6 shadow-2xl">
                 <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase italic tracking-widest text-white/40">Évi mérőállás trend</span>
+                    <span className="text-[10px] font-black uppercase italic tracking-widest text-text-primary/40">Évi mérőállás trend</span>
                     <div className={`flex items-center gap-1 text-xs font-black ${meter.trendPercentage <= 0 ? "text-emerald-400" : "text-red-500"}`}>
                         {meter.trendPercentage <= 0 ? <TrendingDown className="h-4 w-4" /> : <TrendingUp className="h-4 w-4" />}
                         {Math.abs(meter.trendPercentage)}%
@@ -142,8 +142,8 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
                     <AnimatePresence>
                         {hoveredIndex !== null && points[hoveredIndex] && (
                             <motion.div initial={{ opacity: 0, y: 10, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.9 }} style={{ left: `${(points[hoveredIndex].x / width) * 100}%`, top: points[hoveredIndex].y - 55 }} className="pointer-events-none absolute z-[100] flex min-w-[120px] -translate-x-1/2 flex-col items-center rounded-xl border border-white/10 bg-zinc-800 px-3 py-2 shadow-2xl">
-                                <span className="mb-0.5 text-[9px] font-black uppercase tracking-tighter text-white/40">{points[hoveredIndex].monthLabel}</span>
-                                <span className="text-xs font-black leading-none text-white">{points[hoveredIndex].value.toLocaleString()} {meter.unit}</span>
+                                <span className="mb-0.5 text-[9px] font-black uppercase tracking-tighter text-text-primary/40">{points[hoveredIndex].monthLabel}</span>
+                                <span className="text-xs font-black leading-none text-text-primary">{points[hoveredIndex].value.toLocaleString()} {meter.unit}</span>
                                 <div className="absolute -bottom-1 left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 border-b border-r border-white/10 bg-zinc-800" />
                             </motion.div>
                         )}
@@ -189,10 +189,10 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
             </motion.div>
 
             <motion.div variants={itemVariants} className="relative z-10 flex flex-col gap-4">
-                <h3 className="px-2 text-lg font-black uppercase italic tracking-tight text-white">Rögzítések</h3>
+                <h3 className="px-2 text-lg font-black uppercase italic tracking-tight text-text-primary">Rögzítések</h3>
                 <div className="flex flex-col overflow-hidden rounded-[2.5rem] border border-white/5 bg-surface shadow-2xl">
                     {meter.readings.length === 0 ? (
-                        <div className="p-12 text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Nincs rögzített adat</div>
+                        <div className="p-12 text-center text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/20">Nincs rögzített adat</div>
                     ) : (
                         [...meter.readings].map((item, index) => (
                             <button
@@ -202,25 +202,25 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
                             >
                                 <div className="flex w-full items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <span className="text-[15px] font-black tracking-tight text-white">{item.date.toLocaleDateString("hu-HU", { year: "numeric", month: "short", day: "numeric" })}</span>
+                                        <span className="text-[15px] font-black tracking-tight text-text-primary">{item.date.toLocaleDateString("hu-HU", { year: "numeric", month: "short", day: "numeric" })}</span>
                                         {item.photoUrl && (
                                             <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-primary/20 bg-primary/10">
                                                 <Camera className="h-4 w-4 text-primary" />
                                             </div>
                                         )}
                                     </div>
-                                    <div className="flex flex-col items-end text-white">
+                                    <div className="flex flex-col items-end text-text-primary">
                                         <span className="text-lg font-black italic">{item.value.toLocaleString()}</span>
-                                        <span className="text-[9px] font-black uppercase tracking-widest text-white/40">{meter.unit}</span>
+                                        <span className="text-[9px] font-black uppercase tracking-widest text-text-primary/40">{meter.unit}</span>
                                     </div>
                                 </div>
                                 <div className="mt-3 flex w-full items-center justify-between">
-                                    <span className={`text-[11px] font-bold uppercase tracking-wider ${!item.isPaid ? "text-red-400 font-bolder" : "line-through text-white/40"}`}>
+                                    <span className={`text-[11px] font-bold uppercase tracking-wider ${!item.isPaid ? "text-red-400 font-bolder" : "line-through text-text-primary/40"}`}>
                                         {user?.subscriptionPlan === 'pro' &&
                                             `${item.cost.toLocaleString()} Ft`
                                         }
                                     </span>
-                                    <span className={`rounded-lg border border-white/5 bg-white/5 px-2 py-1 text-[11px] font-black uppercase tracking-widest ${item.difference > 0 ? "text-white" : "text-emerald-400"}`}>
+                                    <span className={`rounded-lg border border-white/5 bg-white/5 px-2 py-1 text-[11px] font-black uppercase tracking-widest ${item.difference > 0 ? "text-text-primary" : "text-emerald-400"}`}>
                                         {item.difference > 0 ? "+" : ""}{item.difference.toFixed(2)} {meter.unit}
                                     </span>
                                 </div>
@@ -247,12 +247,12 @@ export default function MeterDetailClient({ meter }: MeterDetailProps) {
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedPhoto(null)} className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-2xl" />
                         <motion.div initial={{ scale: 0.9, opacity: 0, y: 30 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 30 }} className="pointer-events-none fixed inset-0 z-[201] flex items-center justify-center p-4">
                             <div className="pointer-events-auto relative aspect-[3/4] w-full max-w-lg overflow-hidden rounded-[3rem] border border-white/10 bg-surface-elevated shadow-2xl">
-                                <button onClick={() => setSelectedPhoto(null)} className="absolute left-6 top-6 z-10 flex h-12 w-12 items-center justify-center rounded-2xl bg-black/50 text-white backdrop-blur-md transition-transform active:scale-90">
+                                <button onClick={() => setSelectedPhoto(null)} className="absolute left-6 top-6 z-10 flex h-12 w-12 items-center justify-center rounded-2xl bg-black/50 text-text-primary backdrop-blur-md transition-transform active:scale-90">
                                     <X size={24} />
                                 </button>
                                 <button
                                     onClick={async () => { await exportFile(selectedPhoto, "image/jpeg", `reading_photo_${selectedReading?._id}.jpg`, false, () => { }) }}
-                                    className="absolute right-6 top-6 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-primary/80 text-white backdrop-blur-md transition-transform active:scale-90 hover:bg-primary"
+                                    className="absolute right-6 top-6 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-primary/80 text-text-primary backdrop-blur-md transition-transform active:scale-90 hover:bg-primary"
                                 >
                                     <Share size={22} className="ml-[-2px]" />
                                 </button>

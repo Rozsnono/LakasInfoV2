@@ -87,7 +87,7 @@ export default function PersonalDataSheet({ isOpen, onClose }: Props) {
 
                         <div className="flex items-center justify-between">
                             <button onClick={onClose} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform">
-                                <ChevronLeft className="w-6 h-6 text-white" />
+                                <ChevronLeft className="w-6 h-6 text-text-primary" />
                             </button>
                             <h3 className="text-xl font-black tracking-tight uppercase italic">Személyes <span className="text-primary">adatok</span></h3>
                             <div className="w-10" />
@@ -96,26 +96,26 @@ export default function PersonalDataSheet({ isOpen, onClose }: Props) {
                         <div className="space-y-6 flex-1">
                             <div className="space-y-4">
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Név</label>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">Név</label>
                                     <div className="relative">
-                                        <User className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
-                                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50" />
+                                        <User className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
+                                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50" />
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">E-mail</label>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">E-mail</label>
                                     <div className="relative">
-                                        <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
-                                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50" />
+                                        <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
+                                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50" />
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Profil szín</label>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">Profil szín</label>
                                     <div className="bg-white/5 rounded-[2.5rem] p-6 border border-white/5 space-y-6">
                                         <div className="flex items-center justify-between">
                                             <div className="flex bg-black/40 p-1 rounded-full border border-white/5">
-                                                <button onClick={() => setMode("solid")} className={`px-4 py-1.5 rounded-full text-[10px] font-black transition-all ${mode === "solid" ? "bg-white text-black" : "text-white/40"}`}>SOLID</button>
-                                                <button onClick={() => setMode("gradient")} className={`px-4 py-1.5 rounded-full text-[10px] font-black transition-all ${mode === "gradient" ? "bg-white text-black" : "text-white/40"}`}>GRADIENT</button>
+                                                <button onClick={() => setMode("solid")} className={`px-4 py-1.5 rounded-full text-[10px] font-black transition-all ${mode === "solid" ? "bg-white text-black" : "text-text-primary/40"}`}>SOLID</button>
+                                                <button onClick={() => setMode("gradient")} className={`px-4 py-1.5 rounded-full text-[10px] font-black transition-all ${mode === "gradient" ? "bg-white text-black" : "text-text-primary/40"}`}>GRADIENT</button>
                                             </div>
                                         </div>
 
@@ -128,7 +128,7 @@ export default function PersonalDataSheet({ isOpen, onClose }: Props) {
                                                     style={{ background: finalColorCode }}
                                                 >
                                                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                        <MousePointer2 className="w-6 h-6 text-white shadow-xl" />
+                                                        <MousePointer2 className="w-6 h-6 text-text-primary shadow-xl" />
                                                     </div>
                                                 </motion.button>
                                             </div>
@@ -144,7 +144,7 @@ export default function PersonalDataSheet({ isOpen, onClose }: Props) {
                                                         onClick={() => solidInputRef.current?.click()}
                                                         className="bg-black/20 p-4 rounded-2xl border border-white/5 flex flex-col items-center gap-2"
                                                     >
-                                                        <span className="text-[8px] font-black text-white/20 uppercase tracking-widest">Szín</span>
+                                                        <span className="text-[8px] font-black text-text-primary/20 uppercase tracking-widest">Szín</span>
                                                         <div className="w-10 h-10 rounded-full border-2 border-white/10" style={{ backgroundColor: solidColor }} />
                                                     </motion.button>
                                                 ) : (
@@ -154,7 +154,7 @@ export default function PersonalDataSheet({ isOpen, onClose }: Props) {
                                                             onClick={() => gradStartRef.current?.click()}
                                                             className="bg-black/20 p-4 rounded-2xl border border-white/5 flex flex-col items-center gap-2"
                                                         >
-                                                            <span className="text-[8px] font-black text-white/20 uppercase tracking-widest">Kezdő</span>
+                                                            <span className="text-[8px] font-black text-text-primary/20 uppercase tracking-widest">Kezdő</span>
                                                             <div className="w-10 h-10 rounded-full border-2 border-white/10" style={{ backgroundColor: gradStart }} />
                                                         </motion.button>
                                                         <motion.button
@@ -162,7 +162,7 @@ export default function PersonalDataSheet({ isOpen, onClose }: Props) {
                                                             onClick={() => gradEndRef.current?.click()}
                                                             className="bg-black/20 p-4 rounded-2xl border border-white/5 flex flex-col items-center gap-2"
                                                         >
-                                                            <span className="text-[8px] font-black text-white/20 uppercase tracking-widest">Végpont</span>
+                                                            <span className="text-[8px] font-black text-text-primary/20 uppercase tracking-widest">Végpont</span>
                                                             <div className="w-10 h-10 rounded-full border-2 border-white/10" style={{ backgroundColor: gradEnd }} />
                                                         </motion.button>
                                                     </div>

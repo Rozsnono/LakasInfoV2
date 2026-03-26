@@ -97,9 +97,9 @@ export default function DetailedStatsPage() {
             {/* FEJLÉC */}
             <motion.header variants={itemVariants} className="p-6 flex justify-between items-center z-20 pt-12">
                 <Link href="/dashboard/stats" className="w-10 h-10 rounded-full bg-surface-elevated flex items-center justify-center border border-white/5 shadow-xl shrink-0 active:scale-90 transition-transform">
-                    <ArrowLeft className="w-5 h-5 text-white" />
+                    <ArrowLeft className="w-5 h-5 text-text-primary" />
                 </Link>
-                <h1 className="text-xl font-black tracking-tight text-white uppercase italic text-center flex-1 pr-10">Részletes <span className="text-primary">ELEMZÉS</span></h1>
+                <h1 className="text-xl font-black tracking-tight text-text-primary uppercase italic text-center flex-1 pr-10">Részletes <span className="text-primary">ELEMZÉS</span></h1>
             </motion.header>
 
             {/* VEZÉRLŐPULT (Lebegő Kártya) */}
@@ -108,18 +108,18 @@ export default function DetailedStatsPage() {
                     {/* Dátum Választó */}
                     <button
                         onClick={() => setIsTimeSheetOpen(true)}
-                        className="flex-1 bg-black/50 hover:bg-white/10 py-3 rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-all"
+                        className="flex-1 bg-surface/50 hover:bg-white/10 py-3 rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-all"
                     >
                         <Calendar className="w-4 h-4 text-primary" />
-                        <span className="text-[10px] font-black uppercase tracking-widest truncate text-white">
+                        <span className="text-[10px] font-black uppercase tracking-widest truncate text-text-primary">
                             {timeRange === "custom" && customRange ? `${customRange.start.slice(2)} - ${customRange.end.slice(2)}` : timeRange === "3m" ? "3 Hó" : timeRange === "6m" ? "6 Hó" : "1 Év"}
                         </span>
                     </button>
 
                     {/* Grafikon Típus Választó */}
-                    <div className="flex bg-black/50 p-1 rounded-2xl border border-white/5 shrink-0">
-                        <button onClick={() => setChartType("line")} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${chartType === "line" ? "bg-white/10 text-white shadow-md" : "text-white/40 hover:text-white/80"}`}><LineChart className="w-4 h-4" /></button>
-                        <button onClick={() => setChartType("bar")} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${chartType === "bar" ? "bg-white/10 text-white shadow-md" : "text-white/40 hover:text-white/80"}`}><BarChart2 className="w-4 h-4" /></button>
+                    <div className="flex bg-surface/50 p-1 rounded-2xl border border-white/5 shrink-0">
+                        <button onClick={() => setChartType("line")} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${chartType === "line" ? "bg-white/10 text-text-primary shadow-md" : "text-text-primary/40 hover:text-text-primary/80"}`}><LineChart className="w-4 h-4" /></button>
+                        <button onClick={() => setChartType("bar")} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${chartType === "bar" ? "bg-white/10 text-text-primary shadow-md" : "text-text-primary/40 hover:text-text-primary/80"}`}><BarChart2 className="w-4 h-4" /></button>
                     </div>
                 </div>
             </motion.div>
@@ -127,7 +127,7 @@ export default function DetailedStatsPage() {
             {loading ? (
                 <div className="flex-1 flex flex-col items-center justify-center gap-4">
                     <Loader2 className="w-8 h-8 animate-spin text-primary opacity-50" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Adatok elemzése...</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-text-primary/40">Adatok elemzése...</span>
                 </div>
             ) : (
                 <>
@@ -138,7 +138,7 @@ export default function DetailedStatsPage() {
                                 <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeColor, boxShadow: `0 0 10px ${activeColor}` }} />
                                 {cleanConfig[filter]?.label} • {viewMode === "cost" ? "Költség" : "Fogyasztás"}
                             </span>
-                            <h2 className="text-4xl font-black mt-2 tracking-tighter italic text-white drop-shadow-lg">
+                            <h2 className="text-4xl font-black mt-2 tracking-tighter italic text-text-primary drop-shadow-lg">
                                 {viewMode === "cost" ? data?.totalCost : data?.totalConsumption}
                             </h2>
                             <div className={`flex items-center gap-2 font-bold mt-3 text-xs uppercase ${data?.isTrendPositive ? "text-red-500" : "text-emerald-500"}`}>
@@ -161,15 +161,15 @@ export default function DetailedStatsPage() {
                                     exit={{ opacity: 0, scale: 0.9 }}
                                     className="absolute z-50 -translate-x-1/2 pointer-events-none bg-surface-elevated p-4 rounded-3xl border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl min-w-[120px]"
                                 >
-                                    <div className="text-[10px] font-black text-white/40 uppercase mb-3 text-center">{data.chartData[hoveredPoint].label}</div>
+                                    <div className="text-[10px] font-black text-text-primary/40 uppercase mb-3 text-center">{data.chartData[hoveredPoint].label}</div>
                                     <div className="space-y-2">
                                         {(filter === "all" ? categories : [filter as CategoryKey]).map(cat => (
                                             <div key={cat} className="flex items-center justify-between gap-4">
                                                 <div className="flex items-center gap-2">
                                                     <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cleanConfig[cat]?.color }} />
-                                                    <span className="text-[10px] font-bold text-white/60">{cleanConfig[cat]?.label}</span>
+                                                    <span className="text-[10px] font-bold text-text-primary/60">{cleanConfig[cat]?.label}</span>
                                                 </div>
-                                                <span className="text-xs font-black text-white">
+                                                <span className="text-xs font-black text-text-primary">
                                                     {viewMode === "cost" ? `${data.chartData[hoveredPoint].breakdown[cat].cost.toLocaleString()} Ft` : `${data.chartData[hoveredPoint].breakdown[cat].consumption.toLocaleString()} ${cleanConfig[cat]?.unit}`}
                                                 </span>
                                             </div>
@@ -309,14 +309,14 @@ export default function DetailedStatsPage() {
                         </svg>
 
                         {/* Hónap Feliratok (X tengely) */}
-                        <div className="absolute -bottom-2 left-0 right-0 flex justify-around px-8 text-white/30 font-black text-[10px] uppercase tracking-widest">
+                        <div className="absolute -bottom-2 left-0 right-0 flex justify-around px-8 text-text-primary/30 font-black text-[10px] uppercase tracking-widest">
                             {data?.chartData.map(d => <span key={d.label}>{d.label}</span>)}
                         </div>
                     </motion.div>
 
                     {/* KATEGÓRIÁK LISTÁJA */}
                     <div className="bg-surface rounded-[3rem] px-6 py-8 flex-1 border-t border-white/5 z-10 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] mt-10">
-                        <h3 className="font-black text-xl italic uppercase mb-6 pl-2 text-white">Kategóriák</h3>
+                        <h3 className="font-black text-xl italic uppercase mb-6 pl-2 text-text-primary">Kategóriák</h3>
                         <div className="flex flex-col gap-4">
                             {(Object.keys(cleanConfig) as MeterFilter[]).map(key => {
                                 const isActive = filter === key;
@@ -345,14 +345,14 @@ export default function DetailedStatsPage() {
                                                 >
                                                     {cleanConfig[key].icon}
                                                 </div>
-                                                <span className="font-black text-lg text-white">{cleanConfig[key].label}</span>
+                                                <span className="font-black text-lg text-text-primary">{cleanConfig[key].label}</span>
                                             </div>
                                             <div className="text-right flex flex-col justify-center h-full">
-                                                <span className="font-black italic text-white text-lg leading-none">
+                                                <span className="font-black italic text-text-primary text-lg leading-none">
                                                     {isActive ? (viewMode === "cost" ? data?.totalCost : data?.totalConsumption) : "•••"}
                                                 </span>
                                                 {isActive && viewMode === "difference" && key !== "all" && (
-                                                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest mt-1">
+                                                    <span className="text-[10px] font-bold text-text-primary/40 uppercase tracking-widest mt-1">
                                                         {cleanConfig[key].unit}
                                                     </span>
                                                 )}

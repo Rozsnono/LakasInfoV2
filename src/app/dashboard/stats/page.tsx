@@ -165,7 +165,7 @@ export default function StatsPage() {
                 <div className="flex items-center gap-4">
                     <Link
                         href="/dashboard"
-                        className="w-10 h-10 rounded-full bg-surface-elevated flex items-center justify-center active:scale-95 transition-transform border border-white/5 shadow-xl text-white"
+                        className="w-10 h-10 rounded-full bg-surface-elevated flex items-center justify-center active:scale-95 transition-transform border border-white/5 shadow-xl text-text-primary"
                     >
                         <ArrowLeft className="w-5 h-5" />
                     </Link>
@@ -229,7 +229,7 @@ export default function StatsPage() {
                                             className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${selectedMeters.includes(meter.id) ? "bg-primary border-primary" : "border-white/10"
                                                 }`}
                                         >
-                                            {selectedMeters.includes(meter.id) && <Check className="w-4 h-4 text-white" />}
+                                            {selectedMeters.includes(meter.id) && <Check className="w-4 h-4 text-text-primary" />}
                                         </div>
                                     </button>
                                 ))}
@@ -304,7 +304,7 @@ export default function StatsPage() {
                                 <Target className="w-3.5 h-3.5" />
                                 <span className="font-bold text-[10px] uppercase tracking-[0.2em]">Keret</span>
                             </div>
-                            <h3 className="text-2xl font-black text-white drop-shadow-md">{(100 - (statsData?.isOverLimitOverAllPercent || 0)).toFixed(0)}%</h3>
+                            <h3 className="text-2xl font-black text-text-primary drop-shadow-md">{(100 - (statsData?.isOverLimitOverAllPercent || 0)).toFixed(0)}%</h3>
                             <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mt-1 relative z-10">
                                 <motion.div
                                     initial={{ width: 0 }}

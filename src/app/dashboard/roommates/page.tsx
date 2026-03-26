@@ -111,7 +111,7 @@ export default function RoommatesClient() {
 
                                 <button
                                     onClick={() => setIsSheetOpen("guests")} // Ezt később átírhatod, ha lesz külön Bérlő Sheet
-                                    className="flex-1 py-5 px-2 bg-primary text-white rounded-[2rem] flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform shadow-[0_0_20px_rgba(var(--primary),0.4)]"
+                                    className="flex-1 py-5 px-2 bg-primary text-text-primary rounded-[2rem] flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform shadow-[0_0_20px_rgba(var(--primary),0.4)]"
                                 >
                                     <Key className="w-6 h-6" strokeWidth={2.5} />
                                     <span className="font-black uppercase tracking-widest text-[10px] text-center">Bérlő<br />meghívása</span>
@@ -138,7 +138,7 @@ export default function RoommatesClient() {
                         user?.houseRole === 'guest' && (
                             <button
                                 onClick={() => setIsSheetOpen("guests")}
-                                className="flex-1 py-5 px-2 bg-primary text-white rounded-[2rem] flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform shadow-[0_0_20px_rgba(var(--primary),0.4)]"
+                                className="flex-1 py-5 px-2 bg-primary text-text-primary rounded-[2rem] flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform shadow-[0_0_20px_rgba(var(--primary),0.4)]"
                             >
                                 <UserPlus className="w-6 h-6" strokeWidth={2.5} />
                                 <span className="font-black uppercase tracking-widest text-[10px] text-center">Bérlőtárs<br />meghívása</span>
@@ -151,7 +151,7 @@ export default function RoommatesClient() {
 
             <motion.div variants={itemVariants} className="relative z-10 space-y-4">
                 <div className="flex items-center justify-between px-4">
-                    <h3 className="text-white/40 font-black text-[10px] uppercase tracking-[0.2em]">
+                    <h3 className="text-text-primary/40 font-black text-[10px] uppercase tracking-[0.2em]">
                         {isPending ? "Betöltés..." : `Aktív tagok (${members.length})`}
                     </h3>
                 </div>
@@ -168,7 +168,7 @@ export default function RoommatesClient() {
                                 className="flex flex-col items-center justify-center py-16 gap-4 m-auto"
                             >
                                 <Loader2 className="w-8 h-8 text-primary animate-spin" />
-                                <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Tagok betöltése...</p>
+                                <p className="text-text-primary/40 text-xs font-bold uppercase tracking-widest">Tagok betöltése...</p>
                             </motion.div>
                         ) : error ? (
                             /* HIBA ÁLLAPOT */
@@ -179,7 +179,7 @@ export default function RoommatesClient() {
                         ) : members.length === 0 ? (
                             /* ÜRES ÁLLAPOT (Bár elméletben legalább 1 ember, a tulaj mindig benne van) */
                             <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-center py-16 m-auto">
-                                <p className="text-white/20 text-sm font-bold uppercase tracking-widest italic">Nincsenek aktív lakótársak.</p>
+                                <p className="text-text-primary/20 text-sm font-bold uppercase tracking-widest italic">Nincsenek aktív lakótársak.</p>
                             </motion.div>
                         ) : (
                             /* ADATOK MEGJELENÍTÉSE */
@@ -187,7 +187,7 @@ export default function RoommatesClient() {
                                 {members.map((user) => (
                                     <div key={user.id} className="flex items-center justify-between p-6 group transition-colors">
                                         <div className="flex items-center gap-5">
-                                            <div className={`w-14 h-14 rounded-2xl ${user.role === 'owner' ? 'bg-primary' : 'bg-surface-elevated'} flex items-center justify-center text-white font-black text-xl shadow-inner relative border border-white/5`}>
+                                            <div className={`w-14 h-14 rounded-2xl ${user.role === 'owner' ? 'bg-primary' : 'bg-surface-elevated'} flex items-center justify-center text-text-primary font-black text-xl shadow-inner relative border border-white/5`}>
                                                 {user.init}
                                                 {user.role === 'owner' && (
                                                     <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-surface rounded-full flex items-center justify-center border-2 border-background shadow-lg">
@@ -196,12 +196,12 @@ export default function RoommatesClient() {
                                                 )}
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="text-white font-black text-[17px] tracking-tight">
-                                                    {user.name} {user.isMe && <span className="text-white/20 font-bold ml-1">(Te)</span>}
+                                                <span className="text-text-primary font-black text-[17px] tracking-tight">
+                                                    {user.name} {user.isMe && <span className="text-text-primary/20 font-bold ml-1">(Te)</span>}
                                                 </span>
                                                 <div className="flex items-center gap-1.5 mt-1">
-                                                    {user.role === 'owner' ? <Crown className="w-3 h-3 text-yellow-500/50" /> : <User className="w-3 h-3 text-white/20" />}
-                                                    <span className="text-white/40 text-[11px] font-black uppercase tracking-wider">{Role[user.role as keyof typeof Role]}</span>
+                                                    {user.role === 'owner' ? <Crown className="w-3 h-3 text-yellow-500/50" /> : <User className="w-3 h-3 text-text-primary/20" />}
+                                                    <span className="text-text-primary/40 text-[11px] font-black uppercase tracking-wider">{Role[user.role as keyof typeof Role]}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -210,7 +210,7 @@ export default function RoommatesClient() {
                                             <button
                                                 onClick={() => handleRemove(user.id)}
                                                 disabled={removingId === user.id}
-                                                className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500/40 active:bg-red-500 active:text-white transition-all"
+                                                className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500/40 active:bg-red-500 active:text-text-primary transition-all"
                                             >
                                                 {removingId === user.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
                                             </button>

@@ -55,7 +55,7 @@ export default function MapPageClient() {
                     href="/dashboard"
                     className="w-12 h-12 rounded-full bg-black/80 backdrop-blur-md flex items-center justify-center border border-white/10 shadow-2xl active:scale-90 transition-transform"
                 >
-                    <ArrowLeft className="w-6 h-6 text-white" />
+                    <ArrowLeft className="w-6 h-6 text-text-primary" />
                 </Link>
             </div>
 
@@ -65,14 +65,14 @@ export default function MapPageClient() {
                     onClick={handleLocateMe}
                     className="w-14 h-14 rounded-full bg-black/90 backdrop-blur-md flex items-center justify-center border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.8)] active:scale-90 transition-transform"
                 >
-                    <Navigation className="w-6 h-6 text-white" fill="white" />
+                    <Navigation className="w-6 h-6 text-text-primary" fill="white" />
                 </button>
             </div>
 
             {/* A Térkép Háttere */}
             <div className="absolute inset-0 h-screen bg-[#1a1a1a]">
                 {isPending ? (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-white/50">
+                    <div className="w-full h-full flex flex-col items-center justify-center text-text-primary/50">
                         <Loader2 className="w-8 h-8 animate-spin mb-4 text-primary" />
                         <span className="text-xs font-black uppercase tracking-widest">Térkép betöltése...</span>
                     </div>
@@ -82,7 +82,7 @@ export default function MapPageClient() {
                         <span className="text-xs font-black uppercase tracking-widest">Hiba a betöltéskor</span>
                     </div>
                 ) : !activeHouse ? (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-white/30 gap-2">
+                    <div className="w-full h-full flex flex-col items-center justify-center text-text-primary/30 gap-2">
                         <MapPin className="w-8 h-8 opacity-50" />
                         <span className="text-xs font-bold uppercase tracking-widest">Nincs megjeleníthető térkép</span>
                     </div>
@@ -111,7 +111,7 @@ export default function MapPageClient() {
                         </AnimatePresence>
                     </div>
                 ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-white/30 gap-2">
+                    <div className="w-full h-full flex flex-col items-center justify-center text-text-primary/30 gap-2">
                         <MapPin className="w-8 h-8 opacity-50" />
                         <span className="text-xs font-bold uppercase tracking-widest">Nincs cím megadva</span>
                     </div>
@@ -153,7 +153,7 @@ export default function MapPageClient() {
                                     className="flex-1 flex flex-col items-center justify-center gap-3 py-10"
                                 >
                                     <Loader2 className="w-6 h-6 text-primary animate-spin" />
-                                    <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest">Helyszínek keresése...</p>
+                                    <p className="text-text-primary/30 text-[10px] font-bold uppercase tracking-widest">Helyszínek keresése...</p>
                                 </motion.div>
                             ) : error ? (
                                 /* HIBA ÁLLAPOT */
@@ -185,15 +185,15 @@ export default function MapPageClient() {
                                                 <div className="flex items-center gap-4">
                                                     <div className={`w-12 h-12 rounded-full border flex items-center justify-center shrink-0 group-active:scale-95 transition-transform ${isActive ? "bg-primary border-primary/50 shadow-[0_0_15px_rgba(var(--primary),0.3)]" : "bg-[#1A1A1A] border-white/5"
                                                         }`}>
-                                                        <Home className={`w-5 h-5 ${isActive ? "text-white" : "text-white/60"}`} />
+                                                        <Home className={`w-5 h-5 ${isActive ? "text-text-primary" : "text-text-primary/60"}`} />
                                                     </div>
                                                     <div className="flex flex-col">
-                                                        <span className="text-white font-bold text-lg leading-tight">{house.name}</span>
-                                                        <span className="text-white/40 text-xs font-medium mt-1 truncate max-w-[200px]">{house.address || "Nincs cím"}</span>
+                                                        <span className="text-text-primary font-bold text-lg leading-tight">{house.name}</span>
+                                                        <span className="text-text-primary/40 text-xs font-medium mt-1 truncate max-w-[200px]">{house.address || "Nincs cím"}</span>
                                                     </div>
                                                 </div>
                                                 {house.distance && (
-                                                    <span className="text-white/60 text-sm font-medium shrink-0 ml-2">Táv: {house.distance}</span>
+                                                    <span className="text-text-primary/60 text-sm font-medium shrink-0 ml-2">Táv: {house.distance}</span>
                                                 )}
                                             </div>
                                         );
@@ -206,7 +206,7 @@ export default function MapPageClient() {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
-                                    className="flex-1 flex items-center justify-center text-white/30 text-xs font-bold uppercase tracking-widest text-center px-6 pb-10"
+                                    className="flex-1 flex items-center justify-center text-text-primary/30 text-xs font-bold uppercase tracking-widest text-center px-6 pb-10"
                                 >
                                     Nincsenek megjeleníthető háztartások
                                 </motion.div>

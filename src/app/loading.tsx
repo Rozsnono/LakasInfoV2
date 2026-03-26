@@ -41,7 +41,7 @@ export default function Loading() {
 
                 {/* Szöveges visszajelzés */}
                 <div className="flex flex-col items-center gap-3">
-                    <h2 className="text-white font-black italic tracking-tighter uppercase text-2xl flex items-center gap-1">
+                    <h2 className="text-text-primary font-black italic tracking-tighter uppercase text-2xl flex items-center gap-1">
                         Szinkronizálás
                         <motion.span
                             animate={{ opacity: [0, 1, 0] }}
@@ -51,7 +51,7 @@ export default function Loading() {
                             ...
                         </motion.span>
                     </h2>
-                    <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.5em]">
+                    <p className="text-text-primary/30 text-[10px] font-black uppercase tracking-[0.5em]">
                         Adatok betöltése folyamatban
                     </p>
                 </div>

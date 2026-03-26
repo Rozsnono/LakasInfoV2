@@ -67,7 +67,7 @@ export default function CreateHousePage() {
                 >
                     <ArrowLeft className="w-5 h-5 text-text-primary" />
                 </Link>
-                <h1 className="text-3xl font-black text-white tracking-tight uppercase italic">
+                <h1 className="text-3xl font-black text-text-primary tracking-tight uppercase italic">
                     Új <span className="text-primary">Háztartás</span>
                 </h1>
             </motion.header>
@@ -75,7 +75,7 @@ export default function CreateHousePage() {
             <div className="relative z-10 w-full max-w-sm mx-auto flex flex-col gap-10 flex-1">
 
                 <motion.div variants={itemVariants} className="space-y-4">
-                    <h2 className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-2">Háztartás adatai</h2>
+                    <h2 className="text-[10px] font-black text-text-primary/40 uppercase tracking-[0.2em] ml-2">Háztartás adatai</h2>
 
                     {error && (
                         <div className="mb-4 bg-red-500/10 border border-red-500/20 p-4 rounded-[2rem] flex items-center gap-3">
@@ -90,7 +90,7 @@ export default function CreateHousePage() {
                         {/* Háztartás Neve */}
                         <div className="flex flex-col gap-2">
                             <div className="relative">
-                                <Home className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
+                                <Home className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
                                 <input
                                     type="text"
                                     required
@@ -98,7 +98,7 @@ export default function CreateHousePage() {
                                     value={houseName}
                                     onChange={(e) => setHouseName(e.target.value)}
                                     placeholder="Név (pl. Családi fészek)"
-                                    className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-white/30"
+                                    className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-text-primary/30"
                                 />
                             </div>
                         </div>
@@ -106,14 +106,14 @@ export default function CreateHousePage() {
                         {/* Pontos Cím */}
                         <div className="flex flex-col gap-2">
                             <div className="relative">
-                                <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
+                                <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
                                 <input
                                     type="text"
                                     disabled={loading}
                                     value={address}
                                     onChange={(e) => setAddress(e.target.value)}
                                     placeholder="Pontos cím (opcionális)"
-                                    className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-white/30"
+                                    className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-text-primary/30"
                                 />
                             </div>
                         </div>
@@ -145,7 +145,7 @@ export default function CreateHousePage() {
             {/* Footer Branding */}
             <motion.p
                 variants={itemVariants}
-                className="mt-auto pt-12 text-center text-white/10 text-[10px] font-bold uppercase tracking-[0.5em]"
+                className="mt-auto pt-12 text-center text-text-primary/10 text-[10px] font-bold uppercase tracking-[0.5em]"
             >
                 LakasInfo Ecosystem
             </motion.p>

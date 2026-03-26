@@ -16,7 +16,7 @@ export const PLANS = [
         ],
         buttonText: (cond: boolean) => cond ? "Jelenlegi Csomagod" : "Váltás Ingyenes Csomagra",
         isPopular: false,
-        icon: <ShieldCheck className="w-6 h-6 text-white/40" />
+        icon: <ShieldCheck className="w-6 h-6 text-text-primary/40" />
     },
     {
         id: "pro",

@@ -74,9 +74,9 @@ export default function MoreOptionsSheet({ isOpen, onClose }: MoreOptionsSheetPr
                                 disabled={isExporting}
                                 className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform disabled:opacity-20"
                             >
-                                <ChevronLeft className="w-6 h-6 text-white" />
+                                <ChevronLeft className="w-6 h-6 text-text-primary" />
                             </button>
-                            <h3 className="text-xl font-black tracking-tight text-white uppercase italic">Műve<span className="text-primary">letek</span></h3>
+                            <h3 className="text-xl font-black tracking-tight text-text-primary uppercase italic">Műve<span className="text-primary">letek</span></h3>
                             <div className="w-10" />
                         </div>
 
@@ -92,7 +92,7 @@ export default function MoreOptionsSheet({ isOpen, onClose }: MoreOptionsSheetPr
                                         <div className="w-20 h-20 rounded-full bg-emerald-500/20 flex items-center justify-center">
                                             <CheckCircle className="w-10 h-10 text-emerald-500" />
                                         </div>
-                                        <span className="text-white font-black text-xl block uppercase italic">Sikeres exportálás!</span>
+                                        <span className="text-text-primary font-black text-xl block uppercase italic">Sikeres exportálás!</span>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
@@ -111,7 +111,7 @@ export default function MoreOptionsSheet({ isOpen, onClose }: MoreOptionsSheetPr
 
                             <Link href={'/dashboard/roommates'} >
                                 <OptionItem
-                                    icon={<Users className="w-6 h-6 text-white/60" />}
+                                    icon={<Users className="w-6 h-6 text-text-primary/60" />}
                                     label="Lakótársak"
                                     sub="Tagok kezelése és meghívás"
                                     onClick={() => { }}
@@ -120,7 +120,7 @@ export default function MoreOptionsSheet({ isOpen, onClose }: MoreOptionsSheetPr
 
                             <Link href={'/dashboard/settings'}>
                                 <OptionItem
-                                    icon={<Settings className="w-6 h-6 text-white/60" />}
+                                    icon={<Settings className="w-6 h-6 text-text-primary/60" />}
                                     label="Ház beállításai"
                                     sub="Cím és fogyasztási keretek"
                                     onClick={() => { }}
@@ -129,7 +129,7 @@ export default function MoreOptionsSheet({ isOpen, onClose }: MoreOptionsSheetPr
 
                             <Link href={'/dashboard/properties'}>
                                 <OptionItem
-                                    icon={<HousePlus className="w-6 h-6 text-white/60" />}
+                                    icon={<HousePlus className="w-6 h-6 text-text-primary/60" />}
                                     label="Házak kezelése"
                                     sub="Házváltás és új ház létrehozása"
                                     onClick={() => { }}
@@ -168,12 +168,12 @@ function OptionItem({ icon, label, sub, onClick, isLoading }: OptionItemProps) {
                     )}
                 </div>
                 <div className="flex flex-col text-left">
-                    <span className="text-white font-black text-[17px] tracking-tight leading-tight">{label}</span>
-                    <span className="text-white/30 text-[11px] font-bold uppercase tracking-wider mt-1">{sub}</span>
+                    <span className="text-text-primary font-black text-[17px] tracking-tight leading-tight">{label}</span>
+                    <span className="text-text-primary/30 text-[11px] font-bold uppercase tracking-wider mt-1">{sub}</span>
                 </div>
             </div>
             <div className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity">
-                <ChevronLeft className="w-5 h-5 text-white rotate-180" />
+                <ChevronLeft className="w-5 h-5 text-text-primary rotate-180" />
             </div>
         </motion.button>
     );

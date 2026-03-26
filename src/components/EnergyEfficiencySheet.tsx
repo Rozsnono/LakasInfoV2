@@ -32,7 +32,7 @@ export default function EnergyEfficiencySheet({ isOpen, onClose }: Props) {
               <div className="p-6 bg-primary/10 rounded-[2.5rem] border border-primary/20 relative overflow-hidden">
                 <TrendingDown className="w-12 h-12 text-primary opacity-20 absolute -right-2 -top-2" />
                 <h4 className="text-primary font-black uppercase tracking-widest text-[10px] mb-2">Gemini AI javaslat</h4>
-                <p className="text-white font-bold text-lg leading-tight">Cseréld le a konyhai izzókat LED-re! Évi 12 400 Ft-ot spórolhatsz.</p>
+                <p className="text-text-primary font-bold text-lg leading-tight">Cseréld le a konyhai izzókat LED-re! Évi 12 400 Ft-ot spórolhatsz.</p>
               </div>
               <div className="space-y-3">
                 {tips.map((tip, idx) => (

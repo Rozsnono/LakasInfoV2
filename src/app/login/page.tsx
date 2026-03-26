@@ -69,16 +69,16 @@ export default function LoginPage() {
 
       <motion.header variants={itemVariants} className="relative z-10 flex items-center mb-12">
         <Link href="/" className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/5 shadow-xl active:scale-90 transition-transform">
-          <ArrowLeft className="w-6 h-6 text-white" />
+          <ArrowLeft className="w-6 h-6 text-text-primary" />
         </Link>
       </motion.header>
 
       <div className="relative z-10 space-y-8 max-w-sm mx-auto w-full">
         <motion.div variants={itemVariants} className="space-y-2">
-          <h1 className="text-4xl font-black text-white tracking-tighter uppercase italic">
+          <h1 className="text-4xl font-black text-text-primary tracking-tighter uppercase italic">
             Üdv <span className="text-primary">Újra!</span>
           </h1>
-          <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em]">V 2.5 Ecosystem Login</p>
+          <p className="text-text-primary/40 text-[10px] font-black uppercase tracking-[0.3em]">V 2.5 Ecosystem Login</p>
         </motion.div>
 
         {/* Hibaüzenet Bento-stílusban */}
@@ -94,31 +94,31 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <motion.div variants={itemVariants} className="flex flex-col gap-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">E-mail cím</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">E-mail cím</label>
             <div className="relative">
-              <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
+              <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
               <input
                 type="email"
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="pelda@email.hu"
-                className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-white/5"
+                className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-text-primary/5"
               />
             </div>
           </motion.div>
 
           <motion.div variants={itemVariants} className="flex flex-col gap-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Jelszó</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 ml-4">Jelszó</label>
             <div className="relative">
-              <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
+              <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-text-primary/20" />
               <input
                 type="password"
                 required
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 placeholder="••••••••"
-                className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-white font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-white/5"
+                className="w-full bg-white/5 border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-text-primary font-bold focus:outline-none focus:border-primary/50 transition-colors placeholder:text-text-primary/5"
               />
             </div>
           </motion.div>
@@ -143,8 +143,8 @@ export default function LoginPage() {
 
         <motion.div variants={itemVariants} className="text-center">
           <Link href="/register" className="group">
-            <span className="text-white/20 text-xs font-bold uppercase tracking-widest transition-colors group-active:text-primary">
-              Még nincs fiókod? <span className="text-white/60 group-hover:text-white">Regisztráció</span>
+            <span className="text-text-primary/20 text-xs font-bold uppercase tracking-widest transition-colors group-active:text-primary">
+              Még nincs fiókod? <span className="text-text-primary/60 group-hover:text-text-primary">Regisztráció</span>
             </span>
           </Link>
         </motion.div>

@@ -84,9 +84,9 @@ export default function WidgetSelectionSheet({
 
                         <div className="flex items-center justify-between mb-8 px-2 shrink-0">
                             <button onClick={onClose} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform">
-                                <ChevronLeft className="w-6 h-6 text-white" />
+                                <ChevronLeft className="w-6 h-6 text-text-primary" />
                             </button>
-                            <h3 className="text-xl font-black tracking-tight text-white uppercase italic">
+                            <h3 className="text-xl font-black tracking-tight text-text-primary uppercase italic">
                                 Widget<span className="text-primary">kezelés</span>
                             </h3>
                             <div className="w-10" />
@@ -122,9 +122,9 @@ export default function WidgetSelectionSheet({
                                     className={`relative rounded-[2.5rem] p-6 border transition-all ${activeWidgetIds.includes("unit-overallStatus") ? "bg-white/10 border-white/20 shadow-xl" : "bg-white/[0.03] border-white/5 opacity-60"}`}
                                 >
                                     <div className="flex justify-between items-center mb-6">
-                                        <h4 className="text-sm font-black text-white uppercase italic tracking-wider">Aktuális állapot</h4>
+                                        <h4 className="text-sm font-black text-text-primary uppercase italic tracking-wider">Aktuális állapot</h4>
                                         <div className={`w-6 h-6 rounded-full flex items-center justify-center ${activeWidgetIds.includes("unit-overallStatus") ? "bg-primary" : "bg-white/10"}`}>
-                                            {activeWidgetIds.includes("unit-overallStatus") ? <Check className="w-3.5 h-3.5 text-white" strokeWidth={4} /> : <Plus className="w-3.5 h-3.5 text-white/40" />}
+                                            {activeWidgetIds.includes("unit-overallStatus") ? <Check className="w-3.5 h-3.5 text-text-primary" strokeWidth={4} /> : <Plus className="w-3.5 h-3.5 text-text-primary/40" />}
                                         </div>
                                     </div>
                                     <div className="space-y-4">
@@ -135,11 +135,11 @@ export default function WidgetSelectionSheet({
                                                         {getMeterVisuals(meter.type).icon}
                                                     </div>
                                                     <div>
-                                                        <div className="text-xs font-bold text-white tracking-tight">{meter.name}</div>
-                                                        <div className="text-[9px] font-black text-white/30 uppercase">{meter.stats.isOverLimit ? "Limit felett!" : "Kereten belül"}</div>
+                                                        <div className="text-xs font-bold text-text-primary tracking-tight">{meter.name}</div>
+                                                        <div className="text-[9px] font-black text-text-primary/30 uppercase">{meter.stats.isOverLimit ? "Limit felett!" : "Kereten belül"}</div>
                                                     </div>
                                                 </div>
-                                                <div className="text-xs font-black text-white italic">{meter.lastReadingValue} {meter.unit}</div>
+                                                <div className="text-xs font-black text-text-primary italic">{meter.lastReadingValue} {meter.unit}</div>
                                             </div>
                                         ))}
                                     </div>
@@ -151,10 +151,10 @@ export default function WidgetSelectionSheet({
                                 >
                                     <div className="flex justify-between items-center mb-6">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-xs font-black text-white/40 uppercase tracking-widest">Lakótársak</span>
+                                            <span className="text-xs font-black text-text-primary/40 uppercase tracking-widest">Lakótársak</span>
                                         </div>
                                         <div className={`w-6 h-6 rounded-full flex items-center justify-center ${activeWidgetIds.includes("unit-roommateStatus") ? "bg-primary" : "bg-white/10"}`}>
-                                            {activeWidgetIds.includes("unit-roommateStatus") ? <Check className="w-3.5 h-3.5 text-white" strokeWidth={4} /> : <Plus className="w-3.5 h-3.5 text-white/40" />}
+                                            {activeWidgetIds.includes("unit-roommateStatus") ? <Check className="w-3.5 h-3.5 text-text-primary" strokeWidth={4} /> : <Plus className="w-3.5 h-3.5 text-text-primary/40" />}
                                         </div>
                                     </div>
                                     <div className="flex gap-6 justify-start items-center">
@@ -210,7 +210,7 @@ function SmallWidgetCard({ title, value, isActive, onToggle, color, trendUp, tre
                     <path d={graphPath} fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
             </div>
-            <div className={`absolute bottom-3 right-3 w-5 h-5 rounded-full flex items-center justify-center ${isActive ? "bg-primary text-white" : "bg-white/10 text-white/40"}`}>
+            <div className={`absolute bottom-3 right-3 w-5 h-5 rounded-full flex items-center justify-center ${isActive ? "bg-primary text-text-primary" : "bg-white/10 text-text-primary/40"}`}>
                 {isActive ? <Check className="w-3 h-3" strokeWidth={4} /> : <Plus className="w-3 h-3" />}
             </div>
         </motion.div>
@@ -220,7 +220,7 @@ function SmallWidgetCard({ title, value, isActive, onToggle, color, trendUp, tre
 function RoommateAvatar({ name, init, color, isOwner }: any) {
     return (
         <div className="flex flex-col items-center gap-2">
-            <div className={`w-14 h-14 rounded-full ${color} flex items-center justify-center text-white font-bold text-lg shadow-lg relative`}>
+            <div className={`w-14 h-14 rounded-full ${color} flex items-center justify-center text-text-primary font-bold text-lg shadow-lg relative`}>
                 {init}
                 {isOwner && (
                     <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-surface rounded-full border-2 border-zinc-800 flex items-center justify-center">
@@ -228,7 +228,7 @@ function RoommateAvatar({ name, init, color, isOwner }: any) {
                     </div>
                 )}
             </div>
-            <span className="text-[10px] font-bold text-white/60">{name}</span>
+            <span className="text-[10px] font-bold text-text-primary/60">{name}</span>
         </div>
     );
 }

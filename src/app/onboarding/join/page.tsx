@@ -77,11 +77,11 @@ export default function JoinHousePage() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen p-6 relative overflow-hidden text-white">
+        <div className="flex flex-col min-h-screen p-6 relative overflow-hidden text-text-primary">
 
             <header className="relative z-10 flex items-center mb-10 pt-6">
                 <Link href="/onboarding" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center active:scale-95 transition-transform border border-white/5 shadow-lg">
-                    <ArrowLeft className="w-5 h-5 text-white" />
+                    <ArrowLeft className="w-5 h-5 text-text-primary" />
                 </Link>
             </header>
 
@@ -95,7 +95,7 @@ export default function JoinHousePage() {
                     <h1 className="text-5xl font-black italic tracking-tighter uppercase leading-none">
                         Csatla<span className="text-primary">kozás</span>
                     </h1>
-                    <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.4em] leading-relaxed">
+                    <p className="text-text-primary/40 text-[10px] font-black uppercase tracking-[0.4em] leading-relaxed">
                         Add meg a kódot
                     </p>
                 </div>
@@ -133,7 +133,7 @@ export default function JoinHousePage() {
                                 value={digit}
                                 onChange={(e) => handleChange(index, e)}
                                 onKeyDown={(e) => handleKeyDown(index, e)}
-                                className={`w-12 h-16 bg-white/5 border ${error ? 'border-primary/50' : 'border-white/10'} rounded-2xl text-center text-white text-3xl font-black focus:outline-none focus:border-primary transition-all shadow-xl disabled:opacity-50`}
+                                className={`w-12 h-16 bg-white/5 border ${error ? 'border-primary/50' : 'border-white/10'} rounded-2xl text-center text-text-primary text-3xl font-black focus:outline-none focus:border-primary transition-all shadow-xl disabled:opacity-50`}
                             />
                         ))}
                     </motion.div>
@@ -142,14 +142,14 @@ export default function JoinHousePage() {
                     <div className="flex flex-col gap-4 mt-4">
                         <div className="flex items-center gap-4">
                             <div className="h-px bg-white/10 flex-1" />
-                            <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em]">Vagy</span>
+                            <span className="text-[10px] font-black text-text-primary/30 uppercase tracking-[0.3em]">Vagy</span>
                             <div className="h-px bg-white/10 flex-1" />
                         </div>
 
                         <button
                             type="button"
                             onClick={() => setIsScanning(true)}
-                            className="w-full py-5 bg-white/5 rounded-[2rem] border border-white/10 text-white/80 font-black uppercase tracking-[0.2em] text-[10px] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 hover:bg-white/10 hover:text-white"
+                            className="w-full py-5 bg-white/5 rounded-[2rem] border border-white/10 text-text-primary/80 font-black uppercase tracking-[0.2em] text-[10px] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 hover:bg-white/10 hover:text-text-primary"
                         >
                             <QrCode className="w-5 h-5 text-primary/80" />
                             Kód Beolvasása Kamerával
@@ -248,11 +248,11 @@ function QRScannerOverlay({ onClose, onSuccess }: ScannerProps) {
             <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between bg-gradient-to-b from-black/80 to-transparent p-6 pt-12">
                 <button
                     onClick={onClose}
-                    className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-xl active:scale-90 transition-transform border border-white/10"
+                    className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-text-primary backdrop-blur-xl active:scale-90 transition-transform border border-white/10"
                 >
                     <X size={24} />
                 </button>
-                <span className="text-[10px] font-black uppercase italic tracking-[0.3em] text-white">Kód beolvasása</span>
+                <span className="text-[10px] font-black uppercase italic tracking-[0.3em] text-text-primary">Kód beolvasása</span>
                 <div className="w-12" />
             </div>
 
@@ -260,12 +260,12 @@ function QRScannerOverlay({ onClose, onSuccess }: ScannerProps) {
                 {error ? (
                     <div className="flex flex-col items-center gap-4 px-10 text-center z-20">
                         <AlertCircle className="h-12 w-12 text-red-500" />
-                        <p className="text-xs font-bold uppercase leading-relaxed tracking-widest text-white/60">
+                        <p className="text-xs font-bold uppercase leading-relaxed tracking-widest text-text-primary/60">
                             {error}
                         </p>
                         <button
                             onClick={onClose}
-                            className="mt-4 rounded-2xl bg-white/10 border border-white/20 px-8 py-4 text-[10px] font-black uppercase tracking-widest text-white active:bg-white/20 transition-colors"
+                            className="mt-4 rounded-2xl bg-white/10 border border-white/20 px-8 py-4 text-[10px] font-black uppercase tracking-widest text-text-primary active:bg-white/20 transition-colors"
                         >
                             Vissza a kézi bevitelhez
                         </button>
@@ -295,7 +295,7 @@ function QRScannerOverlay({ onClose, onSuccess }: ScannerProps) {
                             </div>
                             <div className="flex flex-col items-center gap-2 bg-black/40 px-6 py-3 rounded-full backdrop-blur-md">
                                 <ScanLine className="w-6 h-6 text-primary animate-pulse" />
-                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/80">Illeszd a kódot a keretbe</p>
+                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary/80">Illeszd a kódot a keretbe</p>
                             </div>
                         </div>
                     </>

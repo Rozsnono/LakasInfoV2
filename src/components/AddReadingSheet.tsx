@@ -81,9 +81,9 @@ export default function AddReadingSheet({ isOpen, onClose }: AddReadingSheetProp
                         <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${m.bg}`}>
                             <m.icon className={`w-7 h-7 ${m.color}`} />
                         </div>
-                        <span className="font-black text-xl text-white">{m.name}</span>
+                        <span className="font-black text-xl text-text-primary">{m.name}</span>
                     </div>
-                    <ArrowRight className="w-6 h-6 text-white opacity-20 group-hover:opacity-100 transition-opacity" />
+                    <ArrowRight className="w-6 h-6 text-text-primary opacity-20 group-hover:opacity-100 transition-opacity" />
                 </button>
             ))}
         </motion.div>
@@ -93,31 +93,31 @@ export default function AddReadingSheet({ isOpen, onClose }: AddReadingSheetProp
         <motion.div key="value" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="flex flex-col gap-6 px-2">
             <div className=" rounded-[3rem] py-12 px-6 flex flex-col items-center border border-white/5 shadow-inner">
                 <div className="flex items-baseline gap-2">
-                    <span className="text-7xl font-black tracking-tighter text-white">{value || "0"}</span>
-                    <span className="text-2xl font-black text-white/20 uppercase">{selectedMeter?.unit}</span>
+                    <span className="text-7xl font-black tracking-tighter text-text-primary">{value || "0"}</span>
+                    <span className="text-2xl font-black text-text-primary/20 uppercase">{selectedMeter?.unit}</span>
                 </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
                 <button onClick={() => setPhoto(!photo)} className={`flex items-center gap-4 px-6 py-5 rounded-3xl border transition-all ${photo ? 'border-primary bg-primary/10' : 'border-white/10 bg-white/5'}`}>
-                    <Camera className={`w-5 h-5 ${photo ? 'text-primary' : 'text-white/40'}`} />
-                    <span className={`text-[10px] font-black uppercase tracking-widest ${photo ? 'text-primary' : 'text-white/40'}`}>{photo ? "Fotó kész" : "Fotó"}</span>
+                    <Camera className={`w-5 h-5 ${photo ? 'text-primary' : 'text-text-primary/40'}`} />
+                    <span className={`text-[10px] font-black uppercase tracking-widest ${photo ? 'text-primary' : 'text-text-primary/40'}`}>{photo ? "Fotó kész" : "Fotó"}</span>
                 </button>
                 <button onClick={() => { setTempDate(new Date(selectedDate)); setStep("date"); }} className="flex items-center gap-4 px-6 py-5 rounded-3xl border border-white/10 bg-white/5 active:bg-white/10">
                     <Clock className="w-5 h-5 text-primary" />
                     <div className="flex flex-col items-start leading-none">
-                        <span className="text-[10px] font-black text-white uppercase tracking-tight">{selectedDate.toLocaleDateString('hu-HU', { month: 'short', day: 'numeric' })}</span>
-                        <span className="text-[9px] font-bold text-white/40 uppercase">{selectedDate.toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' })}</span>
+                        <span className="text-[10px] font-black text-text-primary uppercase tracking-tight">{selectedDate.toLocaleDateString('hu-HU', { month: 'short', day: 'numeric' })}</span>
+                        <span className="text-[9px] font-bold text-text-primary/40 uppercase">{selectedDate.toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
                 </button>
             </div>
             <div className="grid grid-cols-3 gap-2">
                 {["1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "0", "back"].map((key) => (
-                    <button key={key} onClick={() => handleKeypad(key)} className="h-16 rounded-2xl bg-white/5 flex items-center justify-center text-xl font-black text-white active:bg-primary transition-all">
+                    <button key={key} onClick={() => handleKeypad(key)} className="h-16 rounded-2xl bg-white/5 flex items-center justify-center text-xl font-black text-text-primary active:bg-primary transition-all">
                         {key === "back" ? <ChevronLeft className="w-6 h-6" /> : key}
                     </button>
                 ))}
             </div>
-            <button disabled={!value} onClick={resetAndClose} className="w-full py-6 bg-primary text-white rounded-[2rem] font-black text-lg uppercase tracking-[0.2em] shadow-xl active:scale-95 disabled:opacity-20 transition-all mt-2">Mentés</button>
+            <button disabled={!value} onClick={resetAndClose} className="w-full py-6 bg-primary text-text-primary rounded-[2rem] font-black text-lg uppercase tracking-[0.2em] shadow-xl active:scale-95 disabled:opacity-20 transition-all mt-2">Mentés</button>
         </motion.div>
     );
 
@@ -134,7 +134,7 @@ export default function AddReadingSheet({ isOpen, onClose }: AddReadingSheetProp
                 <button
                     key={d}
                     onClick={() => updateTempDate({ day: d })}
-                    className={`h-10 w-10 rounded-full flex items-center justify-center text-sm font-black transition-all ${isSelected ? "bg-primary text-white scale-110" : "text-white/40 hover:bg-white/5"}`}
+                    className={`h-10 w-10 rounded-full flex items-center justify-center text-sm font-black transition-all ${isSelected ? "bg-primary text-text-primary scale-110" : "text-text-primary/40 hover:bg-white/5"}`}
                 >
                     {d}
                 </button>
@@ -144,20 +144,20 @@ export default function AddReadingSheet({ isOpen, onClose }: AddReadingSheetProp
         return (
             <motion.div key="date" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="flex flex-col px-2">
                 <div className="flex bg-white/5 p-1 rounded-2xl mb-8 self-center">
-                    <button onClick={() => setPickerView("date")} className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${pickerView === "date" ? "bg-white text-black" : "text-white/40"}`}>Dátum</button>
-                    <button onClick={() => setPickerView("time")} className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${pickerView === "time" ? "bg-white text-black" : "text-white/40"}`}>Idő</button>
+                    <button onClick={() => setPickerView("date")} className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${pickerView === "date" ? "bg-white text-black" : "text-text-primary/40"}`}>Dátum</button>
+                    <button onClick={() => setPickerView("time")} className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${pickerView === "time" ? "bg-white text-black" : "text-text-primary/40"}`}>Idő</button>
                 </div>
                 <div className="min-h-[300px]">
                     {pickerView === "date" ? (
                         <div className="flex flex-col gap-6">
                             <div className="flex items-center justify-between bg-white/5 p-2 rounded-2xl">
-                                <button onClick={() => updateTempDate({ month: month - 1 })} className="p-2 text-white/40"><ChevronLeft size={20} /></button>
-                                <span className="text-white font-black uppercase tracking-widest text-xs">{new Intl.DateTimeFormat("hu-HU", { month: "long", year: "numeric" }).format(tempDate)}</span>
-                                <button onClick={() => updateTempDate({ month: month + 1 })} className="p-2 text-white/40"><ChevronRight size={20} /></button>
+                                <button onClick={() => updateTempDate({ month: month - 1 })} className="p-2 text-text-primary/40"><ChevronLeft size={20} /></button>
+                                <span className="text-text-primary font-black uppercase tracking-widest text-xs">{new Intl.DateTimeFormat("hu-HU", { month: "long", year: "numeric" }).format(tempDate)}</span>
+                                <button onClick={() => updateTempDate({ month: month + 1 })} className="p-2 text-text-primary/40"><ChevronRight size={20} /></button>
                             </div>
                             <div className="grid grid-cols-7 gap-1">
                                 {["H", "K", "Sze", "Cs", "P", "Szo", "V"].map((day) => (
-                                    <div key={day} className="text-[10px] font-black text-white/20 text-center mb-2 uppercase">{day}</div>
+                                    <div key={day} className="text-[10px] font-black text-text-primary/20 text-center mb-2 uppercase">{day}</div>
                                 ))}
                                 {days}
                             </div>
@@ -165,11 +165,11 @@ export default function AddReadingSheet({ isOpen, onClose }: AddReadingSheetProp
                     ) : (
                         <div className="flex flex-col items-center justify-center pt-8 gap-8">
                             <div className="flex items-center gap-6">
-                                <input type="number" value={tempDate.getHours().toString().padStart(2, '0')} onChange={(e) => updateTempDate({ hour: Math.min(23, Math.max(0, parseInt(e.target.value, 10) || 0)) })} className="w-24 bg-white/5 border border-white/5 rounded-[2rem] py-8 text-center text-5xl font-black text-white focus:outline-none focus:border-primary/50" />
-                                <span className="text-4xl font-black text-white/10">:</span>
-                                <input type="number" value={tempDate.getMinutes().toString().padStart(2, '0')} onChange={(e) => updateTempDate({ minute: Math.min(59, Math.max(0, parseInt(e.target.value, 10) || 0)) })} className="w-24 bg-white/5 border border-white/5 rounded-[2rem] py-8 text-center text-5xl font-black text-white focus:outline-none focus:border-primary/50" />
+                                <input type="number" value={tempDate.getHours().toString().padStart(2, '0')} onChange={(e) => updateTempDate({ hour: Math.min(23, Math.max(0, parseInt(e.target.value, 10) || 0)) })} className="w-24 bg-white/5 border border-white/5 rounded-[2rem] py-8 text-center text-5xl font-black text-text-primary focus:outline-none focus:border-primary/50" />
+                                <span className="text-4xl font-black text-text-primary/10">:</span>
+                                <input type="number" value={tempDate.getMinutes().toString().padStart(2, '0')} onChange={(e) => updateTempDate({ minute: Math.min(59, Math.max(0, parseInt(e.target.value, 10) || 0)) })} className="w-24 bg-white/5 border border-white/5 rounded-[2rem] py-8 text-center text-5xl font-black text-text-primary focus:outline-none focus:border-primary/50" />
                             </div>
-                            <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.5em]">Óra : Perc</span>
+                            <span className="text-[10px] font-black text-text-primary/20 uppercase tracking-[0.5em]">Óra : Perc</span>
                         </div>
                     )}
                 </div>
@@ -196,9 +196,9 @@ export default function AddReadingSheet({ isOpen, onClose }: AddReadingSheetProp
                                 onClick={step === "meter" ? resetAndClose : () => setStep(step === "date" ? "value" : "meter")}
                                 className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center active:scale-90 transition-transform"
                             >
-                                {step === "meter" ? <X className="w-5 h-5 text-white" /> : <ChevronLeft className="w-6 h-6 text-white" />}
+                                {step === "meter" ? <X className="w-5 h-5 text-text-primary" /> : <ChevronLeft className="w-6 h-6 text-text-primary" />}
                             </button>
-                            <h3 className="text-xl font-black tracking-tight text-white uppercase">
+                            <h3 className="text-xl font-black tracking-tight text-text-primary uppercase">
                                 {step === "meter" ? "Mérőóra" : step === "value" ? "Mérés" : "Időpont"}
                             </h3>
                             <div className="w-10" />
