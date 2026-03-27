@@ -140,7 +140,7 @@ export default function DashboardClient({
             variants={containerVariants}
             className="relative min-h-full"
         >
-            <div className="relative z-10 px-4 pt-12 pb-12 flex flex-col gap-8">
+            <div className="relative z-10 px-4 pt-12 pb-24 flex flex-col gap-8">
                 <motion.header variants={itemVariants} className="flex items-center gap-3">
                     <Link href={'/dashboard/profile'}>
                         <div style={{ background: user?.colorCode }} className="w-10 h-10 rounded-full p-[0.1rem] overflow-hidden border border-white/10 shrink-0 flex items-center justify-center">

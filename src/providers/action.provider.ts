@@ -8,20 +8,20 @@ interface ActionOptions<T, Args extends unknown[]> {
     initialArgs?: Args;
     onSuccess?: (data: T) => void;
     onError?: (error: Error) => void;
+    repeatDelay?: number; // ÚJ: Ismétlési időköz milliszekundumban
 }
 
 export function useAction<T, Args extends unknown[]>(
     actionFn: (...args: Args) => Promise<T>,
     options: ActionOptions<T, Args> = {}
 ) {
-    const { immediate = false, condition = true, initialArgs } = options;
+    const { immediate = false, condition = true, initialArgs, repeatDelay } = options;
 
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<Error | null>(null);
     const [isPending, setIsPending] = useState<boolean>(false);
 
     // 1. TRÜKK: useRef használata a függvényhez és a callbackekhez
-    // Így mindig a legfrissebb függvényt hívjuk, de a referencia nem változik minden rendernél
     const actionFnRef = useRef(actionFn);
     actionFnRef.current = actionFn;
 
@@ -43,7 +43,7 @@ export function useAction<T, Args extends unknown[]>(
                 const result = await actionFnRef.current(...args);
                 setData(result);
                 if (result && !(result as unknown as { success: boolean }).success) {
-                    onErrorRef.current?.(new Error((result as unknown as { message: string }).message || "Ismeretlen hiba"));
+                    onErrorRef.current?.(new Error((result as unknown as { error: string }).error || "Ismeretlen hiba"));
                     return result;
                 }
                 onSuccessRef.current?.(result);
@@ -61,20 +61,33 @@ export function useAction<T, Args extends unknown[]>(
     );
 
     // 2. TRÜKK: Stringify az argumentumokra
-    // Ezzel átalakítjuk a tömböt egy stringgé (pl. '["userId123"]'). 
-    // Így a React csak akkor indítja újra a lekérést, ha a userId TÉNYLEG megváltozott.
     const argsHash = JSON.stringify(initialArgs);
 
+    // ÚJ: Kombinált useEffect az azonnali futtatáshoz ÉS a pollinghoz (ismétlődéshez)
     useEffect(() => {
-        if (immediate && condition) {
-            const args = initialArgs ?? ([] as unknown as Args);
+        if (!condition) return;
 
+        const args = initialArgs ?? ([] as unknown as Args);
+
+        // 1. Azonnali lekérés (ha kérjük)
+        if (immediate) {
             execute(...args).catch(() => {
                 // A hibát fent már kezeljük
             });
         }
+
+        // 2. Ismétlődés beállítása (ha van megadva repeatDelay)
+        if (repeatDelay && repeatDelay > 0) {
+            const intervalId = setInterval(() => {
+                execute(...args).catch(() => { });
+            }, repeatDelay);
+
+            // Tisztítás: ha a komponens megsemmisül, vagy változik egy paraméter, kilőjük az interval-t
+            return () => clearInterval(intervalId);
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [immediate, condition, execute, argsHash]); // <-- Itt az argsHash menti meg a napot!
+    }, [immediate, condition, execute, argsHash, repeatDelay]);
 
     return { data, error, isPending, execute };
 }

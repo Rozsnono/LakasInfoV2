@@ -92,7 +92,7 @@ export default function DetailedStatsPage() {
     const activeColor = cleanConfig[filter]?.color || "#ffffff";
 
     return (
-        <motion.div initial="hidden" animate="visible" className="min-h-screen flex flex-col text-text-primary overflow-x-hidden">
+        <motion.div initial="hidden" animate="visible" className="min-h-screen flex flex-col text-text-primary overflow-x-hidden pb-16">
 
             {/* FEJLÉC */}
             <motion.header variants={itemVariants} className="p-6 flex justify-between items-center z-20 pt-12">

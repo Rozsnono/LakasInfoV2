@@ -69,7 +69,7 @@ export default function MetersClient() {
             initial="hidden"
             animate="visible"
             variants={containerVariants}
-            className="relative min-h-full px-4 pt-12 pb-6 flex flex-col gap-6"
+            className="relative min-h-full px-4 pt-12 pb-32 flex flex-col gap-6"
         >
             <motion.header variants={itemVariants} className="relative z-10 flex items-center justify-between mt-2">
                 <div className="flex items-center gap-4">

@@ -59,7 +59,7 @@ export default function CalculatorClient({ initialMeters }: { initialMeters: IMe
     }
 
     return (
-        <motion.div initial="hidden" animate="visible" className="relative min-h-screen px-4 pt-12 pb-12 flex flex-col gap-8">
+        <motion.div initial="hidden" animate="visible" className="relative min-h-screen px-4 pt-12 pb-24 flex flex-col gap-8">
 
             <motion.header variants={itemVariants} className="relative flex items-center gap-4">
                 <Link href="/dashboard" className="w-10 h-10 rounded-full bg-surface-elevated flex items-center justify-center border border-white/5 shadow-xl">

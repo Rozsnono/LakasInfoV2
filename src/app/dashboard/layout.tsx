@@ -29,7 +29,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
     return (
         <div className="flex flex-col h-screen relative overflow-hidden text-text-primary">
 
-            <div className="flex-1 overflow-y-auto pb-32 scrollbar-hide">
+            <div className="flex-1 overflow-y-auto scrollbar-hide">
                 <HouseProvider house={houseData}>
                     {children}
                 </HouseProvider>

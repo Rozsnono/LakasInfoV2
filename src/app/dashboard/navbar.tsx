@@ -3,7 +3,7 @@
 import Link from "@/contexts/router.context";
 import React from "react";
 import { usePathname } from "next/navigation";
-import { Home, Gauge, BarChart3, User, History } from "lucide-react";
+import { Home, Gauge, BarChart3, User, History, MessageSquareIcon } from "lucide-react";
 
 export default function DashboardNav() {
     const pathname = usePathname();
@@ -30,12 +30,16 @@ export default function DashboardNav() {
             isActive: pathname.startsWith("/dashboard/history"),
         },
         {
-            label: "Statisztika",
-            href: "/dashboard/stats",
-            icon: <BarChart3 className="w-5 h-5" strokeWidth={2} />,
-            isActive: pathname.startsWith("/dashboard/stats"),
+            label: "Üzenetek",
+            href: "/dashboard/messages",
+            icon: <MessageSquareIcon className="w-5 h-5" strokeWidth={2} />,
+            isActive: pathname.startsWith("/dashboard/messages"),
         }
     ];
+
+    if (pathname.startsWith("/dashboard/messages/")) {
+        return null;
+    }
 
     return (
         <>

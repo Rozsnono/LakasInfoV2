@@ -1,6 +1,6 @@
 {
   "name": "lakas-info-v2",
-  "version": "2.5.4",
+  "version": "2.6.0",
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
