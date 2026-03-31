@@ -37,13 +37,19 @@ export const StartupService = {
         const house = await HouseService.getHouseDetailsByUserId(payload.userId as string);
         if (!house.success || !house.house) return null;
 
+        const houseOwnerSub = await SubscriptionService.getSubscriptionStatus(house.house.ownerId.toString());
+        const cleanHouse = {
+            ...house.house.toObject(),
+            houseSubscriptionPlan: houseOwnerSub ? houseOwnerSub.plan : "free"
+        }
+
         const settings = await SettingsService.getSettings(payload.userId as string);
         if (!settings) return null;
 
         return {
             user: user.user as IUser,
             subscription: subscription as SubscriptionStatus,
-            house: house.house as IHouse,
+            house: cleanHouse as IHouse,
             settings: settings as ISettings
         };
     },
@@ -58,9 +64,10 @@ export const StartupService = {
                 email: data.user.email,
                 colorCode: data.user.colorCode,
                 subscriptionPlan: data.subscription.plan,
-                subscriptionExpiresAt: data.subscription.expiresAt!.toISOString(),
+                subscriptionExpiresAt: data.subscription.expiresAt ? data.subscription.expiresAt.toISOString() : null,
                 houseId: data.house._id.toString(),
-                houseRole: data.house.membersRoles.get(data.user._id.toString()) || 'guest'
+                houseRole: data.house.membersRoles.get(data.user._id.toString()) || 'guest',
+                houseSubscriptionPlan: data.house.houseSubscriptionPlan || "free"
             })
                 .setProtectedHeader({ alg: "HS256" })
                 .setIssuedAt()

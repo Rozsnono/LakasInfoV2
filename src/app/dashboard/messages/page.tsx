@@ -75,7 +75,7 @@ export default function MessagesClient() {
                             <ArrowLeft className="w-5 h-5" />
                         </Link>
                         <div>
-                            <h1 className="text-3xl font-black text-text-primary tracking-tight italic uppercase">Beszélge<span className="text-primary">tések</span></h1>
+                            <h1 className="text-3xl font-black text-text-primary tracking-tight italic uppercase">Üzene<span className="text-primary">tek</span></h1>
                             <p className="text-text-secondary text-xs font-bold uppercase tracking-widest opacity-60 mt-1">
                                 {isPending && !data ? "Betöltés..." : `${0} olvasatlan`}
                             </p>
@@ -136,7 +136,7 @@ export default function MessagesClient() {
                                         >
                                             <div className="flex items-center gap-4 flex-1 overflow-hidden">
                                                 <div className="relative shrink-0">
-                                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${chat.members.length > 2 ? 'bg-blue-500/10 border-blue-500/20 text-blue-500' : 'bg-white/5 border-white/10 text-white/60'}`}>
+                                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${chat.members.length > 2 ? 'bg-primary/10 border-primary/20 text-primary' : 'bg-white/5 border-white/10 text-white/60'}`}>
                                                         {chat.members.length > 2 ? <Users className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
                                                     </div>
                                                     {isUnread && <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-primary border-2 border-background rounded-full shadow-[0_0_10px_rgba(var(--primary),0.5)]" />}

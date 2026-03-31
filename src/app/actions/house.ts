@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import { IUser } from "@/models/user.model";
+import { SubscriptionService } from "@/services/subscription.service";
 
 const JWT_SECRET = new TextEncoder().encode(
     process.env.JWT_SECRET || "valami-nagyon-titkos-kulcs"
@@ -106,10 +107,17 @@ export async function getUserHouseAction() {
 
         const result = await HouseService.getHouseDetailsByUserId(userId);
 
+        const subscription = await SubscriptionService.getSubscriptionStatus(result.house?.ownerId.toString() || "");
+
+        const cleanHouse = {
+            ...result.house?.toObject(),
+            subscriptionPlan: subscription?.plan || "free"
+        }
+
         return {
             success: result.success,
             hasHouse: result.success && !!result.house,
-            house: result.house ? JSON.parse(JSON.stringify(result.house)) : null
+            house: result.house ? JSON.parse(JSON.stringify(cleanHouse)) : null
         };
     } catch (error) {
         return { success: false, hasHouse: false };
@@ -146,7 +154,7 @@ export async function updateHouseAction(houseId: string, name: string, address: 
         if (!userId) return { success: false, message: "Nem vagy bejelentkezve!" };
 
         // Itt hívjuk a HouseService-t (feltételezve, hogy létezik az update metódus)
-        const result = await HouseService.updateHouse(houseId, { name, address });
+        const result = await HouseService.updateHouse(houseId, { name, address }, userId);
 
         if (result.success) {
             revalidatePath("/dashboard");
@@ -168,7 +176,7 @@ export async function deleteHouseAction(houseId: string) {
         const userId = await getUserIdFromToken();
         if (!userId) return { success: false, message: "Nem vagy bejelentkezve!" };
 
-        const result = await HouseService.deleteHouse(houseId);
+        const result = await HouseService.deleteHouse(houseId, userId);
 
         if (result.success) {
             revalidatePath("/dashboard");

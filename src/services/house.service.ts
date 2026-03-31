@@ -69,7 +69,6 @@ export const HouseService = {
         try {
             await dbConnect();
 
-            const inviteCodes = [await this.generateUniqueInviteCode(), await this.generateUniqueInviteCode()];
             const ownerObjectId = new mongoose.Types.ObjectId(ownerId);
 
             const isPro = await SubscriptionService.userHasProSubscription(ownerId);
@@ -82,12 +81,19 @@ export const HouseService = {
                 };
             }
 
+            try {
+                await House.collection.dropIndex('inviteCode_1');
+                console.log("Sikeresen töröltem a beragadt régi indexet!");
+            } catch (e) {
+                // Ha már nincs ott, nem baj, megyünk tovább
+            }
+
             const newHouse = await House.create({
                 name,
                 address: address || undefined,
                 inviteCodes: {
-                    'members': parseInt(inviteCodes[0]),
-                    'guests': parseInt(inviteCodes[1])
+                    'members': parseInt(await this.generateUniqueInviteCode()),
+                    'guests': parseInt(await this.generateUniqueInviteCode())
                 },
                 ownerId: ownerObjectId,
                 members: [ownerObjectId],
@@ -267,9 +273,15 @@ export const HouseService = {
         }
     },
 
-    async updateHouse(houseId: string, data: { name: string; address: string }): Promise<HouseServiceResponse> {
+    async updateHouse(houseId: string, data: { name: string; address: string }, userId: string): Promise<HouseServiceResponse> {
         try {
             await dbConnect();
+
+            const house = await House.find({ _id: houseId, ownerId: userId }).exec();
+
+            if (!house || house.length === 0) {
+                return { success: false, message: "A háztartás nem található, vagy nincs jogosultságod a módosításához." };
+            }
 
             const updatedHouse = await House.findByIdAndUpdate(
                 houseId,
@@ -292,7 +304,7 @@ export const HouseService = {
         }
     },
 
-    async deleteHouse(houseId: string): Promise<HouseServiceResponse> {
+    async deleteHouse(houseId: string, userId: string): Promise<HouseServiceResponse> {
         try {
             await dbConnect();
             const houseObjectId = new mongoose.Types.ObjectId(houseId);
@@ -301,6 +313,10 @@ export const HouseService = {
             const house = await House.findById(houseObjectId);
             if (!house) {
                 return { success: false, message: "A háztartás nem található." };
+            }
+
+            if (house.ownerId.toString() !== userId) {
+                return { success: false, message: "Csak a háztartás tulajdonosa törölheti a házat." };
             }
 
             // 2. Távolítsuk el a ház hivatkozást az összes tagnál a User modellben

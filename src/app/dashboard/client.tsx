@@ -15,7 +15,8 @@ import {
     TrendingUp,
     TrendingDown,
     ChartColumn,
-    Gem
+    Gem,
+    Crown
 } from "lucide-react";
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "@/contexts/router.context";
@@ -89,6 +90,9 @@ export default function DashboardClient({
     const [unreadCount, setUnreadCount] = useState(initialUnreadCount);
     const { user } = useUser();
 
+    const isPro = useMemo(() => user?.subscriptionPlan === 'pro' || house?.subscriptionPlan === 'pro', [user, house]);
+    const isEnterprise = useMemo(() => user?.subscriptionPlan === 'enterprise' || house?.subscriptionPlan === 'enterprise', [user, house]);
+
     const refreshNotifications = async () => {
         const res = await getNotificationsAction();
         if (res.success) {
@@ -142,12 +146,16 @@ export default function DashboardClient({
         >
             <div className="relative z-10 px-4 pt-12 pb-24 flex flex-col gap-8">
                 <motion.header variants={itemVariants} className="flex items-center gap-3">
-                    <Link href={'/dashboard/profile'}>
-                        <div style={{ background: user?.colorCode }} className="w-10 h-10 rounded-full p-[0.1rem] overflow-hidden border border-white/10 shrink-0 flex items-center justify-center">
+                    <Link href={'/dashboard/profile'} className="relative">
+                        <div style={{ background: user?.colorCode }} className="w-10 h-10 rounded-full p-[0.1rem] overflow-hidden border border-white/10 shrink-0 flex items-center justify-center relative" >
                             <span className="font-bold text-text-primary text-sm uppercase bg-surface-elevated px-2 rounded-full w-full text-center tracking-tighter h-full flex items-center justify-center">
                                 {user?.name ? (user.name.charAt(0) + (user.name.split(' ')[1]?.charAt(0) || '')) : "?"}
                             </span>
                         </div>
+                        <span className="absolute -top-4 right-1/2 translate-x-1/2">
+                            {isPro && <Gem className="w-3 h-3 text-yellow-400" />}
+                            {isEnterprise && <Crown className="w-3 h-3 text-yellow-400" />}
+                        </span>
                     </Link>
                     <div className="flex-1 bg-surface/80 backdrop-blur-md rounded-full h-10 flex items-center px-4 border border-white/5 shadow-inner">
                         <Search className="w-4 h-4 text-text-secondary mr-2" />
@@ -180,7 +188,7 @@ export default function DashboardClient({
                     <span className="text-text-secondary text-sm font-medium mb-1 opacity-60 uppercase tracking-widest flex items-center justify-center gap-1">E havi várható költség
                         <PremiumBadge className="h-3 w-3 relative text-yellow-400" /></span>
                     <h2 className="text-6xl font-black tracking-tighter text-text-primary italic">
-                        {user?.subscriptionPlan == 'pro' ? totalMonthlyCost.toLocaleString('hu-HU', { maximumFractionDigits: 0 }) : '---'} <span className="text-2xl text-primary not-italic">Ft</span>
+                        {isPro || isEnterprise ? totalMonthlyCost.toLocaleString('hu-HU', { maximumFractionDigits: 0 }) : '---'} <span className="text-2xl text-primary not-italic">Ft</span>
                     </h2>
                     <motion.div whileTap={{ scale: 1.02 }} className="mt-3">
                         <Link href="/dashboard/properties" className="flex items-center gap-2 mt-4 text-text-secondary text-[10px] font-bold uppercase tracking-wider bg-surface-elevated/50 px-4 py-1.5 rounded-full border border-white/5 shadow-sm">

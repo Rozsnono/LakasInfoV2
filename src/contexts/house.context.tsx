@@ -9,6 +9,7 @@ export interface HouseData {
     name: string;
     address?: string;
     inviteCode?: string;
+    subscriptionPlan?: string;
     members: string[] | mongoose.Types.ObjectId[]; // Csak ID-k, hogy ne legyen túl sok adat a contextben
 }
 

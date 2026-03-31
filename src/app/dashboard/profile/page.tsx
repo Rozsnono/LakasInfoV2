@@ -5,7 +5,8 @@ import { motion, Variants } from "framer-motion";
 import {
     X, Gem, QrCode, UserPlus, HelpCircle, User,
     Home, FileText, Lightbulb, Bell, LogOut,
-    PenTool, ShieldCheck, Crown, Loader2
+    PenTool, ShieldCheck, Crown, Loader2,
+    Ticket
 } from "lucide-react";
 import Link from "@/contexts/router.context";
 import PersonalDataSheet from "@/components/PersonalDataSheet";
@@ -22,6 +23,7 @@ import { useRouter } from "@/contexts/router.context";
 import AppInfoSheet from "@/components/AppInfosSheet";
 import { getSubscriptionStatusTitle } from "@/types/subscription";
 import { useAction } from "@/providers/action.provider";
+import PremiumBadge from "@/components/PremiumBadge";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -47,6 +49,7 @@ export default function ProfilePage() {
 
     const [activeSheet, setActiveSheet] = useState<string | null>(null);
     const [isPro, setIsPro] = useState(profile?.subscriptionPlan === "pro");
+    const [isEnterprise, setIsEnterprise] = useState(profile?.subscriptionPlan === "enterprise");
     const [copied, setCopied] = useState(false);
 
     const householdCode = house?.inviteCode || "N/A";
@@ -64,6 +67,10 @@ export default function ProfilePage() {
         setActiveSheet(sheetId);
         if (sheetId === 'appearance') {
             router.push("/dashboard/appearance");
+        } else if (sheetId === 'subscriptions') {
+            router.push("/dashboard/profile/subscriptions");
+        } else if (sheetId === 'tickets') {
+            router.push("/dashboard/tickets");
         }
     }
 
@@ -88,13 +95,14 @@ export default function ProfilePage() {
     };
 
     const menuItems = [
-        { id: "help", icon: <HelpCircle className="w-5 h-5 text-blue-400" />, label: "Súgó és Támogatás" },
-        { id: "personal", icon: <User className="w-5 h-5 text-zinc-400" />, label: "Személyes adatok" },
-        { id: "appearance", icon: <PenTool className="w-5 h-5 text-primary" />, label: "Megjelenés" },
-        { id: "reports", icon: <FileText className="w-5 h-5 text-orange-400" />, label: "Rezsi jelentések" },
-        { id: "energy", icon: <Lightbulb className="w-5 h-5 text-yellow-400" />, label: "Energiatakarékosság" },
-        { id: "notifications", icon: <Bell className="w-5 h-5 text-primary" />, label: "Értesítések", badge: unreadCount, isLoading: isNotifPending },
-        { id: "appinfo", icon: <Gem className="w-5 h-5 text-purple-400" />, label: "Alkalmazás infók" },
+        { id: "help", icon: <HelpCircle className="w-5 h-5 text-blue-400" />, label: "Súgó és Támogatás", isPro: false, isEnterprise: false },
+        { id: "personal", icon: <User className="w-5 h-5 text-zinc-400" />, label: "Személyes adatok", isPro: false, isEnterprise: false },
+        { id: "appearance", icon: <PenTool className="w-5 h-5 text-primary" />, label: "Megjelenés", isPro: false, isEnterprise: false },
+        { id: "reports", icon: <FileText className="w-5 h-5 text-orange-400" />, label: "Rezsi jelentések", isPro: false, isEnterprise: false },
+        { id: "tickets", icon: <Ticket className="w-5 h-5 text-orange-400" />, label: "Hibajegyek", isPro: false, isEnterprise: true },
+        { id: "energy", icon: <Lightbulb className="w-5 h-5 text-yellow-400" />, label: "Energiatakarékosság", isPro: false, isEnterprise: false },
+        { id: "notifications", icon: <Bell className="w-5 h-5 text-primary" />, label: "Értesítések", badge: unreadCount, isLoading: isNotifPending, isPro: false, isEnterprise: false },
+        { id: "appinfo", icon: <Gem className="w-5 h-5 text-purple-400" />, label: "Alkalmazás infók", isPro: false, isEnterprise: false },
     ];
 
     return (
@@ -111,13 +119,12 @@ export default function ProfilePage() {
                 </Link>
                 <button
                     onClick={() => setIsPro(!isPro)}
-                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full border transition-all active:scale-95 ${isPro ? "bg-primary border-primary" : "bg-surface-elevated border-white/5"}`}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full border transition-all active:scale-95 ${isPro||isEnterprise ? "bg-primary border-primary" : "bg-surface-elevated border-white/5"}`}
                 >
-                    {
-                        isPro ?
-                            <Gem className="w-4 h-4 text-text-primary" /> :
-                            <ShieldCheck className="w-4 h-4 text-primary" />
-                    }
+                    { isPro && <Gem className="w-4 h-4 text-text-primary" /> }
+                    { isEnterprise && <Crown className="w-4 h-4 text-yellow-400" /> }
+                    { !isPro && !isEnterprise && <ShieldCheck className="w-4 h-4 text-green-400" /> }
+
                     <span className={`text-[10px] font-black uppercase tracking-widest text-text-primary`}>
                         LakasInfo {getSubscriptionStatusTitle(profile?.subscriptionPlan || "free")}
                     </span>
@@ -142,7 +149,7 @@ export default function ProfilePage() {
             {/* GYORS KÁRTYÁK */}
             <div className="grid grid-cols-2 gap-4">
                 <Link href="/dashboard/profile/subscriptions">
-                    <motion.div whileTap={{ scale: 0.95 }} variants={itemVariants} className={`bg-surface rounded-[2.5rem] p-6 ${isPro ? "border-2 border-primary" : "border border-white/5"} shadow-xl flex flex-col justify-between aspect-square relative`}>
+                    <motion.div whileTap={{ scale: 0.95 }} variants={itemVariants} className={`bg-surface rounded-[2.5rem] p-6 ${isPro||isEnterprise ? "border-2 border-primary" : "border border-white/5"} shadow-xl flex flex-col justify-between aspect-square relative`}>
                         <div className="w-12 h-8 rounded-xl" style={{ background: profile?.colorCode }} />
                         <div>
                             <h3 className="text-text-primary font-black text-xl leading-none">{getSubscriptionStatusTitle(profile?.subscriptionPlan || "free")}</h3>
@@ -201,6 +208,18 @@ export default function ProfilePage() {
                             <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">{item.icon}</div>
                             <span className="text-text-primary font-bold text-[17px] tracking-tight">{item.label}</span>
                         </div>
+
+                        {
+                            item.isPro && (
+                                <PremiumBadge className="right-0 " />
+                            )
+                        }
+
+                        {
+                            item.isEnterprise && (
+                                <PremiumBadge isEnterprise className="right-8" />
+                            )
+                        }
 
                         {/* Töltés állapot vagy értesítés badge */}
                         {item.isLoading ? (

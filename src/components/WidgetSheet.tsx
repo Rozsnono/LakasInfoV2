@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import {
     X, Plus, Check, Zap, Flame, Droplets,
@@ -51,6 +51,7 @@ export default function WidgetSelectionSheet({
 }: WidgetSelectionSheetProps) {
     const { house } = useHouse();
     const { user } = useUser();
+
 
     const removeAccents = (str: string): string => {
         return str
@@ -165,11 +166,11 @@ export default function WidgetSelectionSheet({
                             </section>
 
                             <section className="space-y-4">
-                                <UpcomingReadingsWidget isProWidget isSelectable={user?.subscriptionPlan == 'pro'} meters={meters} isSelection={() => onToggleWidget("unit-upcomingReadings")} isSelected={activeWidgetIds.includes("unit-upcomingReadings")} />
+                                <UpcomingReadingsWidget isProWidget isSelectable={user?.subscriptionPlan == 'pro' || user?.subscriptionPlan == 'enterprise'} meters={meters} isSelection={() => onToggleWidget("unit-upcomingReadings")} isSelected={activeWidgetIds.includes("unit-upcomingReadings")} />
 
-                                <HouseMapWidget isProWidget isSelectable={user?.subscriptionPlan == 'pro'} address={house?.address} isSelection={() => onToggleWidget("unit-houseMap")} isSelected={activeWidgetIds.includes("unit-houseMap")} />
+                                <HouseMapWidget isProWidget isSelectable={user?.subscriptionPlan == 'pro' || user?.subscriptionPlan == 'enterprise'} address={house?.address} isSelection={() => onToggleWidget("unit-houseMap")} isSelected={activeWidgetIds.includes("unit-houseMap")} />
 
-                                <UnpaidBillsWidget isProWidget isSelectable={user?.subscriptionPlan == 'pro'} isSelection={() => onToggleWidget("unit-unpaidBills")} isSelected={activeWidgetIds.includes("unit-unpaidBills")} meters={meters} />
+                                <UnpaidBillsWidget isProWidget isSelectable={user?.subscriptionPlan == 'pro' || user?.subscriptionPlan == 'enterprise'} isSelection={() => onToggleWidget("unit-unpaidBills")} isSelected={activeWidgetIds.includes("unit-unpaidBills")} meters={meters} />
                             </section>
                         </div>
 

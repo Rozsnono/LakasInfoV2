@@ -10,7 +10,8 @@ export const SubscriptionService = {
 
             const existingUser = await Subscription.findOne({ userId: data.userId });
             if (!existingUser) {
-                return { success: false, message: "Előfizetés nem található." };
+                await this.createSubscription(data.userId);
+                return { success: false, message: "Előfizetés nem található, létrehoztam egy újat a felhasználóhoz. Kérlek próbáld újra a frissítést." };
             }
 
             const newData = await Subscription.findOneAndUpdate(

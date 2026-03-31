@@ -52,7 +52,11 @@ export async function middleware(request: NextRequest) {
                 return NextResponse.redirect(new URL("/onboarding", request.url));
             }
 
-            if (payload.subscriptionPlan === 'free' && pathname.includes("/calculator")) {
+            if ((payload.subscriptionPlan === 'free' && payload.houseSubscriptionPlan === 'free') && (pathname.includes("/calculator") || pathname.includes("/tickets"))) {
+                return NextResponse.redirect(new URL("/dashboard/profile/subscriptions", request.url));
+            }
+
+            if ((payload.subscriptionPlan === 'pro' && payload.houseSubscriptionPlan === 'pro') && pathname.includes("/tickets")) {
                 return NextResponse.redirect(new URL("/dashboard/profile/subscriptions", request.url));
             }
 

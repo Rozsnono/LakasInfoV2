@@ -109,13 +109,17 @@ export default function RoommatesClient() {
                                     <span className="font-black uppercase tracking-widest text-[10px] text-center">Lakótárs<br />meghívása</span>
                                 </button>
 
-                                <button
-                                    onClick={() => setIsSheetOpen("guests")} // Ezt később átírhatod, ha lesz külön Bérlő Sheet
-                                    className="flex-1 py-5 px-2 bg-primary text-text-primary rounded-[2rem] flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform shadow-[0_0_20px_rgba(var(--primary),0.4)]"
-                                >
-                                    <Key className="w-6 h-6" strokeWidth={2.5} />
-                                    <span className="font-black uppercase tracking-widest text-[10px] text-center">Bérlő<br />meghívása</span>
-                                </button>
+                                {
+                                    user?.subscriptionPlan === 'enterprise' && (
+                                        <button
+                                            onClick={() => setIsSheetOpen("guests")} // Ezt később átírhatod, ha lesz külön Bérlő Sheet
+                                            className="flex-1 py-5 px-2 bg-primary text-text-primary rounded-[2rem] flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform shadow-[0_0_20px_rgba(var(--primary),0.4)]"
+                                        >
+                                            <Key className="w-6 h-6" strokeWidth={2.5} />
+                                            <span className="font-black uppercase tracking-widest text-[10px] text-center">Bérlő<br />meghívása</span>
+                                        </button>
+                                    )
+                                }
                             </React.Fragment>
                         )
                     }

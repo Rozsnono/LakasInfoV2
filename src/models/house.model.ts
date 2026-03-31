@@ -7,6 +7,7 @@ export interface IHouse extends Document {
     ownerId: mongoose.Types.ObjectId;
     members: mongoose.Types.ObjectId[];
     membersRoles: Map<string, 'owner' | 'member' | 'guest'>;
+    houseSubscriptionPlan?: "free" | "pro" | "enterprise";
     createdAt: Date;
     updatedAt: Date;
 }
@@ -31,7 +32,6 @@ const HouseSchema: Schema<IHouse> = new Schema(
             },
             default: {},
             required: true,
-            unique: true,
             index: true,
         },
         ownerId: {

@@ -86,7 +86,7 @@ export default function SubscriptionPageClient() {
             {/* Kártyák */}
             <div className="flex flex-col gap-6 relative z-10 mt-2">
                 {PLANS.map((plan) => {
-                    const isPro = plan.id === "pro";
+                    const isPro = plan.id === "pro" || plan.id === "enterprise";
                     const price = billingCycle === "monthly" ? plan.priceMonthly : plan.priceYearly;
                     // Jelenlegi csomag ellenőrzése
                     const isCurrentPlan = profile?.subscriptionPlan === plan.id;

@@ -12,7 +12,7 @@ export interface ISubscription extends Document {
 const SubscriptionSchema: Schema<ISubscription> = new Schema(
     {
         userId: { type: Schema.Types.ObjectId, ref: "User", required: true, unique: true },
-        startDate: { type: Date, required: true },
+        startDate: { type: Date, default: Date.now },
         endDate: { type: Date, default: null },
         plan: { type: String, enum: ["free", "pro", "enterprise"], default: "free" },
         isPaid: { type: Boolean, default: false },

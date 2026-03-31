@@ -205,7 +205,7 @@ export default function NewReadingSheet({ isOpen, onClose }: NewReadingSheetProp
                                         <div className="space-y-3">
                                             <motion.button
                                                 whileTap={{ scale: 0.98 }}
-                                                onClick={user?.subscriptionPlan === "pro" ? () => setIsWebcamOpen(true) : () => setError("A mérőóra állás leolvasásához Pro előfizetés szükséges!")}
+                                                onClick={(user?.subscriptionPlan === "pro" || user?.subscriptionPlan === "enterprise") ? () => setIsWebcamOpen(true) : () => setError("A mérőóra állás leolvasásához Pro előfizetés szükséges!")}
                                                 className="w-full p-6 bg-gradient-to-br from-indigo-500/20 to-purple-600/20 border border-indigo-500/20 rounded-[2.5rem] flex items-center gap-5 relative overflow-hidden group relative"
                                             >
                                                 <div className="absolute top-0 right-0 p-4 opacity-10 group-active:scale-110 transition-transform"><Sparkles className="w-12 h-12 text-indigo-400" /></div>

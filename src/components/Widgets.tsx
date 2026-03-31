@@ -4,8 +4,7 @@ import { JSX, useEffect, useState } from "react";
 import { useAppearance } from "@/contexts/appearance.context";
 import { motion, Variants, AnimatePresence, TargetAndTransition, VariantLabels } from "framer-motion";
 import Link from "@/contexts/router.context";
-import { useRouter } from "@/contexts/router.context";
-import { CrownIcon, TrendingDown, TrendingUp, Loader2, LayoutGrid, CalendarClock, Map, MapPin, Check, Plus, Gem, Receipt } from "lucide-react";
+import { CrownIcon, TrendingDown, TrendingUp, Loader2, LayoutGrid, Map, MapPin, Check, Plus, Gem, CheckCircle2 } from "lucide-react";
 import { getMetersForWidgetAction } from "@/app/actions/meter";
 import { MeterWithStats } from "@/services/meter.service";
 import { getMeterVisuals } from "@/types/meter";
@@ -36,7 +35,6 @@ interface WidgetContainerProps {
     whileTap?: TargetAndTransition | VariantLabels | undefined;
 }
 
-// A közös "Doboz", ami lekezeli a hátteret, animációt és a kiválasztó/Pro badge-eket
 function WidgetContainer({ children, className = "", onClick, isSelectionMode, isSelected, isSelectable, isProWidget, whileTap }: WidgetContainerProps) {
     const baseClass = !isSelectionMode
         ? 'bg-surface'
@@ -49,14 +47,12 @@ function WidgetContainer({ children, className = "", onClick, isSelectionMode, i
             whileTap={whileTap}
             className={`${baseClass} rounded-[2.5rem] border border-white/5 shadow-xl mt-2 relative ${className}`}
         >
-            {/* Jobb felső extra ikonok (Kiválasztás Pipa / Plusz) */}
             {isSelectable && isSelectionMode && (
                 <div className={`w-6 h-6 absolute top-6 right-6 rounded-full flex items-center justify-center ${isSelected ? "bg-primary" : "bg-white/10"} z-50`}>
                     {isSelected ? <Check className="w-3.5 h-3.5 text-text-primary" strokeWidth={4} /> : <Plus className="w-3.5 h-3.5 text-text-primary/40" />}
                 </div>
             )}
 
-            {/* Pro Badge (Ha kiválasztható is, akkor beljebb toljuk, hogy ne takarják egymást!) */}
             {isProWidget && isSelectionMode && (
                 <div className={`w-6 h-6 absolute top-6 ${isSelectable ? 'right-14' : 'right-6'} rounded-full flex items-center justify-center bg-white/10 z-50`}>
                     <Gem className="w-3.5 h-3.5 text-yellow-500/60" />
@@ -128,19 +124,19 @@ export default function Widgets() {
                         type: 'large',
                         id: 'unit-upcomingReadings',
                         isPro: true,
-                        component: <UpcomingReadingsWidget meters={results.results.meters} isProWidget isSelectable={user?.subscriptionPlan == 'pro'} />
+                        component: <UpcomingReadingsWidget meters={results.results.meters} isProWidget isSelectable={user?.subscriptionPlan == 'pro' || user?.subscriptionPlan == 'enterprise'} />
                     },
                     {
                         type: 'large',
-                        id: 'unit-unpaidBills', // Új widget azonosító
+                        id: 'unit-unpaidBills',
                         isPro: true,
-                        component: <UnpaidBillsWidget meters={results.results.meters} isProWidget isSelectable={user?.subscriptionPlan == 'pro'} />
+                        component: <UnpaidBillsWidget meters={results.results.meters} isProWidget isSelectable={user?.subscriptionPlan == 'pro' || user?.subscriptionPlan == 'enterprise'} />
                     },
                     {
                         type: 'large',
                         id: 'unit-houseMap',
                         isPro: true,
-                        component: <HouseMapWidget address={results.results.house?.address} isProWidget isSelectable={user?.subscriptionPlan == 'pro'} />
+                        component: <HouseMapWidget address={results.results.house?.address} isProWidget isSelectable={user?.subscriptionPlan == 'pro' || user?.subscriptionPlan == 'enterprise'} />
                     },
                     {
                         type: 'large',
@@ -149,7 +145,7 @@ export default function Widgets() {
                         component: <RoommateStatusWidget members={results.results.house?.members} />
                     }
                 ];
-                setWidgetComponents(components.filter(c => !c.isPro || (c.isPro && user?.subscriptionPlan == 'pro')));
+                setWidgetComponents(components.filter(c => !c.isPro || (c.isPro && (user?.subscriptionPlan == 'pro' || user?.subscriptionPlan == 'enterprise'))));
             } catch (error) {
                 console.error("Hiba a widgetek betöltésekor:", error);
             } finally {
@@ -199,12 +195,10 @@ export default function Widgets() {
     );
 }
 
-// ---------------------------------------------------------------------------
-// ÚJ WIDGET: FIZETENDŐ SZÁMLÁK
-// ---------------------------------------------------------------------------
 export function UnpaidBillsWidget({ meters, isSelection, isSelected, isProWidget, isSelectable }: { meters: MeterWithStats[], isSelection?: () => void, isSelected?: boolean, isProWidget?: boolean, isSelectable?: boolean }) {
     // Kiszűrjük azokat, ahol van fizetendő összeg (ahol totalCost > 0)
     const unpaidMeters = meters.filter(m => !m.lastReadingIsPaid);
+    
     return (
         <WidgetContainer onClick={isSelectable ? isSelection : undefined} isSelectionMode={!!isSelection} isSelected={isSelected} isSelectable={isSelectable} isProWidget={isProWidget} className="p-6 flex flex-col gap-6">
             <WidgetHeader
@@ -214,8 +208,17 @@ export function UnpaidBillsWidget({ meters, isSelection, isSelected, isProWidget
             />
             <div className="flex flex-col gap-3" style={{ filter: `${isProWidget && !isSelectable ? 'blur(4px)' : ''}` }}>
                 {unpaidMeters.length === 0 ? (
-                    <div className="text-center py-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
-                        <span className="text-emerald-500 text-[11px] font-black uppercase tracking-widest">Minden rendezve!</span>
+                    // --- ÚJ, LÁTVÁNYOS "MINDEN RENDEZVE" ÁLLAPOT ---
+                    <div className="flex flex-col items-center justify-center py-8 px-4 bg-emerald-500/5 rounded-[2rem] border border-emerald-500/10 shadow-inner">
+                        <div className="w-14 h-14 rounded-full bg-emerald-500/20 flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                            <CheckCircle2 className="w-7 h-7 text-emerald-400" />
+                        </div>
+                        <span className="text-emerald-400 font-black text-[13px] uppercase tracking-[0.15em] text-center">
+                            Minden rendezve!
+                        </span>
+                        <span className="text-emerald-400/50 text-[10px] font-bold uppercase tracking-widest mt-1.5 text-center">
+                            Nincs elmaradt befizetésed
+                        </span>
                     </div>
                 ) : (
                     unpaidMeters.map(meter => {
@@ -239,7 +242,6 @@ export function UnpaidBillsWidget({ meters, isSelection, isSelected, isProWidget
         </WidgetContainer>
     );
 }
-
 export function UpcomingReadingsWidget({ meters, isSelection, isSelected, isProWidget, isSelectable }: { meters: MeterWithStats[], isSelection?: () => void, isSelected?: boolean, isProWidget?: boolean, isSelectable?: boolean }) {
     const calculateStatus = (lastReadingDate: Date) => {
         const lastDate = new Date(lastReadingDate || new Date());
@@ -403,13 +405,8 @@ function RoommateAvatar({ name, init, color, isOwner }: { name: string; init: st
     );
 }
 
-// ---------------------------------------------------------------------------
-// KIS MÉRETŰ WIDGETEK (Havi Fogyasztás)
-// ---------------------------------------------------------------------------
-
 function MonthlyCandCWidgetByMeter(meters: MeterWithStats[]) {
-    const graphPaths =
-    {
+    const graphPaths = {
         villany: { up: "M 0 45 Q 40 40 80 30 T 160 10", down: "M 0 10 Q 40 15 80 30 T 160 40" },
         viz: { up: "M 0 45 Q 40 70 80 30 T 160 10", down: "M 0 10 Q 30 15 60 30 T 160 40" },
         gaz: { up: "M 0 45 Q 40 40 80 30 T 160 10", down: "M 0 10 Q 40 15 80 30 T 160 40" }
@@ -428,7 +425,13 @@ function MonthlyCandCWidgetByMeter(meters: MeterWithStats[]) {
         const { stats } = meter;
         const trendUp = stats.isOverLimit;
         const trend = stats.totalCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + " Ft";
-        const color = getMeterVisuals(meter.type).hex;
+        const visual = getMeterVisuals(meter.type);
+        const color = (visual as any).hex || "#0ea5e9";
+
+        const meterTypeKey = meter.type as keyof typeof graphPaths;
+        const safeGraphPath = graphPaths[meterTypeKey] || graphPaths.villany;
+        const pathData = trendUp ? safeGraphPath.up : safeGraphPath.down;
+
         return ({
             type: 'small',
             id: `unit-${removeAccents(meter.name).replace(/\s/g, '-').toLowerCase()}`,
@@ -441,7 +444,7 @@ function MonthlyCandCWidgetByMeter(meters: MeterWithStats[]) {
                     value={stats.consumption}
                     trendUp={trendUp}
                     trend={trend}
-                    graphPath={trendUp ? graphPaths[meter.type].up : graphPaths[meter.type].down}
+                    graphPath={pathData}
                     color={color}
                 />
             )
